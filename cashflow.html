@@ -134,7 +134,7 @@
     if(mode==='loan'){
       var m=pmtMo(nt,s.loan.aprPct,s.loan.termYears),ann=m*12,t=s.loan.termYears;
       return {hero:'+'+per(sav-ann), sub:'$0 down · '+t+'-yr loan @ '+s.loan.aprPct+'%',
-        chips:[['Savings','+'+per(sav)],['Loan payment','−'+per(ann)],['Payback',pay.toFixed(1)+' yrs']],
+        chips:[['Savings','+'+per(sav)],['Loan payment','−'+per(ann)]],
         series:(function(){var a=[0],cum=0;for(var y=1;y<=10;y++){cum+=sav-(y<=t?ann:0);a.push(cum);}return a;})(), be:0.05, beLabel:'cash-flow positive from day one',
         takeaway:'$0 down; you net '+per(sav-ann)+' from day one — best near-term cash flow.'};
     }

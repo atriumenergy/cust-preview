@@ -41,7 +41,7 @@
 <body>
 <div class="wrap">
   <h1>Atrium — concept preview</h1>
-  <p class="sub">Nine directions for the same product. Open any concept in a new tab, click around the drill-downs, and tell us what resonates. Sample data throughout — not final visual design.</p>
+  <p class="sub">Nine directions for the same product. Open any concept, click around the drill-downs, and tell us what resonates. Sample data throughout — not final visual design.</p>
   <div class="bar">
     <label class="toggle"><input type="checkbox" id="blind"> Blind labels (hide names for interviews)</label>
     <button class="btn" id="shuffle"><i class="ti ti-arrows-shuffle"></i> New order (next interviewee)</button>
@@ -73,9 +73,9 @@
     var blind=blindEl.checked, o=order();
     grid.innerHTML=o.map(function(idx,pos){
       var c=CONCEPTS[idx], label=blind?('Concept '+String.fromCharCode(65+pos)):c.name, ts=blind?'A direction for the same product — open and explore.':c.teaser;
-      var foot=c.live?'<span>Open in new tab</span><i class="ti ti-external-link"></i>':'<span>In progress</span><i class="ti ti-dots"></i>';
+      var foot=c.live?'<span>Open</span><i class="ti ti-arrow-right"></i>':'<span>In progress</span><i class="ti ti-dots"></i>';
       var inner='<div style="display:flex;align-items:center;gap:9px"><span class="idx">'+String.fromCharCode(65+pos)+'</span><span class="nm">'+label+'</span></div><span class="ts">'+ts+'</span><span class="foot">'+foot+'</span>';
-      return c.live?'<a class="card" href="'+c.key+'.html" target="_blank" rel="noopener">'+inner+'</a>':'<div class="card soon">'+inner+'</div>';
+      return c.live?'<a class="card" href="'+c.key+'.html">'+inner+'</a>':'<div class="card soon">'+inner+'</div>';
     }).join('');
     note.textContent=blind?'Blind mode: names hidden and order reshuffled per interviewee — decode later from the tab’s URL. 3 of 9 concepts are wired up so far.':'3 of 9 concepts are wired up so far; the rest are in progress. Toggle blind labels + reshuffle before each interview.';
   }
