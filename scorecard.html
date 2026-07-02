@@ -66,26 +66,51 @@
   .disc-reply input{flex:1;border:1px solid var(--border);border-radius:8px;padding:8px 10px;font:inherit;font-size:13px;background:var(--surface-1)}
   .cf-fade{animation:cfOut .35s forwards}
   @keyframes cfOut{to{opacity:0;transform:scale(.96);height:0;margin:0;padding:0;border-width:0}}
-  /* --- timeline / roadmap shell --- */
-  .tl-scroll{overflow-x:auto;margin:0 -18px;padding:4px 18px 10px}
-  .tl-row{display:flex;min-width:660px}
-  .tl-col{flex:1;min-width:170px}
-  .tl-col.cap{flex:0 0 78px;min-width:78px}
-  .tl-node{position:relative;height:28px;margin-bottom:10px}
-  .tl-line{position:absolute;top:12px;left:0;right:0;height:3px;background:var(--border-strong)}
-  .tl-node.start .tl-line{left:50%}
-  .tl-node.end .tl-line{right:50%}
-  .tl-dot{position:absolute;top:5px;left:50%;transform:translateX(-50%);width:16px;height:16px;border-radius:50%;background:var(--primary);border:3px solid var(--surface-0);box-shadow:0 0 0 1px var(--border-strong);z-index:1}
-  .tl-node.warn .tl-dot{background:var(--text-warning)}
-  .tl-node.goal .tl-dot{background:var(--text-success)}
-  .tl-node.muted .tl-dot{background:var(--text-muted)}
-  .tl-inner{padding:0 7px}
-  .tl-time{font-size:13px;font-weight:700;text-align:center}
-  .tl-cum{font-size:12px;color:var(--text-success);font-weight:600;text-align:center;margin-bottom:12px}
-  .tl-event{display:block;width:100%;text-align:left;background:var(--surface-2);border:1px solid var(--border);border-left:3px solid var(--primary);border-radius:8px;padding:10px 12px;margin-bottom:8px;cursor:pointer;box-shadow:var(--shadow);font:inherit;color:inherit;transition:transform .12s,box-shadow .12s}
-  .tl-event:hover{transform:translateY(-1px);box-shadow:var(--shadow-hover)}
-  .tl-event.warn{border-left-color:var(--text-warning)}
-  .tl-event.est{border-left-color:var(--text-warning);border-style:dashed;border-left-style:solid}
+
+  /* ---- Scorecard shell (appended) ---- */
+  .sc-hero{background:var(--surface-2);border:1px solid var(--border);border-radius:16px;box-shadow:var(--shadow);padding:22px;margin-bottom:18px}
+  .sc-hero-top{display:flex;gap:22px;align-items:center;flex-wrap:wrap}
+  .sc-gauge{position:relative;flex-shrink:0;width:168px;height:168px}
+  .sc-gauge svg{display:block}
+  .sc-gauge-num{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+  .sc-gauge-score{font-size:44px;font-weight:700;letter-spacing:-.03em;line-height:1;color:var(--text-primary);font-variant-numeric:tabular-nums}
+  .sc-gauge-of{font-size:14px;color:var(--text-muted);margin-top:2px}
+  .sc-gauge-band{font-size:12px;font-weight:600;color:var(--text-secondary);margin-top:5px}
+  .sc-hero-body{flex:1;min-width:220px}
+  .sc-hero-body h1{font-size:24px}
+  .sc-metric{display:flex;gap:9px;align-items:flex-start;margin-top:12px;font-size:14px;color:var(--text-secondary);line-height:1.45}
+  .sc-metric i{margin-top:2px;font-size:17px;flex-shrink:0}
+  .sc-metric b{color:var(--text-primary);font-weight:600}
+  .sc-bar{margin-top:10px;height:9px;border-radius:99px;background:hsl(240 16% 92%);position:relative;overflow:hidden}
+  .sc-bar-fill{position:absolute;left:0;top:0;bottom:0;border-radius:99px;background:linear-gradient(90deg,hsl(24 82% 55%),hsl(48 90% 52%),hsl(86 55% 45%))}
+  .sc-bar-mark{position:absolute;top:-3px;bottom:-3px;width:2px;background:var(--text-primary);opacity:.55}
+  .sc-pot{margin-top:16px;display:flex;align-items:center;gap:8px;background:var(--bg-success);border:1px solid hsl(86 40% 82%);border-radius:12px;padding:11px 14px;font-size:14px;color:var(--text-success)}
+  .sc-pot b{font-weight:700}
+  .sc-propcard{background:var(--surface-2);border:1px solid var(--border);border-radius:14px;padding:18px;cursor:pointer;transition:transform .12s,box-shadow .12s,border-color .12s;text-align:left;width:100%;font:inherit;color:inherit;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:6px;min-height:186px}
+  .sc-propcard:hover{transform:translateY(-2px);box-shadow:var(--shadow-hover);border-color:var(--border-strong)}
+  .sc-pc-name{font-size:15px;font-weight:600}
+  .sc-pc-scorewrap{display:flex;align-items:baseline;gap:6px;margin-top:2px}
+  .sc-pc-score{font-size:38px;font-weight:700;letter-spacing:-.02em;line-height:1;font-variant-numeric:tabular-nums}
+  .sc-pc-of{font-size:14px;color:var(--text-muted)}
+  .sc-pc-band{font-size:12px;font-weight:600;color:var(--text-secondary)}
+  .sc-pcbar{margin-top:8px;height:7px;border-radius:99px;background:hsl(240 16% 92%);position:relative;overflow:hidden}
+  .sc-pcbar-fill{position:absolute;left:0;top:0;bottom:0;border-radius:99px}
+  .sc-pts{display:inline-flex;align-items:center;gap:4px;font-size:12px;font-weight:600;color:var(--text-success);background:var(--bg-success);border:1px solid hsl(86 40% 82%);border-radius:99px;padding:3px 9px}
+  .sc-pts.est{color:var(--text-warning);background:var(--bg-warning);border-color:var(--border-warning)}
+  .sc-pc-foot{margin-top:auto;display:flex;justify-content:space-between;align-items:center;color:var(--text-muted);font-size:13px}
+  .sc-move{display:flex;align-items:stretch;justify-content:space-between;gap:14px;background:var(--surface-2);border:1px solid var(--border);border-radius:14px;padding:16px 18px;cursor:pointer;transition:transform .12s,box-shadow .12s,border-color .12s;text-align:left;width:100%;font:inherit;color:inherit;box-shadow:var(--shadow)}
+  .sc-move:hover{transform:translateY(-2px);box-shadow:var(--shadow-hover);border-color:var(--border-strong)}
+  .sc-move.est{border-style:dashed;border-color:var(--border-strong)}
+  .sc-move-rank{flex-shrink:0;width:30px;height:30px;border-radius:99px;background:hsl(240 20% 96%);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:var(--text-secondary)}
+  .sc-move-main{min-width:0;flex:1}
+  .sc-move-title{font-weight:600;font-size:15px}
+  .sc-move-sub{font-size:13px;color:var(--text-muted);margin-top:2px;display:flex;flex-wrap:wrap;align-items:center;gap:6px}
+  .sc-move-right{flex-shrink:0;text-align:right;display:flex;flex-direction:column;align-items:flex-end;gap:6px;justify-content:center}
+  .sc-move-tile{font-size:12px;color:var(--text-muted)}
+  .sc-move-tileval{font-size:16px;font-weight:700;color:var(--text-success);letter-spacing:-.01em}
+  .sc-legend{display:flex;flex-wrap:wrap;gap:14px;margin-top:14px;padding-top:12px;border-top:1px dashed var(--border);font-size:12px;color:var(--text-muted)}
+  .sc-legend span{display:inline-flex;align-items:center;gap:5px}
+  .sc-dot{width:9px;height:9px;border-radius:99px;flex-shrink:0}
 </style>
 </head>
 <body>
@@ -231,83 +256,156 @@
       +discussion(s)+'</div>';
   }
   function unlockedBanner(){ if(!S.unlocked)return ''; return '<div style="display:flex;align-items:center;gap:8px;background:var(--bg-success);border:1px solid hsl(86 40% 82%);border-radius:var(--radius);padding:9px 13px;margin-bottom:1rem;font-size:14px;color:var(--text-success)"><i class="ti ti-sparkles"></i>Unlocked this session: <span style="font-weight:700">'+fmt(S.unlocked)+'</span> over 5 years</div>'; }
-  function backPill(){return '<button class="cf-pill" data-act="back" style="display:inline-flex;align-items:center;gap:4px"><i class="ti ti-arrow-left"></i> Back to plan</button>';}
+  function backPill(){return '<button class="cf-pill" data-act="back" style="display:inline-flex;align-items:center;gap:4px"><i class="ti ti-arrow-left"></i> Back to scorecard</button>';}
   function perToggle(){return '<div class="seg"><button data-period="annual" aria-pressed="'+(S.period==='annual')+'">Annual</button><button data-period="monthly" aria-pressed="'+(S.period==='monthly')+'">Monthly</button></div>';}
-  /* --- Timeline shell --- */
-  function eventCard(s){
-    var isEst=est(s), warn=!!s.note, lead=s.install.replace(/·.*/,'').trim();
-    var cls=isEst?' est':(warn?' warn':'');
-    var foot=warn
-      ? '<span style="font-size:11px;color:var(--text-warning);font-weight:600;white-space:nowrap"><i class="ti ti-clock"></i> '+esc(s.note)+'</span>'
-      : (isEst
-          ? '<span class="esttag" style="font-size:11px;white-space:nowrap"><i class="ti ti-help-circle"></i> estimate · connect data</span>'
-          : '<span style="font-size:11px;color:var(--text-muted);white-space:nowrap">starts '+esc(lead)+'</span>');
-    var amt=isEst
-      ? '<span class="mono" style="font-size:14px;font-weight:700;color:var(--text-success)">'+fmtRange(savLo(s),savHi(s))+'<span style="font-size:11px;color:var(--text-muted);font-weight:500">/yr est.</span></span>'
-      : '<span class="mono" style="font-size:15px;font-weight:700;color:var(--text-success)">'+fmtK(s.savings)+'<span style="font-size:11px;color:var(--text-muted);font-weight:500">/yr</span></span>';
-    return '<button class="tl-event'+cls+'" data-act="leaf" data-val="'+s.id+'">'
-      +'<div style="font-weight:600;font-size:14px">'+esc(s.prop)+'</div>'
-      +'<div style="font-size:12px;color:var(--text-muted);margin:1px 0 6px">'+esc(s.type)+'</div>'
-      +'<div style="display:flex;justify-content:space-between;align-items:center;gap:6px">'+amt+foot+'</div></button>';
+
+  /* ---------- Scorecard shell logic ---------- */
+  // Scorecard reframes the same projects around real-sounding performance metrics.
+  // Property base ENERGY STAR-style scores (sample) and the point-gain each move contributes.
+  var PROPS=[
+    {name:'Marina Bay Inn',   base:58, pct:'42nd', pen:22000},
+    {name:'Cedar Court Hotel',base:64, pct:'55th', pen:16000},
+    {name:'Riverside Lodge',  base:54, pct:'38th', pen:10000}
+  ];
+  function propByName(n){return PROPS.filter(function(p){return p.name===n;})[0];}
+  // Points a single move is worth. Bigger measured savings => more points; capped and rounded to feel real.
+  function movePts(s){
+    if(est(s)) return Math.max(2,Math.round(s.savings/3500));
+    return Math.max(3,Math.round(s.savings/6500));
   }
+  // Live moves for a property (unapproved solutions on that property).
+  function propMoves(name){return sols().filter(function(s){return s.prop===name;}).sort(recSort);}
+  // Total available points still on the table for a property.
+  function propAvail(name){return propMoves(name).reduce(function(t,s){return t+movePts(s);},0);}
+  // Current score = base + points already banked (from approved moves this session), capped at 100.
+  function propScore(name){
+    var banked=DATA.solutions.filter(function(s){return s.prop===name && S.approved[s.id];})
+      .reduce(function(t,s){return t+movePts(s);},0);
+    return Math.min(100, propByName(name).base + banked);
+  }
+  // Portfolio score = rounded average of the three property scores (sample metric).
+  function portScore(){
+    var t=0;PROPS.forEach(function(p){t+=propScore(p.name);});
+    return Math.round(t/PROPS.length);
+  }
+  function portAvail(){var t=0;PROPS.forEach(function(p){t+=propAvail(p.name);});return t;}
+  function bandFor(sc){ if(sc>=75)return 'Strong'; if(sc>=60)return 'Above average'; if(sc>=45)return 'Below average'; return 'At risk'; }
+  function colorFor(sc){ if(sc>=75)return 'hsl(86 55% 40%)'; if(sc>=60)return 'hsl(78 55% 42%)'; if(sc>=45)return 'hsl(38 85% 48%)'; return 'hsl(24 82% 52%)'; }
+
+  function gauge(score){
+    var w=168,cx=84,cy=84,r=68,sw=13;
+    var C=2*Math.PI*r, frac=Math.max(0,Math.min(1,score/100));
+    var col=colorFor(score);
+    return '<svg viewBox="0 0 '+w+' '+w+'" width="'+w+'" height="'+w+'">'
+      +'<circle cx="'+cx+'" cy="'+cy+'" r="'+r+'" fill="none" stroke="hsl(240 16% 92%)" stroke-width="'+sw+'"/>'
+      +'<circle cx="'+cx+'" cy="'+cy+'" r="'+r+'" fill="none" stroke="'+col+'" stroke-width="'+sw+'" stroke-linecap="round"'
+        +' stroke-dasharray="'+(frac*C).toFixed(1)+' '+C.toFixed(1)+'" transform="rotate(-90 '+cx+' '+cy+')"/></svg>';
+  }
+
   function renderHome(){
-    var live=sols();
-    var byU=function(u){return live.filter(function(s){return s.u===u;}).sort(recSort);};
-    var buckets=[{u:0,title:'Now',warn:true},{u:1,title:'Next 3 months'},{u:2,title:'Later this year'}];
-    var run=0, cols='';
-    cols+='<div class="tl-col cap"><div class="tl-node start muted"><div class="tl-line"></div><div class="tl-dot"></div></div><div class="tl-inner"><div class="tl-time">Today</div><div class="tl-cum" style="color:var(--text-muted)">$0/yr</div></div></div>';
-    buckets.forEach(function(b){
-      var list=byU(b.u); run+=list.reduce(function(t,s){return t+s.savings;},0);
-      var ev=list.length?list.map(eventCard).join(''):'<div style="font-size:12px;color:var(--text-muted);text-align:center;padding:12px 0"><i class="ti ti-circle-check"></i> nothing pending</div>';
-      cols+='<div class="tl-col"><div class="tl-node'+(b.warn?' warn':'')+'"><div class="tl-line"></div><div class="tl-dot"></div></div>'
-        +'<div class="tl-inner"><div class="tl-time">'+b.title+'</div><div class="tl-cum">'+fmtK(run)+'/yr flowing</div>'+ev+'</div></div>';
-    });
-    cols+='<div class="tl-col cap"><div class="tl-node end goal"><div class="tl-line"></div><div class="tl-dot"></div></div><div class="tl-inner"><div class="tl-time">Optimized</div><div class="tl-cum">'+fmtK(run)+'/yr</div></div></div>';
-    var setup=prospects().length?'<button class="cf-pill" data-act="setup" style="margin-bottom:16px"><i class="ti ti-building-community"></i> '+prospects().length+' properties still need setup to unlock their projects →</button>':'';
-    app.innerHTML='<div style="margin-bottom:1rem"><p style="color:var(--text-secondary);margin:0;font-size:14px">'+esc(DATA.portfolio)+'</p>'
-      +'<h1 style="margin:.2rem 0 .1rem;font-size:26px">Your savings plan</h1>'
-      +'<p style="color:var(--text-muted);margin:0 0 1rem;font-size:13px">Move left to right: do the time-sensitive things now, and watch your yearly cash flow build to <span style="color:var(--text-success);font-weight:600">'+fmtK(run)+'/yr</span>.</p></div>'
-      +unlockedBanner()
-      +setup
-      +'<div class="tl-scroll"><div class="tl-row">'+cols+'</div></div>'
-      +'<p style="color:var(--text-muted);font-size:12px;margin-top:8px"><i class="ti ti-arrow-move-right"></i> Each marker on the rail is a point in time; the cards beneath it are projects to schedule then. Tap one for the economics.</p>';
-  }
-  function renderSetup(){
-    var list=prospects();
-    var rows=list.map(function(p){
-      var cta=p.ready?'<button class="cf-btn" data-act="sign" data-val="'+p.id+'">Approve &amp; sign</button>':'<button class="cf-pill" data-act="step" data-val="'+p.id+'">'+p.step+'</button>';
-      return '<div data-row="'+p.id+'" style="display:flex;align-items:center;justify-content:space-between;gap:12px;background:var(--surface-2);border:1px '+(p.est?'dashed':'solid')+' '+(p.est?'var(--border-strong)':'var(--border)')+';border-radius:12px;padding:15px 16px;box-shadow:var(--shadow)">'
-        +'<div style="min-width:0"><p style="margin:0;font-weight:600">'+esc(p.name)+'</p><p style="margin:.15rem 0 0;font-size:13px;color:var(--text-muted)">'+(p.est?'Estimated · '+p.step:p.step)+'</p></div>'
-        +'<div style="text-align:right;flex-shrink:0"><div class="cf-amt" style="font-size:19px;color:var(--text-success)">'+fmtK(p.cf)+'</div><div style="margin-top:7px">'+cta+'</div></div></div>';
+    var sc=portScore(), avail=portAvail(), band=bandFor(sc);
+    var hero='<div class="sc-hero"><div class="sc-hero-top">'
+      +'<div class="sc-gauge">'+gauge(sc)+'<div class="sc-gauge-num"><div class="sc-gauge-score mono">'+sc+'</div><div class="sc-gauge-of">out of 100</div><div class="sc-gauge-band">'+band+'</div></div></div>'
+      +'<div class="sc-hero-body">'
+        +'<p style="color:var(--text-secondary);margin:0;font-size:14px">'+esc(DATA.portfolio)+'</p>'
+        +'<h1 style="margin:.2rem 0 0">Your energy scorecard</h1>'
+        +'<p style="color:var(--text-muted);margin:.3rem 0 0;font-size:13px">Sample performance score across your portfolio — higher is more efficient, lower-cost, and better positioned for building-performance rules.</p>'
+        +'<div class="sc-metric"><i class="ti ti-chart-bar" style="color:var(--primary)"></i><div>Standing: <b>45th percentile</b> among similar hotels — top-quartile peers spend about <b>30% less</b> on energy per room.'
+          +'<div class="sc-bar"><div class="sc-bar-fill" style="width:100%"></div><div class="sc-bar-mark" style="left:45%"></div></div></div></div>'
+        +'<div class="sc-metric"><i class="ti ti-alert-triangle" style="color:var(--text-warning)"></i><div>Compliance: building-performance penalty exposure of about <b>$48K/yr</b> — avoidable by acting on the moves below.</div></div>'
+      +'</div></div>'
+      +'<div class="sc-pot"><i class="ti ti-arrow-up-right"></i><div>Approving the moves waiting for you would raise this score by up to <b>+'+avail+' points</b> — and remove most of that penalty exposure.</div></div>'
+      +'</div>';
+
+    var cards=PROPS.map(function(p){
+      var pscore=propScore(p.name), pavail=propAvail(p.name), moves=propMoves(p.name);
+      var anyEst=moves.some(est), pband=bandFor(pscore), pcol=colorFor(pscore);
+      var ptsChip = pavail>0
+        ? '<span class="sc-pts'+(anyEst?' est':'')+'"><i class="ti ti-arrow-up-right"></i> +'+pavail+' pts available</span>'
+        : '<span class="sc-pts"><i class="ti ti-circle-check"></i> nothing pending</span>';
+      var foot = moves.length
+        ? '<span>'+moves.length+' move'+(moves.length>1?'s':'')+(anyEst?' · some estimated':'')+'</span>'
+        : '<span>All moves approved</span>';
+      return '<button class="sc-propcard" data-act="prop" data-val="'+esc(p.name)+'">'
+        +'<span class="sc-pc-name">'+esc(p.name)+'</span>'
+        +'<span class="sc-pc-scorewrap"><span class="sc-pc-score mono" style="color:'+pcol+'">'+pscore+'</span><span class="sc-pc-of">/ 100</span></span>'
+        +'<span class="sc-pc-band" style="color:'+pcol+'">'+pband+' · '+p.pct+' percentile</span>'
+        +'<span class="sc-pcbar"><span class="sc-pcbar-fill" style="width:'+pscore+'%;background:'+pcol+'"></span></span>'
+        +'<span style="margin-top:10px">'+ptsChip+'</span>'
+        +'<span class="sc-pc-foot">'+foot+'<i class="ti ti-arrow-right"></i></span>'
+      +'</button>';
     }).join('');
-    app.innerHTML='<div style="margin-bottom:1.25rem">'+backPill()+'<h1 style="margin:14px 0 0">Finish setting up</h1><p style="color:var(--text-secondary);margin:.3rem 0 0">Bring each property online — audits and bills turn on its projects.</p></div>'+unlockedBanner()
-      +(list.length?'<div style="display:flex;flex-direction:column;gap:10px">'+rows+'</div>':'<div class="card" style="text-align:center;padding:2rem"><i class="ti ti-circle-check" style="font-size:26px;color:var(--text-success)"></i><p style="margin:.5rem 0 0">Every property is set up.</p></div>');
+
+    var legend='<div class="sc-legend">'
+      +'<span><span class="sc-dot" style="background:hsl(86 55% 40%)"></span>75–100 Strong</span>'
+      +'<span><span class="sc-dot" style="background:hsl(78 55% 42%)"></span>60–74 Above average</span>'
+      +'<span><span class="sc-dot" style="background:hsl(38 85% 48%)"></span>45–59 Below average</span>'
+      +'<span><span class="sc-dot" style="background:hsl(24 82% 52%)"></span>Under 45 At risk</span>'
+      +'</div>';
+
+    app.innerHTML=hero+unlockedBanner()
+      +'<h2 style="font-size:15px;font-weight:600;color:var(--text-secondary);margin:0 0 12px;text-transform:uppercase;letter-spacing:.04em">Your properties</h2>'
+      +'<div class="grid">'+cards+'</div>'+legend;
   }
+
+  function renderProp(){
+    var name=S.group;
+    var moves=propMoves(name);
+    if(!moves.length){S.screen='home';return renderHome();}
+    var pscore=propScore(name), pavail=propAvail(name), p=propByName(name), pcol=colorFor(pscore), pband=bandFor(pscore);
+    var list=moves.map(function(s,i){
+      var pts=movePts(s);
+      var ptsChip='<span class="sc-pts'+(est(s)?' est':'')+'"><i class="ti ti-arrow-up-right"></i> +'+pts+' pts</span>';
+      var tag=est(s)
+        ? '<span class="esttag"><i class="ti ti-help-circle"></i> estimate · connect data</span>'
+        : (s.note?'<span style="display:inline-flex;align-items:center;gap:4px;color:var(--text-warning);font-weight:500"><i class="ti ti-clock"></i>'+esc(s.note)+'</span>'
+                 :'<span><i class="ti ti-calendar"></i> '+UL[s.u]+'</span>');
+      var tileLabel=est(s)?'5-yr savings (est.)':'5-yr cash';
+      var tileVl=est(s)?perRange(savLo(s),savHi(s)):fmtK(fiveCash(s));
+      return '<button class="sc-move'+(est(s)?' est':'')+'" data-act="leaf" data-val="'+s.id+'">'
+        +'<span class="sc-move-rank">'+(i+1)+'</span>'
+        +'<span class="sc-move-main"><span class="sc-move-title">'+esc(s.type)+'</span>'
+          +'<span class="sc-move-sub"><i class="ti ti-tool"></i> '+esc(s.vendor)+' · '+esc(s.install)+' '+tag+'</span></span>'
+        +'<span class="sc-move-right">'+ptsChip
+          +'<span><span class="sc-move-tile">'+tileLabel+'</span><br><span class="sc-move-tileval mono">'+tileVl+'</span></span></span>'
+      +'</button>';
+    }).join('');
+
+    app.innerHTML='<div style="margin-bottom:1.25rem">'+backPill()
+      +'<div style="display:flex;align-items:center;gap:16px;margin:14px 0 0;flex-wrap:wrap">'
+        +'<div style="display:flex;align-items:baseline;gap:6px"><span class="sc-pc-score mono" style="font-size:46px;color:'+pcol+'">'+pscore+'</span><span class="sc-pc-of" style="font-size:16px">/ 100</span></div>'
+        +'<div><h1 style="margin:0;font-size:22px">'+esc(name)+'</h1>'
+          +'<p style="color:var(--text-secondary);margin:.2rem 0 0;font-size:13px">'+pband+' · '+p.pct+' percentile among similar hotels</p></div>'
+      +'</div>'
+      +'<div class="sc-pot" style="margin-top:16px"><i class="ti ti-arrow-up-right"></i><div>These moves would raise this property by up to <b>+'+pavail+' points</b>. Ranked by what to do first.</div></div>'
+      +'</div>'+unlockedBanner()
+      +'<h2 style="font-size:15px;font-weight:600;color:var(--text-secondary);margin:0 0 12px;text-transform:uppercase;letter-spacing:.04em">Moves that raise your score</h2>'
+      +'<div style="display:flex;flex-direction:column;gap:10px">'+list+'</div>';
+  }
+
   function renderLeaf(){
     var s=DATA.solutions.find(function(x){return x.id===S.leafId;});
-    if(!s||S.approved[s.id]){S.screen='home';return renderHome();}
+    if(!s||S.approved[s.id]){S.screen='prop';return renderProp();}
+    var pts=movePts(s);
+    var scoreCue='<div style="display:flex;align-items:center;gap:8px;background:hsl(240 60% 96%);border:1px solid hsl(240 40% 90%);border-radius:12px;padding:10px 14px;margin-bottom:14px;font-size:14px;color:var(--primary)">'
+      +'<i class="ti ti-arrow-up-right"></i><div>Approving this move raises <b>'+esc(s.prop)+'</b> by an estimated <b>+'+pts+' points</b>'+(est(s)?' once its data is connected':'')+'.</div></div>';
     var head='<div style="display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:16px">'+backPill()+(est(s)?'':'<span style="display:flex;align-items:center;gap:8px"><span style="font-size:13px;color:var(--text-muted)">Amounts:</span>'+perToggle()+'</span>')+'</div>';
-    app.innerHTML=head+unlockedBanner()+solutionCard(s);
+    app.innerHTML=head+unlockedBanner()+scoreCue+solutionCard(s);
   }
-  function render(){
-    if(S.screen==='home')renderHome();
-    else if(S.screen==='setup')renderSetup();
-    else if(S.screen==='leaf')renderLeaf();
-  }
+
+  function render(){ if(S.screen==='home')renderHome();else if(S.screen==='prop')renderProp();else if(S.screen==='leaf')renderLeaf(); }
   function unlockRow(id,amt,then){var row=app.querySelector('[data-row="'+id+'"]');S.unlocked+=amt;if(row){row.classList.add('cf-fade');setTimeout(then,340);}else then();}
   app.addEventListener('click',function(e){
     var d=e.target.closest('[data-disc]'); if(d){S.disc[d.dataset.disc]=!S.disc[d.dataset.disc];render();return;}
     var pertog=e.target.closest('[data-period]'); if(pertog){S.period=pertog.dataset.period;render();return;}
     var seg=e.target.closest('[data-segmode]'); if(seg){S.mode[seg.dataset.sol]=seg.dataset.segmode;render();return;}
     var el=e.target.closest('[data-act],[data-approve]'); if(!el)return;
-    if(el.dataset.approve){var s=DATA.solutions.find(function(x){return x.id===el.dataset.approve;});var m=curMode(s);unlockRow(s.id,fiveCash(s),function(){S.approved[s.id]=1;S.approvedMode[s.id]=m;S.screen='home';render();});return;}
+    if(el.dataset.approve){var s=DATA.solutions.find(function(x){return x.id===el.dataset.approve;});var m=curMode(s);unlockRow(s.id,fiveCash(s),function(){S.approved[s.id]=1;S.approvedMode[s.id]=m;S.screen='prop';render();});return;}
     var a=el.dataset.act, v=el.dataset.val;
     if(a==='connect'){el.textContent='Request sent →';el.disabled=true;el.style.opacity=.7;}
-    else if(a==='setup'){S.screen='setup';render();}
+    else if(a==='prop'){S.group=v;S.screen='prop';render();}
     else if(a==='leaf'){S.leafId=v;S.screen='leaf';render();}
-    else if(a==='back'){S.screen='home';render();}
-    else if(a==='step'){el.textContent='We’ll guide you →';el.disabled=true;el.style.opacity=.6;}
-    else if(a==='sign'){var p=DATA.prospects.find(function(x){return x.id===v;});unlockRow(v,p.cf,function(){S.signed[v]=1;render();});}
+    else if(a==='back'){S.screen=(S.screen==='leaf')?'prop':'home';render();}
   });
   render();
 })();

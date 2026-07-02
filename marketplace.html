@@ -66,26 +66,52 @@
   .disc-reply input{flex:1;border:1px solid var(--border);border-radius:8px;padding:8px 10px;font:inherit;font-size:13px;background:var(--surface-1)}
   .cf-fade{animation:cfOut .35s forwards}
   @keyframes cfOut{to{opacity:0;transform:scale(.96);height:0;margin:0;padding:0;border-width:0}}
-  /* --- timeline / roadmap shell --- */
-  .tl-scroll{overflow-x:auto;margin:0 -18px;padding:4px 18px 10px}
-  .tl-row{display:flex;min-width:660px}
-  .tl-col{flex:1;min-width:170px}
-  .tl-col.cap{flex:0 0 78px;min-width:78px}
-  .tl-node{position:relative;height:28px;margin-bottom:10px}
-  .tl-line{position:absolute;top:12px;left:0;right:0;height:3px;background:var(--border-strong)}
-  .tl-node.start .tl-line{left:50%}
-  .tl-node.end .tl-line{right:50%}
-  .tl-dot{position:absolute;top:5px;left:50%;transform:translateX(-50%);width:16px;height:16px;border-radius:50%;background:var(--primary);border:3px solid var(--surface-0);box-shadow:0 0 0 1px var(--border-strong);z-index:1}
-  .tl-node.warn .tl-dot{background:var(--text-warning)}
-  .tl-node.goal .tl-dot{background:var(--text-success)}
-  .tl-node.muted .tl-dot{background:var(--text-muted)}
-  .tl-inner{padding:0 7px}
-  .tl-time{font-size:13px;font-weight:700;text-align:center}
-  .tl-cum{font-size:12px;color:var(--text-success);font-weight:600;text-align:center;margin-bottom:12px}
-  .tl-event{display:block;width:100%;text-align:left;background:var(--surface-2);border:1px solid var(--border);border-left:3px solid var(--primary);border-radius:8px;padding:10px 12px;margin-bottom:8px;cursor:pointer;box-shadow:var(--shadow);font:inherit;color:inherit;transition:transform .12s,box-shadow .12s}
-  .tl-event:hover{transform:translateY(-1px);box-shadow:var(--shadow-hover)}
-  .tl-event.warn{border-left-color:var(--text-warning)}
-  .tl-event.est{border-left-color:var(--text-warning);border-style:dashed;border-left-style:solid}
+
+  /* ---- Marketplace shell (append-only) ---- */
+  .mk-head{margin-bottom:1.25rem}
+  .mk-eyebrow{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--primary)}
+  .mk-shelf-label{display:flex;align-items:baseline;gap:8px;margin:1.5rem 0 .75rem}
+  .mk-shelf-label h2{font-size:15px;font-weight:700;margin:0;letter-spacing:-.01em}
+  .mk-shelf-label span{font-size:13px;color:var(--text-muted)}
+  .mk-prod{position:relative;display:flex;flex-direction:column;background:var(--surface-2);border:1px solid var(--border);border-radius:14px;box-shadow:var(--shadow);overflow:hidden;transition:transform .12s,box-shadow .12s,border-color .12s}
+  .mk-prod:hover{transform:translateY(-2px);box-shadow:var(--shadow-hover);border-color:var(--border-strong)}
+  .mk-prod.est{border-style:dashed;border-color:var(--border-strong)}
+  .mk-prod.est:hover{transform:none;box-shadow:var(--shadow)}
+  .mk-prod.inplan{border-color:var(--text-success);box-shadow:0 0 0 1px var(--text-success),var(--shadow)}
+  .mk-open{appearance:none;-webkit-appearance:none;background:none;border:none;text-align:left;font:inherit;color:inherit;cursor:pointer;padding:16px 16px 12px;display:flex;flex-direction:column;gap:9px;flex:1}
+  .mk-open:focus-visible{outline:2px solid var(--primary);outline-offset:-2px}
+  .mk-type{font-size:16px;font-weight:700;letter-spacing:-.01em;line-height:1.25}
+  .mk-prop{font-size:13px;color:var(--text-muted);margin-top:1px}
+  .mk-fig{margin-top:2px}
+  .mk-fig-k{font-size:11px;color:var(--text-muted)}
+  .mk-fig-v{font-size:26px;font-weight:700;letter-spacing:-.02em;color:var(--text-success);line-height:1.1}
+  .mk-sav{font-size:13px;color:var(--text-secondary);margin-top:1px}
+  .mk-meta{margin-top:auto;display:flex;flex-wrap:wrap;gap:6px 10px;font-size:12px;color:var(--text-muted);padding-top:4px}
+  .mk-meta i{color:var(--text-muted)}
+  .mk-detailhint{display:inline-flex;align-items:center;gap:3px;font-size:12px;font-weight:500;color:var(--text-secondary)}
+  .mk-foot{border-top:1px solid var(--border);padding:11px 16px;display:flex;align-items:center;gap:10px}
+  .mk-prod.est .mk-foot{border-top-style:dashed}
+  .mk-add{flex:1;display:inline-flex;align-items:center;justify-content:center;gap:6px;background:var(--surface-2);color:var(--primary);border:1px solid var(--border-strong);border-radius:8px;padding:9px 14px;cursor:pointer;font:inherit;font-size:14px;font-weight:600;transition:background .12s,border-color .12s,color .12s}
+  .mk-add:hover{border-color:var(--primary)}
+  .mk-add.in{background:var(--bg-success);color:var(--text-success);border-color:hsl(86 40% 82%)}
+  .mk-add.in:hover{border-color:var(--text-success)}
+  .mk-connect{flex:1;display:inline-flex;align-items:center;justify-content:center;gap:6px;background:none;color:var(--text-warning);border:1px dashed var(--border-warning);border-radius:8px;padding:9px 14px;cursor:pointer;font:inherit;font-size:14px;font-weight:600}
+  .mk-connect:hover{background:var(--bg-warning)}
+  .mk-connect:disabled{cursor:default;opacity:.75}
+  .mk-tags{position:absolute;top:12px;right:12px;display:flex;flex-direction:column;align-items:flex-end;gap:5px;pointer-events:none}
+  .mk-badge{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:600;border-radius:99px;padding:3px 9px;white-space:nowrap}
+  .mk-badge.deal{color:var(--text-success);background:var(--bg-success);border:1px solid hsl(86 40% 82%)}
+  .mk-badge.time{color:var(--text-warning);background:var(--bg-warning);border:1px solid var(--border-warning)}
+  .mk-badge.win{color:var(--primary);background:hsl(240 60% 96%);border:1px solid hsl(240 40% 90%)}
+  .mk-cart{position:sticky;bottom:14px;z-index:5;margin-top:1.5rem;display:flex;align-items:center;gap:14px;background:var(--surface-2);border:1px solid var(--border-strong);border-radius:14px;padding:13px 16px;box-shadow:0 8px 24px rgba(16,18,40,.14)}
+  .mk-cart.empty{border-style:dashed;box-shadow:var(--shadow);color:var(--text-muted)}
+  .mk-cart-ico{width:38px;height:38px;flex-shrink:0;border-radius:10px;display:flex;align-items:center;justify-content:center;background:hsl(240 60% 96%);color:var(--primary);font-size:20px}
+  .mk-cart.empty .mk-cart-ico{background:hsl(240 20% 96%);color:var(--text-muted)}
+  .mk-cart-body{min-width:0;flex:1}
+  .mk-cart-k{font-size:12px;color:var(--text-muted)}
+  .mk-cart-v{font-size:15px;font-weight:600;letter-spacing:-.01em}
+  .mk-cart-v b{color:var(--text-success);font-weight:700}
+  .mk-cart-cta{flex-shrink:0}
 </style>
 </head>
 <body>
@@ -231,83 +257,106 @@
       +discussion(s)+'</div>';
   }
   function unlockedBanner(){ if(!S.unlocked)return ''; return '<div style="display:flex;align-items:center;gap:8px;background:var(--bg-success);border:1px solid hsl(86 40% 82%);border-radius:var(--radius);padding:9px 13px;margin-bottom:1rem;font-size:14px;color:var(--text-success)"><i class="ti ti-sparkles"></i>Unlocked this session: <span style="font-weight:700">'+fmt(S.unlocked)+'</span> over 5 years</div>'; }
-  function backPill(){return '<button class="cf-pill" data-act="back" style="display:inline-flex;align-items:center;gap:4px"><i class="ti ti-arrow-left"></i> Back to plan</button>';}
+  function backPill(){return '<button class="cf-pill" data-act="back" style="display:inline-flex;align-items:center;gap:4px"><i class="ti ti-arrow-left"></i> Back to shop</button>';}
   function perToggle(){return '<div class="seg"><button data-period="annual" aria-pressed="'+(S.period==='annual')+'">Annual</button><button data-period="monthly" aria-pressed="'+(S.period==='monthly')+'">Monthly</button></div>';}
-  /* --- Timeline shell --- */
-  function eventCard(s){
-    var isEst=est(s), warn=!!s.note, lead=s.install.replace(/·.*/,'').trim();
-    var cls=isEst?' est':(warn?' warn':'');
-    var foot=warn
-      ? '<span style="font-size:11px;color:var(--text-warning);font-weight:600;white-space:nowrap"><i class="ti ti-clock"></i> '+esc(s.note)+'</span>'
-      : (isEst
-          ? '<span class="esttag" style="font-size:11px;white-space:nowrap"><i class="ti ti-help-circle"></i> estimate · connect data</span>'
-          : '<span style="font-size:11px;color:var(--text-muted);white-space:nowrap">starts '+esc(lead)+'</span>');
-    var amt=isEst
-      ? '<span class="mono" style="font-size:14px;font-weight:700;color:var(--text-success)">'+fmtRange(savLo(s),savHi(s))+'<span style="font-size:11px;color:var(--text-muted);font-weight:500">/yr est.</span></span>'
-      : '<span class="mono" style="font-size:15px;font-weight:700;color:var(--text-success)">'+fmtK(s.savings)+'<span style="font-size:11px;color:var(--text-muted);font-weight:500">/yr</span></span>';
-    return '<button class="tl-event'+cls+'" data-act="leaf" data-val="'+s.id+'">'
-      +'<div style="font-weight:600;font-size:14px">'+esc(s.prop)+'</div>'
-      +'<div style="font-size:12px;color:var(--text-muted);margin:1px 0 6px">'+esc(s.type)+'</div>'
-      +'<div style="display:flex;justify-content:space-between;align-items:center;gap:6px">'+amt+foot+'</div></button>';
+
+  /* ---- Marketplace shell (append-only) ---- */
+  S.cart={};
+  function cartItems(){return sols().filter(function(s){return !est(s)&&S.cart[s.id];});}
+  function cartCash(){return cartItems().reduce(function(t,s){return t+fiveCash(s);},0);}
+
+  function productCard(s){
+    var inplan=!est(s)&&!!S.cart[s.id];
+    var tags='';
+    if(est(s)){
+      tags='<span class="mk-badge win"><i class="ti ti-flask"></i> Pre-audit estimate</span>';
+    }else{
+      var savePct=Math.round((s.market-price(s))/s.market*100);
+      tags='<span class="mk-badge deal"><i class="ti ti-discount-2"></i> '+savePct+'% below market</span>';
+      if(s.note) tags+='<span class="mk-badge time"><i class="ti ti-clock"></i> '+esc(s.note)+'</span>';
+    }
+    var fig,sav,meta,foot;
+    if(est(s)){
+      fig='<div class="mk-fig"><div class="mk-fig-k">Estimated savings</div><div class="mk-fig-v">'+perRange(savLo(s),savHi(s))+'</div></div>';
+      sav='<div class="mk-sav">Firm 5-year cash flow appears once we have your data.</div>';
+      meta='<div class="mk-meta"><span><i class="ti ti-tool"></i> '+esc(s.vendor)+'</span><span><i class="ti ti-clock-hour-4"></i> connect '+esc(s.dataNeed)+'</span></div>';
+      foot='<button class="mk-connect" data-act="connect" data-val="'+s.id+'"><i class="ti ti-plug-connected"></i> Connect data to price</button>';
+    }else{
+      fig='<div class="mk-fig"><div class="mk-fig-k">5-year net cash flow</div><div class="mk-fig-v mono">'+fmtK(fiveCash(s))+'</div></div>';
+      sav='<div class="mk-sav">Saves about <b style="color:var(--text-success)">'+fmt(s.savings)+'</b> a year · '+esc(s.install)+'</div>';
+      meta='<div class="mk-meta"><span><i class="ti ti-tool"></i> '+esc(s.vendor)+'</span><span><i class="ti ti-calendar"></i> '+UL[s.u]+'</span><span class="mk-detailhint">Open details <i class="ti ti-chevron-right"></i></span></div>';
+      foot='<button class="mk-add'+(inplan?' in':'')+'" data-act="add" data-val="'+s.id+'">'+(inplan?'<i class="ti ti-circle-check-filled"></i> In your plan':'<i class="ti ti-plus"></i> Add to plan')+'</button>';
+    }
+    return '<div class="mk-prod'+(est(s)?' est':'')+(inplan?' inplan':'')+'" data-row="'+s.id+'">'
+      +'<div class="mk-tags">'+tags+'</div>'
+      +'<button class="mk-open" data-act="leaf" data-val="'+s.id+'">'
+        +'<div><div class="mk-type">'+esc(s.type)+'</div><div class="mk-prop"><i class="ti ti-building"></i> '+esc(s.prop)+'</div></div>'
+        +fig+sav+meta
+      +'</button>'
+      +'<div class="mk-foot">'+foot+'</div>'
+    +'</div>';
   }
-  function renderHome(){
+
+  function cartBar(){
+    var items=cartItems(), n=items.length;
+    if(!n){
+      return '<div class="mk-cart empty"><div class="mk-cart-ico"><i class="ti ti-shopping-cart"></i></div>'
+        +'<div class="mk-cart-body"><div class="mk-cart-v" style="color:var(--text-secondary)">Your plan is empty</div>'
+        +'<div class="mk-cart-k">Add upgrades from the shelf to build a plan.</div></div></div>';
+    }
+    return '<div class="mk-cart"><div class="mk-cart-ico"><i class="ti ti-shopping-cart"></i></div>'
+      +'<div class="mk-cart-body"><div class="mk-cart-v">'+n+' upgrade'+(n>1?'s':'')+' in your plan · <b>'+fmtK(cartCash())+'</b> over 5 years</div>'
+      +'<div class="mk-cart-k">Open any upgrade to review the economics and approve.</div></div>'
+      +'<div class="mk-cart-cta"><button class="cf-btn" data-act="review"><i class="ti ti-arrow-right"></i> Review plan</button></div></div>';
+  }
+
+  function renderShop(){
     var live=sols();
-    var byU=function(u){return live.filter(function(s){return s.u===u;}).sort(recSort);};
-    var buckets=[{u:0,title:'Now',warn:true},{u:1,title:'Next 3 months'},{u:2,title:'Later this year'}];
-    var run=0, cols='';
-    cols+='<div class="tl-col cap"><div class="tl-node start muted"><div class="tl-line"></div><div class="tl-dot"></div></div><div class="tl-inner"><div class="tl-time">Today</div><div class="tl-cum" style="color:var(--text-muted)">$0/yr</div></div></div>';
-    buckets.forEach(function(b){
-      var list=byU(b.u); run+=list.reduce(function(t,s){return t+s.savings;},0);
-      var ev=list.length?list.map(eventCard).join(''):'<div style="font-size:12px;color:var(--text-muted);text-align:center;padding:12px 0"><i class="ti ti-circle-check"></i> nothing pending</div>';
-      cols+='<div class="tl-col"><div class="tl-node'+(b.warn?' warn':'')+'"><div class="tl-line"></div><div class="tl-dot"></div></div>'
-        +'<div class="tl-inner"><div class="tl-time">'+b.title+'</div><div class="tl-cum">'+fmtK(run)+'/yr flowing</div>'+ev+'</div></div>';
-    });
-    cols+='<div class="tl-col cap"><div class="tl-node end goal"><div class="tl-line"></div><div class="tl-dot"></div></div><div class="tl-inner"><div class="tl-time">Optimized</div><div class="tl-cum">'+fmtK(run)+'/yr</div></div></div>';
-    var setup=prospects().length?'<button class="cf-pill" data-act="setup" style="margin-bottom:16px"><i class="ti ti-building-community"></i> '+prospects().length+' properties still need setup to unlock their projects →</button>':'';
-    app.innerHTML='<div style="margin-bottom:1rem"><p style="color:var(--text-secondary);margin:0;font-size:14px">'+esc(DATA.portfolio)+'</p>'
-      +'<h1 style="margin:.2rem 0 .1rem;font-size:26px">Your savings plan</h1>'
-      +'<p style="color:var(--text-muted);margin:0 0 1rem;font-size:13px">Move left to right: do the time-sensitive things now, and watch your yearly cash flow build to <span style="color:var(--text-success);font-weight:600">'+fmtK(run)+'/yr</span>.</p></div>'
-      +unlockedBanner()
-      +setup
-      +'<div class="tl-scroll"><div class="tl-row">'+cols+'</div></div>'
-      +'<p style="color:var(--text-muted);font-size:12px;margin-top:8px"><i class="ti ti-arrow-move-right"></i> Each marker on the rail is a point in time; the cards beneath it are projects to schedule then. Tap one for the economics.</p>';
+    var ready=live.filter(function(s){return !est(s);}).sort(recSort);
+    var pending=live.filter(est);
+    var head='<div class="mk-head"><span class="mk-eyebrow"><i class="ti ti-building-store"></i> Upgrade marketplace</span>'
+      +'<p style="color:var(--text-secondary);margin:.5rem 0 0;font-size:14px">'+esc(DATA.portfolio)+'</p>'
+      +'<h1 style="margin:.15rem 0 0;font-size:28px">Shop vetted energy upgrades</h1>'
+      +'<p style="color:var(--text-muted);margin:.3rem 0 0;font-size:13px">A curated shelf, priced from your own meter data. Add upgrades to build a plan, then open any one to review and approve.</p></div>';
+    var body='';
+    if(ready.length){
+      body+='<div class="mk-shelf-label"><h2><i class="ti ti-sparkles" style="color:var(--primary)"></i> Priced &amp; ready</h2><span>'+ready.length+' upgrade'+(ready.length>1?'s':'')+', measured from your data</span></div>'
+        +'<div class="grid">'+ready.map(productCard).join('')+'</div>';
+    }
+    if(pending.length){
+      body+='<div class="mk-shelf-label"><h2><i class="ti ti-flask" style="color:var(--text-warning)"></i> Connect data to price</h2><span>'+pending.length+' upgrade'+(pending.length>1?'s':'')+' waiting on your data</span></div>'
+        +'<div class="grid">'+pending.map(productCard).join('')+'</div>';
+    }
+    if(!ready.length&&!pending.length){
+      body='<div class="cf-sq" style="text-align:center;padding:2rem"><i class="ti ti-circle-check" style="font-size:26px;color:var(--text-success)"></i><p style="margin:.5rem 0 0">Every upgrade on the shelf is approved.</p></div>';
+    }
+    app.innerHTML=head+unlockedBanner()+body+cartBar();
   }
-  function renderSetup(){
-    var list=prospects();
-    var rows=list.map(function(p){
-      var cta=p.ready?'<button class="cf-btn" data-act="sign" data-val="'+p.id+'">Approve &amp; sign</button>':'<button class="cf-pill" data-act="step" data-val="'+p.id+'">'+p.step+'</button>';
-      return '<div data-row="'+p.id+'" style="display:flex;align-items:center;justify-content:space-between;gap:12px;background:var(--surface-2);border:1px '+(p.est?'dashed':'solid')+' '+(p.est?'var(--border-strong)':'var(--border)')+';border-radius:12px;padding:15px 16px;box-shadow:var(--shadow)">'
-        +'<div style="min-width:0"><p style="margin:0;font-weight:600">'+esc(p.name)+'</p><p style="margin:.15rem 0 0;font-size:13px;color:var(--text-muted)">'+(p.est?'Estimated · '+p.step:p.step)+'</p></div>'
-        +'<div style="text-align:right;flex-shrink:0"><div class="cf-amt" style="font-size:19px;color:var(--text-success)">'+fmtK(p.cf)+'</div><div style="margin-top:7px">'+cta+'</div></div></div>';
-    }).join('');
-    app.innerHTML='<div style="margin-bottom:1.25rem">'+backPill()+'<h1 style="margin:14px 0 0">Finish setting up</h1><p style="color:var(--text-secondary);margin:.3rem 0 0">Bring each property online — audits and bills turn on its projects.</p></div>'+unlockedBanner()
-      +(list.length?'<div style="display:flex;flex-direction:column;gap:10px">'+rows+'</div>':'<div class="card" style="text-align:center;padding:2rem"><i class="ti ti-circle-check" style="font-size:26px;color:var(--text-success)"></i><p style="margin:.5rem 0 0">Every property is set up.</p></div>');
-  }
+
   function renderLeaf(){
     var s=DATA.solutions.find(function(x){return x.id===S.leafId;});
-    if(!s||S.approved[s.id]){S.screen='home';return renderHome();}
-    var head='<div style="display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:16px">'+backPill()+(est(s)?'':'<span style="display:flex;align-items:center;gap:8px"><span style="font-size:13px;color:var(--text-muted)">Amounts:</span>'+perToggle()+'</span>')+'</div>';
-    app.innerHTML=head+unlockedBanner()+solutionCard(s);
+    if(!s||S.approved[s.id]){S.screen='home';return renderShop();}
+    var inplan=!est(s)&&!!S.cart[s.id];
+    var addBtn=est(s)?'':'<button class="'+(inplan?'cf-pill':'cf-btn')+'" data-act="add" data-val="'+s.id+'" style="display:inline-flex;align-items:center;gap:6px">'+(inplan?'<i class="ti ti-circle-check"></i> In your plan':'<i class="ti ti-plus"></i> Add to plan')+'</button>';
+    var head='<div style="display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:16px">'+backPill()
+      +'<span style="display:flex;align-items:center;gap:8px">'+addBtn+(est(s)?'':'<span style="font-size:13px;color:var(--text-muted)">Amounts:</span>'+perToggle())+'</span></div>';
+    app.innerHTML=head+unlockedBanner()+solutionCard(s)+cartBar();
   }
-  function render(){
-    if(S.screen==='home')renderHome();
-    else if(S.screen==='setup')renderSetup();
-    else if(S.screen==='leaf')renderLeaf();
-  }
+
+  function render(){ if(S.screen==='leaf')renderLeaf();else renderShop(); }
   function unlockRow(id,amt,then){var row=app.querySelector('[data-row="'+id+'"]');S.unlocked+=amt;if(row){row.classList.add('cf-fade');setTimeout(then,340);}else then();}
   app.addEventListener('click',function(e){
     var d=e.target.closest('[data-disc]'); if(d){S.disc[d.dataset.disc]=!S.disc[d.dataset.disc];render();return;}
     var pertog=e.target.closest('[data-period]'); if(pertog){S.period=pertog.dataset.period;render();return;}
     var seg=e.target.closest('[data-segmode]'); if(seg){S.mode[seg.dataset.sol]=seg.dataset.segmode;render();return;}
     var el=e.target.closest('[data-act],[data-approve]'); if(!el)return;
-    if(el.dataset.approve){var s=DATA.solutions.find(function(x){return x.id===el.dataset.approve;});var m=curMode(s);unlockRow(s.id,fiveCash(s),function(){S.approved[s.id]=1;S.approvedMode[s.id]=m;S.screen='home';render();});return;}
+    if(el.dataset.approve){var s=DATA.solutions.find(function(x){return x.id===el.dataset.approve;});var m=curMode(s);unlockRow(s.id,fiveCash(s),function(){S.approved[s.id]=1;S.approvedMode[s.id]=m;delete S.cart[s.id];S.screen='home';render();});return;}
     var a=el.dataset.act, v=el.dataset.val;
     if(a==='connect'){el.textContent='Request sent →';el.disabled=true;el.style.opacity=.7;}
-    else if(a==='setup'){S.screen='setup';render();}
+    else if(a==='add'){S.cart[v]=!S.cart[v];render();}
+    else if(a==='review'){var it=cartItems();if(it.length){S.leafId=it[0].id;S.screen='leaf';}render();}
     else if(a==='leaf'){S.leafId=v;S.screen='leaf';render();}
     else if(a==='back'){S.screen='home';render();}
-    else if(a==='step'){el.textContent='We’ll guide you →';el.disabled=true;el.style.opacity=.6;}
-    else if(a==='sign'){var p=DATA.prospects.find(function(x){return x.id===v;});unlockRow(v,p.cf,function(){S.signed[v]=1;render();});}
   });
   render();
 })();

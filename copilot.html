@@ -66,26 +66,40 @@
   .disc-reply input{flex:1;border:1px solid var(--border);border-radius:8px;padding:8px 10px;font:inherit;font-size:13px;background:var(--surface-1)}
   .cf-fade{animation:cfOut .35s forwards}
   @keyframes cfOut{to{opacity:0;transform:scale(.96);height:0;margin:0;padding:0;border-width:0}}
-  /* --- timeline / roadmap shell --- */
-  .tl-scroll{overflow-x:auto;margin:0 -18px;padding:4px 18px 10px}
-  .tl-row{display:flex;min-width:660px}
-  .tl-col{flex:1;min-width:170px}
-  .tl-col.cap{flex:0 0 78px;min-width:78px}
-  .tl-node{position:relative;height:28px;margin-bottom:10px}
-  .tl-line{position:absolute;top:12px;left:0;right:0;height:3px;background:var(--border-strong)}
-  .tl-node.start .tl-line{left:50%}
-  .tl-node.end .tl-line{right:50%}
-  .tl-dot{position:absolute;top:5px;left:50%;transform:translateX(-50%);width:16px;height:16px;border-radius:50%;background:var(--primary);border:3px solid var(--surface-0);box-shadow:0 0 0 1px var(--border-strong);z-index:1}
-  .tl-node.warn .tl-dot{background:var(--text-warning)}
-  .tl-node.goal .tl-dot{background:var(--text-success)}
-  .tl-node.muted .tl-dot{background:var(--text-muted)}
-  .tl-inner{padding:0 7px}
-  .tl-time{font-size:13px;font-weight:700;text-align:center}
-  .tl-cum{font-size:12px;color:var(--text-success);font-weight:600;text-align:center;margin-bottom:12px}
-  .tl-event{display:block;width:100%;text-align:left;background:var(--surface-2);border:1px solid var(--border);border-left:3px solid var(--primary);border-radius:8px;padding:10px 12px;margin-bottom:8px;cursor:pointer;box-shadow:var(--shadow);font:inherit;color:inherit;transition:transform .12s,box-shadow .12s}
-  .tl-event:hover{transform:translateY(-1px);box-shadow:var(--shadow-hover)}
-  .tl-event.warn{border-left-color:var(--text-warning)}
-  .tl-event.est{border-left-color:var(--text-warning);border-style:dashed;border-left-style:solid}
+
+  /* ---- Copilot shell (appended) ---- */
+  .co-head{display:flex;align-items:center;gap:11px;margin-bottom:6px}
+  .co-avatar{width:40px;height:40px;border-radius:99px;background:var(--primary);color:var(--primary-fg);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+  .co-avatar i{font-size:22px}
+  .co-title{font-size:19px;font-weight:700;letter-spacing:-.01em;line-height:1.2}
+  .co-status{font-size:12px;color:var(--text-muted);display:flex;align-items:center;gap:5px}
+  .co-dot{width:7px;height:7px;border-radius:99px;background:var(--text-success);display:inline-block}
+  .co-portfolio{font-size:13px;color:var(--text-secondary);margin:0 0 18px 51px}
+  .co-thread{display:flex;flex-direction:column;gap:12px;margin-bottom:16px}
+  .co-turn{display:flex;gap:9px;align-items:flex-end}
+  .co-turn.me{flex-direction:row-reverse}
+  .co-mini{width:26px;height:26px;border-radius:99px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:14px}
+  .co-mini.adv{background:var(--primary);color:var(--primary-fg)}
+  .co-mini.you{background:hsl(240 20% 90%);color:var(--text-secondary)}
+  .co-bubble{max-width:78%}
+  .co-bubble .disc-msg{max-width:100%;font-size:14px}
+  .co-bubble .disc-text{font-size:14px}
+  .co-card-wrap{max-width:100%;align-self:stretch}
+  .co-card-wrap .card{margin-bottom:0}
+  .co-turn.card-turn{align-items:flex-start}
+  .co-turn.card-turn .co-bubble{max-width:calc(100% - 35px);flex:1}
+  .co-chips{display:flex;flex-wrap:wrap;gap:8px;margin-left:35px}
+  .co-chip{border:1px solid var(--border-strong);background:var(--surface-2);border-radius:99px;padding:9px 15px;cursor:pointer;font:inherit;font-size:14px;font-weight:500;color:var(--primary);display:inline-flex;align-items:center;gap:6px;text-align:left;box-shadow:var(--shadow)}
+  .co-chip:hover{border-color:var(--primary);background:hsl(240 60% 98%)}
+  .co-chip i{font-size:16px;opacity:.7}
+  .co-composer{display:flex;gap:8px;margin-top:16px;margin-left:35px}
+  .co-composer input{flex:1;border:1px solid var(--border);border-radius:99px;padding:11px 16px;font:inherit;font-size:14px;background:var(--surface-2);color:var(--text-muted)}
+  .co-send{width:42px;height:42px;border-radius:99px;flex-shrink:0;border:1px solid var(--border-strong);background:var(--surface-2);color:var(--text-muted);cursor:default;display:flex;align-items:center;justify-content:center}
+  .co-typing .disc-msg{display:inline-flex;gap:4px;align-items:center}
+  .co-typing span{width:6px;height:6px;border-radius:99px;background:var(--text-muted);display:inline-block;animation:coBlink 1.2s infinite}
+  .co-typing span:nth-child(2){animation-delay:.2s}
+  .co-typing span:nth-child(3){animation-delay:.4s}
+  @keyframes coBlink{0%,60%,100%{opacity:.3}30%{opacity:1}}
 </style>
 </head>
 <body>
@@ -231,85 +245,166 @@
       +discussion(s)+'</div>';
   }
   function unlockedBanner(){ if(!S.unlocked)return ''; return '<div style="display:flex;align-items:center;gap:8px;background:var(--bg-success);border:1px solid hsl(86 40% 82%);border-radius:var(--radius);padding:9px 13px;margin-bottom:1rem;font-size:14px;color:var(--text-success)"><i class="ti ti-sparkles"></i>Unlocked this session: <span style="font-weight:700">'+fmt(S.unlocked)+'</span> over 5 years</div>'; }
-  function backPill(){return '<button class="cf-pill" data-act="back" style="display:inline-flex;align-items:center;gap:4px"><i class="ti ti-arrow-left"></i> Back to plan</button>';}
+  function backPill(){return '<button class="cf-pill" data-act="back" style="display:inline-flex;align-items:center;gap:4px"><i class="ti ti-arrow-left"></i> Restart chat</button>';}
   function perToggle(){return '<div class="seg"><button data-period="annual" aria-pressed="'+(S.period==='annual')+'">Annual</button><button data-period="monthly" aria-pressed="'+(S.period==='monthly')+'">Monthly</button></div>';}
-  /* --- Timeline shell --- */
-  function eventCard(s){
-    var isEst=est(s), warn=!!s.note, lead=s.install.replace(/·.*/,'').trim();
-    var cls=isEst?' est':(warn?' warn':'');
-    var foot=warn
-      ? '<span style="font-size:11px;color:var(--text-warning);font-weight:600;white-space:nowrap"><i class="ti ti-clock"></i> '+esc(s.note)+'</span>'
-      : (isEst
-          ? '<span class="esttag" style="font-size:11px;white-space:nowrap"><i class="ti ti-help-circle"></i> estimate · connect data</span>'
-          : '<span style="font-size:11px;color:var(--text-muted);white-space:nowrap">starts '+esc(lead)+'</span>');
-    var amt=isEst
-      ? '<span class="mono" style="font-size:14px;font-weight:700;color:var(--text-success)">'+fmtRange(savLo(s),savHi(s))+'<span style="font-size:11px;color:var(--text-muted);font-weight:500">/yr est.</span></span>'
-      : '<span class="mono" style="font-size:15px;font-weight:700;color:var(--text-success)">'+fmtK(s.savings)+'<span style="font-size:11px;color:var(--text-muted);font-weight:500">/yr</span></span>';
-    return '<button class="tl-event'+cls+'" data-act="leaf" data-val="'+s.id+'">'
-      +'<div style="font-weight:600;font-size:14px">'+esc(s.prop)+'</div>'
-      +'<div style="font-size:12px;color:var(--text-muted);margin:1px 0 6px">'+esc(s.type)+'</div>'
-      +'<div style="display:flex;justify-content:space-between;align-items:center;gap:6px">'+amt+foot+'</div></button>';
+
+  /* ================= Copilot shell ================= */
+  // Scripted conversation state machine.
+  // C.turns holds the transcript to render (advisor / you / card turns).
+  // Each "step" appends turns and offers a fresh set of reply chips.
+  var C={turns:[],chips:[]};
+
+  // Recommendations the advisor can surface, keyed to DATA.solutions.
+  function solById(id){return DATA.solutions.find(function(x){return x.id===id;});}
+
+  // ---- turn builders ----
+  function advTurn(html){return {who:'adv',html:html};}
+  function youTurn(text){return {who:'you',text:text};}
+  function cardTurn(id,lead){return {who:'card',id:id,lead:lead};}
+
+  // ---- render one transcript turn ----
+  function renderTurn(t){
+    if(t.who==='card'){
+      var s=solById(t.id);
+      return '<div class="co-turn card-turn"><div class="co-mini adv"><i class="ti ti-sparkles"></i></div>'
+        +'<div class="co-bubble">'
+        +(t.lead?'<div class="disc-msg" style="max-width:100%;margin-bottom:8px"><div class="disc-text">'+t.lead+'</div></div>':'')
+        +'<div class="co-card-wrap">'+solutionCard(s)+'</div>'
+        +'</div></div>';
+    }
+    if(t.who==='you'){
+      return '<div class="co-turn me"><div class="co-mini you"><i class="ti ti-user"></i></div>'
+        +'<div class="co-bubble"><div class="disc-msg me"><div class="disc-text">'+esc(t.text)+'</div></div></div></div>';
+    }
+    // advisor plain bubble (html allowed for light emphasis)
+    return '<div class="co-turn"><div class="co-mini adv"><i class="ti ti-sparkles"></i></div>'
+      +'<div class="co-bubble"><div class="disc-msg"><div class="disc-text">'+t.html+'</div></div></div></div>';
   }
-  function renderHome(){
-    var live=sols();
-    var byU=function(u){return live.filter(function(s){return s.u===u;}).sort(recSort);};
-    var buckets=[{u:0,title:'Now',warn:true},{u:1,title:'Next 3 months'},{u:2,title:'Later this year'}];
-    var run=0, cols='';
-    cols+='<div class="tl-col cap"><div class="tl-node start muted"><div class="tl-line"></div><div class="tl-dot"></div></div><div class="tl-inner"><div class="tl-time">Today</div><div class="tl-cum" style="color:var(--text-muted)">$0/yr</div></div></div>';
-    buckets.forEach(function(b){
-      var list=byU(b.u); run+=list.reduce(function(t,s){return t+s.savings;},0);
-      var ev=list.length?list.map(eventCard).join(''):'<div style="font-size:12px;color:var(--text-muted);text-align:center;padding:12px 0"><i class="ti ti-circle-check"></i> nothing pending</div>';
-      cols+='<div class="tl-col"><div class="tl-node'+(b.warn?' warn':'')+'"><div class="tl-line"></div><div class="tl-dot"></div></div>'
-        +'<div class="tl-inner"><div class="tl-time">'+b.title+'</div><div class="tl-cum">'+fmtK(run)+'/yr flowing</div>'+ev+'</div></div>';
-    });
-    cols+='<div class="tl-col cap"><div class="tl-node end goal"><div class="tl-line"></div><div class="tl-dot"></div></div><div class="tl-inner"><div class="tl-time">Optimized</div><div class="tl-cum">'+fmtK(run)+'/yr</div></div></div>';
-    var setup=prospects().length?'<button class="cf-pill" data-act="setup" style="margin-bottom:16px"><i class="ti ti-building-community"></i> '+prospects().length+' properties still need setup to unlock their projects →</button>':'';
-    app.innerHTML='<div style="margin-bottom:1rem"><p style="color:var(--text-secondary);margin:0;font-size:14px">'+esc(DATA.portfolio)+'</p>'
-      +'<h1 style="margin:.2rem 0 .1rem;font-size:26px">Your savings plan</h1>'
-      +'<p style="color:var(--text-muted);margin:0 0 1rem;font-size:13px">Move left to right: do the time-sensitive things now, and watch your yearly cash flow build to <span style="color:var(--text-success);font-weight:600">'+fmtK(run)+'/yr</span>.</p></div>'
-      +unlockedBanner()
-      +setup
-      +'<div class="tl-scroll"><div class="tl-row">'+cols+'</div></div>'
-      +'<p style="color:var(--text-muted);font-size:12px;margin-top:8px"><i class="ti ti-arrow-move-right"></i> Each marker on the rail is a point in time; the cards beneath it are projects to schedule then. Tap one for the economics.</p>';
+
+  function renderChips(){
+    if(!C.chips.length)return '';
+    return '<div class="co-chips">'+C.chips.map(function(c){
+      return '<button class="co-chip" data-chip="'+c.id+'"><i class="ti '+(c.icon||'ti-arrow-right')+'"></i>'+esc(c.label)+'</button>';
+    }).join('')+'</div>';
   }
-  function renderSetup(){
-    var list=prospects();
-    var rows=list.map(function(p){
-      var cta=p.ready?'<button class="cf-btn" data-act="sign" data-val="'+p.id+'">Approve &amp; sign</button>':'<button class="cf-pill" data-act="step" data-val="'+p.id+'">'+p.step+'</button>';
-      return '<div data-row="'+p.id+'" style="display:flex;align-items:center;justify-content:space-between;gap:12px;background:var(--surface-2);border:1px '+(p.est?'dashed':'solid')+' '+(p.est?'var(--border-strong)':'var(--border)')+';border-radius:12px;padding:15px 16px;box-shadow:var(--shadow)">'
-        +'<div style="min-width:0"><p style="margin:0;font-weight:600">'+esc(p.name)+'</p><p style="margin:.15rem 0 0;font-size:13px;color:var(--text-muted)">'+(p.est?'Estimated · '+p.step:p.step)+'</p></div>'
-        +'<div style="text-align:right;flex-shrink:0"><div class="cf-amt" style="font-size:19px;color:var(--text-success)">'+fmtK(p.cf)+'</div><div style="margin-top:7px">'+cta+'</div></div></div>';
-    }).join('');
-    app.innerHTML='<div style="margin-bottom:1.25rem">'+backPill()+'<h1 style="margin:14px 0 0">Finish setting up</h1><p style="color:var(--text-secondary);margin:.3rem 0 0">Bring each property online — audits and bills turn on its projects.</p></div>'+unlockedBanner()
-      +(list.length?'<div style="display:flex;flex-direction:column;gap:10px">'+rows+'</div>':'<div class="card" style="text-align:center;padding:2rem"><i class="ti ti-circle-check" style="font-size:26px;color:var(--text-success)"></i><p style="margin:.5rem 0 0">Every property is set up.</p></div>');
+
+  function renderCopilot(){
+    var head='<div class="co-head"><div class="co-avatar"><i class="ti ti-sparkles"></i></div>'
+      +'<div><div class="co-title">Your energy advisor</div>'
+      +'<div class="co-status"><span class="co-dot"></span> Atrium Copilot · always on</div></div>'
+      +'<span style="margin-left:auto">'+backPill()+'</span></div>'
+      +'<p class="co-portfolio">'+esc(DATA.portfolio)+' · reviewing your portfolio with you</p>';
+    var thread='<div class="co-thread">'+C.turns.map(renderTurn).join('')+'</div>';
+    var composer='<div class="co-composer"><input placeholder="Ask about any property or project…" disabled><button class="co-send"><i class="ti ti-arrow-up"></i></button></div>';
+    app.innerHTML=head+unlockedBanner()+thread+renderChips()+composer;
+    // keep the latest turn in view
+    var t=app.querySelectorAll('.co-turn');
+    if(t.length){t[t.length-1].scrollIntoView({block:'nearest'});}
   }
-  function renderLeaf(){
-    var s=DATA.solutions.find(function(x){return x.id===S.leafId;});
-    if(!s||S.approved[s.id]){S.screen='home';return renderHome();}
-    var head='<div style="display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:16px">'+backPill()+(est(s)?'':'<span style="display:flex;align-items:center;gap:8px"><span style="font-size:13px;color:var(--text-muted)">Amounts:</span>'+perToggle()+'</span>')+'</div>';
-    app.innerHTML=head+unlockedBanner()+solutionCard(s);
+
+  // ---- scripted steps ----
+  // The opening: greet + single next best move (Cedar Court Solar + Batteries = s5).
+  function stepGreet(){
+    C.turns=[
+      advTurn('Morning. I looked across all your properties overnight — here’s the one move I’d make first.'),
+      advTurn('I’d approve <b>Cedar Court’s Solar + Batteries</b> first — the rebate ends <b>Aug 31</b> and it’s cash-flow positive from day one. Want to see the numbers?')
+    ];
+    C.chips=[
+      {id:'numbers-s5',label:'Show me the numbers',icon:'ti-calculator'},
+      {id:'urgent',label:'What’s most urgent?',icon:'ti-clock'},
+      {id:'riverside',label:'What about Riverside Lodge?',icon:'ti-building'}
+    ];
+    renderCopilot();
   }
-  function render(){
-    if(S.screen==='home')renderHome();
-    else if(S.screen==='setup')renderSetup();
-    else if(S.screen==='leaf')renderLeaf();
+
+  // Show the detailed leaf card for a given solution as the advisor's next turn.
+  function stepShowCard(id,youText,lead){
+    C.turns.push(youTurn(youText));
+    C.turns.push(cardTurn(id,lead));
+    // after a card, offer to look at the runner-up / other threads
+    C.chips=[
+      {id:'urgent',label:'What else is time-sensitive?',icon:'ti-clock'},
+      {id:'riverside',label:'What about Riverside Lodge?',icon:'ti-building'},
+      {id:'biggest',label:'Where’s the biggest payoff?',icon:'ti-trending-up'}
+    ];
+    renderCopilot();
   }
+
+  // "What's most urgent?" — advisor calls out the two rebate-driven Solar jobs.
+  function stepUrgent(){
+    C.turns.push(youTurn('What’s most urgent?'));
+    C.turns.push(advTurn('Two things share the <b>Aug 31</b> rebate deadline: <b>Cedar Court</b> and <b>Marina Bay Inn</b>, both Solar + Batteries. Cedar Court is the smaller, faster install — I’d lock it in first, then Marina Bay. Here’s Cedar Court.'));
+    C.turns.push(cardTurn('s5',''));
+    C.chips=[
+      {id:'numbers-s1',label:'Show me Marina Bay’s numbers',icon:'ti-calculator'},
+      {id:'riverside',label:'What about Riverside Lodge?',icon:'ti-building'},
+      {id:'biggest',label:'Where’s the biggest payoff?',icon:'ti-trending-up'}
+    ];
+    renderCopilot();
+  }
+
+  // "Biggest payoff" — advisor points at Marina Bay Solar (largest fiveCash).
+  function stepBiggest(){
+    C.turns.push(youTurn('Where’s the biggest payoff?'));
+    C.turns.push(advTurn('Over five years, <b>Marina Bay Inn’s Solar + Batteries</b> nets the most by a wide margin — and it’s on the same Aug 31 rebate clock. It’s a bigger install, so let’s look together.'));
+    C.turns.push(cardTurn('s1',''));
+    C.chips=[
+      {id:'urgent',label:'What else is time-sensitive?',icon:'ti-clock'},
+      {id:'riverside',label:'What about Riverside Lodge?',icon:'ti-building'},
+      {id:'numbers-s5',label:'Back to Cedar Court',icon:'ti-arrow-back-up'}
+    ];
+    renderCopilot();
+  }
+
+  // "Riverside Lodge" — the estimated path (connect data). Uses s8 (estimated).
+  function stepRiverside(){
+    C.turns.push(youTurn('What about Riverside Lodge?'));
+    C.turns.push(advTurn('Riverside is promising but I’m still working from rough estimates — I don’t have its meter data yet. Best early candidate is <b>Heat Pump Water Heaters</b>. Connect the metering and I’ll turn this into a firm, guaranteed quote.'));
+    C.turns.push(cardTurn('s8',''));
+    C.chips=[
+      {id:'numbers-s5',label:'Show me a ready one instead',icon:'ti-calculator'},
+      {id:'urgent',label:'What’s most urgent?',icon:'ti-clock'},
+      {id:'biggest',label:'Where’s the biggest payoff?',icon:'ti-trending-up'}
+    ];
+    renderCopilot();
+  }
+
+  // ---- chip dispatch ----
+  function handleChip(id){
+    if(id==='numbers-s5') return stepShowCard('s5','Show me the numbers.','Here’s Cedar Court’s Solar + Batteries. Financed, you’re net-positive from day one — the payment stays below what you save.');
+    if(id==='numbers-s1') return stepShowCard('s1','Show me Marina Bay’s numbers.','Here’s Marina Bay Inn’s Solar + Batteries — your largest opportunity. Same Aug 31 rebate applies.');
+    if(id==='urgent') return stepUrgent();
+    if(id==='biggest') return stepBiggest();
+    if(id==='riverside') return stepRiverside();
+  }
+
+  function render(){ renderCopilot(); }
+
   function unlockRow(id,amt,then){var row=app.querySelector('[data-row="'+id+'"]');S.unlocked+=amt;if(row){row.classList.add('cf-fade');setTimeout(then,340);}else then();}
+
   app.addEventListener('click',function(e){
+    // shared card interactions (discussion toggle, period toggle, pay mode, approve)
     var d=e.target.closest('[data-disc]'); if(d){S.disc[d.dataset.disc]=!S.disc[d.dataset.disc];render();return;}
     var pertog=e.target.closest('[data-period]'); if(pertog){S.period=pertog.dataset.period;render();return;}
     var seg=e.target.closest('[data-segmode]'); if(seg){S.mode[seg.dataset.sol]=seg.dataset.segmode;render();return;}
+    var chip=e.target.closest('[data-chip]'); if(chip){handleChip(chip.dataset.chip);return;}
     var el=e.target.closest('[data-act],[data-approve]'); if(!el)return;
-    if(el.dataset.approve){var s=DATA.solutions.find(function(x){return x.id===el.dataset.approve;});var m=curMode(s);unlockRow(s.id,fiveCash(s),function(){S.approved[s.id]=1;S.approvedMode[s.id]=m;S.screen='home';render();});return;}
+    if(el.dataset.approve){var s=solById(el.dataset.approve);var m=curMode(s);unlockRow(s.id,fiveCash(s),function(){S.approved[s.id]=1;S.approvedMode[s.id]=m;
+      // advisor acknowledges the approval and nudges the next best move
+      C.turns.push(advTurn('Done — <b>'+esc(s.type)+'</b> at <b>'+esc(s.prop)+'</b> is approved. I’ll handle scheduling with '+esc(s.vendor)+' and keep you posted. Want the next best move?'));
+      C.chips=[
+        {id:'urgent',label:'What’s next?',icon:'ti-arrow-right'},
+        {id:'biggest',label:'Where’s the biggest payoff?',icon:'ti-trending-up'},
+        {id:'riverside',label:'What about Riverside Lodge?',icon:'ti-building'}
+      ];
+      renderCopilot();
+    });return;}
     var a=el.dataset.act, v=el.dataset.val;
     if(a==='connect'){el.textContent='Request sent →';el.disabled=true;el.style.opacity=.7;}
-    else if(a==='setup'){S.screen='setup';render();}
-    else if(a==='leaf'){S.leafId=v;S.screen='leaf';render();}
-    else if(a==='back'){S.screen='home';render();}
-    else if(a==='step'){el.textContent='We’ll guide you →';el.disabled=true;el.style.opacity=.6;}
-    else if(a==='sign'){var p=DATA.prospects.find(function(x){return x.id===v;});unlockRow(v,p.cf,function(){S.signed[v]=1;render();});}
+    else if(a==='back'){C.turns=[];C.chips=[];stepGreet();}
   });
-  render();
+
+  stepGreet();
 })();
 </script>
 </body>

@@ -66,26 +66,39 @@
   .disc-reply input{flex:1;border:1px solid var(--border);border-radius:8px;padding:8px 10px;font:inherit;font-size:13px;background:var(--surface-1)}
   .cf-fade{animation:cfOut .35s forwards}
   @keyframes cfOut{to{opacity:0;transform:scale(.96);height:0;margin:0;padding:0;border-width:0}}
-  /* --- timeline / roadmap shell --- */
-  .tl-scroll{overflow-x:auto;margin:0 -18px;padding:4px 18px 10px}
-  .tl-row{display:flex;min-width:660px}
-  .tl-col{flex:1;min-width:170px}
-  .tl-col.cap{flex:0 0 78px;min-width:78px}
-  .tl-node{position:relative;height:28px;margin-bottom:10px}
-  .tl-line{position:absolute;top:12px;left:0;right:0;height:3px;background:var(--border-strong)}
-  .tl-node.start .tl-line{left:50%}
-  .tl-node.end .tl-line{right:50%}
-  .tl-dot{position:absolute;top:5px;left:50%;transform:translateX(-50%);width:16px;height:16px;border-radius:50%;background:var(--primary);border:3px solid var(--surface-0);box-shadow:0 0 0 1px var(--border-strong);z-index:1}
-  .tl-node.warn .tl-dot{background:var(--text-warning)}
-  .tl-node.goal .tl-dot{background:var(--text-success)}
-  .tl-node.muted .tl-dot{background:var(--text-muted)}
-  .tl-inner{padding:0 7px}
-  .tl-time{font-size:13px;font-weight:700;text-align:center}
-  .tl-cum{font-size:12px;color:var(--text-success);font-weight:600;text-align:center;margin-bottom:12px}
-  .tl-event{display:block;width:100%;text-align:left;background:var(--surface-2);border:1px solid var(--border);border-left:3px solid var(--primary);border-radius:8px;padding:10px 12px;margin-bottom:8px;cursor:pointer;box-shadow:var(--shadow);font:inherit;color:inherit;transition:transform .12s,box-shadow .12s}
-  .tl-event:hover{transform:translateY(-1px);box-shadow:var(--shadow-hover)}
-  .tl-event.warn{border-left-color:var(--text-warning)}
-  .tl-event.est{border-left-color:var(--text-warning);border-style:dashed;border-left-style:solid}
+
+  /* ===== Planner shell (appended) ===== */
+  .pl-sticky{position:sticky;top:0;z-index:20;background:var(--surface-0);padding:14px 0 12px;margin:-2px 0 18px;border-bottom:1px solid var(--border)}
+  .pl-sumcard{background:var(--surface-2);border:1px solid var(--border-strong);border-radius:14px;padding:16px 18px;box-shadow:var(--shadow)}
+  .pl-sumtop{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+  .pl-sumlead{font-size:12px;color:var(--text-muted);text-transform:uppercase;letter-spacing:.05em;font-weight:600}
+  .pl-hero{font-size:32px;line-height:1.05;letter-spacing:-.02em;color:var(--text-success)}
+  .pl-count{font-size:13px;color:var(--text-secondary)}
+  .pl-metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+  .pl-metric{background:hsl(240 20% 98%);border:1px solid var(--border);border-radius:10px;padding:9px 11px}
+  .pl-metric .k{font-size:11px;color:var(--text-muted);text-transform:uppercase;letter-spacing:.04em;font-weight:600}
+  .pl-metric .v{font-size:18px;font-weight:700;letter-spacing:-.01em;margin-top:1px}
+  .pl-row{display:flex;align-items:center;gap:13px;background:var(--surface-2);border:1px solid var(--border);border-radius:12px;padding:13px 15px;box-shadow:var(--shadow);transition:border-color .12s,box-shadow .12s,opacity .12s}
+  .pl-row:hover{border-color:var(--border-strong)}
+  .pl-row.off{opacity:.5}
+  .pl-row.dash{border-style:dashed;border-color:var(--border-strong)}
+  .pl-tog{flex-shrink:0;width:44px;height:26px;border-radius:99px;border:1px solid var(--border-strong);background:hsl(240 14% 92%);position:relative;cursor:pointer;padding:0;transition:background .14s,border-color .14s}
+  .pl-tog::after{content:"";position:absolute;top:2px;left:2px;width:20px;height:20px;border-radius:50%;background:#fff;box-shadow:0 1px 2px rgba(16,18,40,.25);transition:left .14s}
+  .pl-tog[aria-pressed="true"]{background:var(--primary);border-color:var(--primary)}
+  .pl-tog[aria-pressed="true"]::after{left:20px}
+  .pl-tog:disabled{cursor:default;opacity:.55}
+  .pl-name{min-width:0;flex:1}
+  .pl-nm-btn{background:none;border:none;padding:0;margin:0;font:inherit;color:inherit;cursor:pointer;text-align:left;font-weight:600;display:inline-flex;align-items:center;gap:5px}
+  .pl-nm-btn:hover{color:var(--primary);text-decoration:underline}
+  .pl-nm-btn .ti-chevron-right{font-size:14px;color:var(--text-muted)}
+  .pl-sub{font-size:12.5px;color:var(--text-muted);margin-top:2px}
+  .pl-fig{text-align:right;flex-shrink:0}
+  .pl-fig .big{font-size:18px;font-weight:700;letter-spacing:-.01em;color:var(--text-success)}
+  .pl-fig.off-fig .big{color:var(--text-muted)}
+  .pl-fig .small{font-size:12px;color:var(--text-secondary);margin-top:1px}
+  .pl-need{font-size:12px;color:var(--text-warning);font-weight:500;display:inline-flex;align-items:center;gap:4px}
+  .pl-sectlabel{font-size:12px;color:var(--text-muted);text-transform:uppercase;letter-spacing:.05em;font-weight:600;margin:20px 2px 9px}
+  .pl-quickrow{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
 </style>
 </head>
 <body>
@@ -233,81 +246,93 @@
   function unlockedBanner(){ if(!S.unlocked)return ''; return '<div style="display:flex;align-items:center;gap:8px;background:var(--bg-success);border:1px solid hsl(86 40% 82%);border-radius:var(--radius);padding:9px 13px;margin-bottom:1rem;font-size:14px;color:var(--text-success)"><i class="ti ti-sparkles"></i>Unlocked this session: <span style="font-weight:700">'+fmt(S.unlocked)+'</span> over 5 years</div>'; }
   function backPill(){return '<button class="cf-pill" data-act="back" style="display:inline-flex;align-items:center;gap:4px"><i class="ti ti-arrow-left"></i> Back to plan</button>';}
   function perToggle(){return '<div class="seg"><button data-period="annual" aria-pressed="'+(S.period==='annual')+'">Annual</button><button data-period="monthly" aria-pressed="'+(S.period==='monthly')+'">Monthly</button></div>';}
-  /* --- Timeline shell --- */
-  function eventCard(s){
-    var isEst=est(s), warn=!!s.note, lead=s.install.replace(/·.*/,'').trim();
-    var cls=isEst?' est':(warn?' warn':'');
-    var foot=warn
-      ? '<span style="font-size:11px;color:var(--text-warning);font-weight:600;white-space:nowrap"><i class="ti ti-clock"></i> '+esc(s.note)+'</span>'
-      : (isEst
-          ? '<span class="esttag" style="font-size:11px;white-space:nowrap"><i class="ti ti-help-circle"></i> estimate · connect data</span>'
-          : '<span style="font-size:11px;color:var(--text-muted);white-space:nowrap">starts '+esc(lead)+'</span>');
-    var amt=isEst
-      ? '<span class="mono" style="font-size:14px;font-weight:700;color:var(--text-success)">'+fmtRange(savLo(s),savHi(s))+'<span style="font-size:11px;color:var(--text-muted);font-weight:500">/yr est.</span></span>'
-      : '<span class="mono" style="font-size:15px;font-weight:700;color:var(--text-success)">'+fmtK(s.savings)+'<span style="font-size:11px;color:var(--text-muted);font-weight:500">/yr</span></span>';
-    return '<button class="tl-event'+cls+'" data-act="leaf" data-val="'+s.id+'">'
-      +'<div style="font-weight:600;font-size:14px">'+esc(s.prop)+'</div>'
-      +'<div style="font-size:12px;color:var(--text-muted);margin:1px 0 6px">'+esc(s.type)+'</div>'
-      +'<div style="display:flex;justify-content:space-between;align-items:center;gap:6px">'+amt+foot+'</div></button>';
+
+  /* ===== Planner shell logic ===== */
+  // Included set: measured solutions default ON; estimated are never includable.
+  // Use S.excl to track measured rows the user has toggled OFF.
+  S.excl={};
+  function measured(){return DATA.solutions.filter(function(s){return !est(s);});}
+  function estimated(){return DATA.solutions.filter(function(s){return est(s);});}
+  function included(){return measured().filter(function(s){return !S.excl[s.id];});}
+  function on(s){return !est(s) && !S.excl[s.id];}
+
+  function summaryStrip(){
+    var inc=included();
+    var totalCash=inc.reduce(function(t,s){return t+fiveCash(s);},0);
+    var totalSav=inc.reduce(function(t,s){return t+s.savings;},0);
+    var totalUp=inc.reduce(function(t,s){return t+net(s);},0);
+    var n=inc.length, nTot=measured().length;
+    return '<div class="pl-sticky"><div class="pl-sumcard">'
+      +'<div class="pl-sumtop">'
+        +'<div><div class="pl-sumlead">This plan · 5-year net cash flow</div>'
+          +'<div class="pl-hero mono">'+fmtK(totalCash)+'</div></div>'
+        +'<div class="pl-count mono">'+n+' of '+nTot+' projects included</div></div>'
+      +'<div class="pl-metrics">'
+        +'<div class="pl-metric"><div class="k">Annual savings</div><div class="v mono" style="color:var(--text-success)">'+fmtK(totalSav)+'/yr</div></div>'
+        +'<div class="pl-metric"><div class="k">Upfront (net)</div><div class="v mono">'+fmtK(totalUp)+'</div></div>'
+        +'<div class="pl-metric"><div class="k">Projects in plan</div><div class="v mono">'+n+'</div></div></div>'
+      +'<div class="pl-quickrow"><button class="cf-pill" data-act="all" aria-pressed="false"><i class="ti ti-checks"></i> Include all</button>'
+        +'<button class="cf-pill" data-act="none" aria-pressed="false"><i class="ti ti-square-off"></i> Clear all</button></div>'
+      +'</div></div>';
   }
-  function renderHome(){
-    var live=sols();
-    var byU=function(u){return live.filter(function(s){return s.u===u;}).sort(recSort);};
-    var buckets=[{u:0,title:'Now',warn:true},{u:1,title:'Next 3 months'},{u:2,title:'Later this year'}];
-    var run=0, cols='';
-    cols+='<div class="tl-col cap"><div class="tl-node start muted"><div class="tl-line"></div><div class="tl-dot"></div></div><div class="tl-inner"><div class="tl-time">Today</div><div class="tl-cum" style="color:var(--text-muted)">$0/yr</div></div></div>';
-    buckets.forEach(function(b){
-      var list=byU(b.u); run+=list.reduce(function(t,s){return t+s.savings;},0);
-      var ev=list.length?list.map(eventCard).join(''):'<div style="font-size:12px;color:var(--text-muted);text-align:center;padding:12px 0"><i class="ti ti-circle-check"></i> nothing pending</div>';
-      cols+='<div class="tl-col"><div class="tl-node'+(b.warn?' warn':'')+'"><div class="tl-line"></div><div class="tl-dot"></div></div>'
-        +'<div class="tl-inner"><div class="tl-time">'+b.title+'</div><div class="tl-cum">'+fmtK(run)+'/yr flowing</div>'+ev+'</div></div>';
-    });
-    cols+='<div class="tl-col cap"><div class="tl-node end goal"><div class="tl-line"></div><div class="tl-dot"></div></div><div class="tl-inner"><div class="tl-time">Optimized</div><div class="tl-cum">'+fmtK(run)+'/yr</div></div></div>';
-    var setup=prospects().length?'<button class="cf-pill" data-act="setup" style="margin-bottom:16px"><i class="ti ti-building-community"></i> '+prospects().length+' properties still need setup to unlock their projects →</button>':'';
-    app.innerHTML='<div style="margin-bottom:1rem"><p style="color:var(--text-secondary);margin:0;font-size:14px">'+esc(DATA.portfolio)+'</p>'
-      +'<h1 style="margin:.2rem 0 .1rem;font-size:26px">Your savings plan</h1>'
-      +'<p style="color:var(--text-muted);margin:0 0 1rem;font-size:13px">Move left to right: do the time-sensitive things now, and watch your yearly cash flow build to <span style="color:var(--text-success);font-weight:600">'+fmtK(run)+'/yr</span>.</p></div>'
-      +unlockedBanner()
-      +setup
-      +'<div class="tl-scroll"><div class="tl-row">'+cols+'</div></div>'
-      +'<p style="color:var(--text-muted);font-size:12px;margin-top:8px"><i class="ti ti-arrow-move-right"></i> Each marker on the rail is a point in time; the cards beneath it are projects to schedule then. Tap one for the economics.</p>';
+
+  function plRow(s){
+    var isEst=est(s);
+    var included=on(s);
+    var sub=esc(s.prop)+' · '+esc(s.type);
+    var name='<button class="pl-nm-btn" data-act="leaf" data-val="'+s.id+'">'+esc(s.type)+' <i class="ti ti-chevron-right"></i></button>';
+    if(isEst){
+      var lo=savLo(s),hi=savHi(s);
+      return '<div class="pl-row dash" data-row="'+s.id+'">'
+        +'<button class="pl-tog" aria-pressed="false" disabled title="Connect data to include"></button>'
+        +'<div class="pl-name">'+name+'<div class="pl-sub">'+sub+'</div>'
+          +'<div class="pl-need" style="margin-top:4px"><i class="ti ti-plug-connected"></i> Connect data to include</div></div>'
+        +'<div class="pl-fig off-fig"><div class="big mono">'+perRange(lo,hi)+'</div><div class="small">estimate · not in totals</div></div>'
+        +'</div>';
+    }
+    return '<div class="pl-row'+(included?'':' off')+'" data-row="'+s.id+'">'
+      +'<button class="pl-tog" data-act="toggle" data-val="'+s.id+'" aria-pressed="'+included+'" title="'+(included?'Included — click to remove':'Excluded — click to include')+'"></button>'
+      +'<div class="pl-name">'+name+'<div class="pl-sub">'+sub+'</div></div>'
+      +'<div class="pl-fig'+(included?'':' off-fig')+'"><div class="big mono">'+per(s.savings)+'</div>'
+        +'<div class="small mono">'+fmtK(fiveCash(s))+' over 5 yrs</div></div>'
+      +'</div>';
   }
-  function renderSetup(){
-    var list=prospects();
-    var rows=list.map(function(p){
-      var cta=p.ready?'<button class="cf-btn" data-act="sign" data-val="'+p.id+'">Approve &amp; sign</button>':'<button class="cf-pill" data-act="step" data-val="'+p.id+'">'+p.step+'</button>';
-      return '<div data-row="'+p.id+'" style="display:flex;align-items:center;justify-content:space-between;gap:12px;background:var(--surface-2);border:1px '+(p.est?'dashed':'solid')+' '+(p.est?'var(--border-strong)':'var(--border)')+';border-radius:12px;padding:15px 16px;box-shadow:var(--shadow)">'
-        +'<div style="min-width:0"><p style="margin:0;font-weight:600">'+esc(p.name)+'</p><p style="margin:.15rem 0 0;font-size:13px;color:var(--text-muted)">'+(p.est?'Estimated · '+p.step:p.step)+'</p></div>'
-        +'<div style="text-align:right;flex-shrink:0"><div class="cf-amt" style="font-size:19px;color:var(--text-success)">'+fmtK(p.cf)+'</div><div style="margin-top:7px">'+cta+'</div></div></div>';
-    }).join('');
-    app.innerHTML='<div style="margin-bottom:1.25rem">'+backPill()+'<h1 style="margin:14px 0 0">Finish setting up</h1><p style="color:var(--text-secondary);margin:.3rem 0 0">Bring each property online — audits and bills turn on its projects.</p></div>'+unlockedBanner()
-      +(list.length?'<div style="display:flex;flex-direction:column;gap:10px">'+rows+'</div>':'<div class="card" style="text-align:center;padding:2rem"><i class="ti ti-circle-check" style="font-size:26px;color:var(--text-success)"></i><p style="margin:.5rem 0 0">Every property is set up.</p></div>');
+
+  function renderPlanner(){
+    var meas=measured().slice().sort(recSort);
+    var ests=estimated().slice().sort(recSort);
+    var head='<div style="display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:2px">'
+        +'<div><p style="color:var(--text-secondary);margin:0;font-size:14px">'+esc(DATA.portfolio)+'</p>'
+        +'<h1 style="margin:.2rem 0 0;font-size:26px">Plan your savings</h1></div>'
+        +'<span style="display:flex;align-items:center;gap:8px"><span style="font-size:13px;color:var(--text-muted)">Amounts:</span>'+perToggle()+'</span></div>'
+      +'<p style="color:var(--text-muted);margin:.3rem 0 0;font-size:13px">Toggle projects in or out and watch the portfolio numbers move. Include everything, or model just the set you want to start with.</p>';
+    var measRows='<div class="pl-sectlabel">Measured projects · toggle to include</div><div style="display:flex;flex-direction:column;gap:10px">'+meas.map(plRow).join('')+'</div>';
+    var estRows=ests.length?'<div class="pl-sectlabel">Estimated projects · connect data to include</div><div style="display:flex;flex-direction:column;gap:10px">'+ests.map(plRow).join('')+'</div>':'';
+    app.innerHTML=head+summaryStrip()+measRows+estRows;
   }
+
   function renderLeaf(){
     var s=DATA.solutions.find(function(x){return x.id===S.leafId;});
-    if(!s||S.approved[s.id]){S.screen='home';return renderHome();}
+    if(!s){S.screen='home';return renderPlanner();}
     var head='<div style="display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:16px">'+backPill()+(est(s)?'':'<span style="display:flex;align-items:center;gap:8px"><span style="font-size:13px;color:var(--text-muted)">Amounts:</span>'+perToggle()+'</span>')+'</div>';
-    app.innerHTML=head+unlockedBanner()+solutionCard(s);
+    app.innerHTML=head+solutionCard(s);
   }
-  function render(){
-    if(S.screen==='home')renderHome();
-    else if(S.screen==='setup')renderSetup();
-    else if(S.screen==='leaf')renderLeaf();
-  }
-  function unlockRow(id,amt,then){var row=app.querySelector('[data-row="'+id+'"]');S.unlocked+=amt;if(row){row.classList.add('cf-fade');setTimeout(then,340);}else then();}
+
+  function render(){ if(S.screen==='leaf')renderLeaf(); else renderPlanner(); }
+
   app.addEventListener('click',function(e){
     var d=e.target.closest('[data-disc]'); if(d){S.disc[d.dataset.disc]=!S.disc[d.dataset.disc];render();return;}
     var pertog=e.target.closest('[data-period]'); if(pertog){S.period=pertog.dataset.period;render();return;}
     var seg=e.target.closest('[data-segmode]'); if(seg){S.mode[seg.dataset.sol]=seg.dataset.segmode;render();return;}
     var el=e.target.closest('[data-act],[data-approve]'); if(!el)return;
-    if(el.dataset.approve){var s=DATA.solutions.find(function(x){return x.id===el.dataset.approve;});var m=curMode(s);unlockRow(s.id,fiveCash(s),function(){S.approved[s.id]=1;S.approvedMode[s.id]=m;S.screen='home';render();});return;}
+    if(el.dataset.approve){var s=DATA.solutions.find(function(x){return x.id===el.dataset.approve;});S.approved[s.id]=1;S.excl[s.id]=1;S.screen='home';render();return;}
     var a=el.dataset.act, v=el.dataset.val;
     if(a==='connect'){el.textContent='Request sent →';el.disabled=true;el.style.opacity=.7;}
-    else if(a==='setup'){S.screen='setup';render();}
+    else if(a==='toggle'){S.excl[v]=!S.excl[v];render();}
+    else if(a==='all'){S.excl={};render();}
+    else if(a==='none'){measured().forEach(function(s){S.excl[s.id]=1;});render();}
     else if(a==='leaf'){S.leafId=v;S.screen='leaf';render();}
     else if(a==='back'){S.screen='home';render();}
-    else if(a==='step'){el.textContent='We’ll guide you →';el.disabled=true;el.style.opacity=.6;}
-    else if(a==='sign'){var p=DATA.prospects.find(function(x){return x.id===v;});unlockRow(v,p.cf,function(){S.signed[v]=1;render();});}
   });
   render();
 })();
