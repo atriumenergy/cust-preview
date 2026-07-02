@@ -91,7 +91,7 @@
     return '<div style="display:flex;align-items:center;gap:8px;background:var(--bg-success);border:1px solid hsl(86 40% 82%);border-radius:var(--radius);padding:9px 13px;margin-bottom:1rem;font-size:14px;color:var(--text-success)"><i class="ti ti-sparkles" aria-hidden="true"></i>Unlocked this session: <span style="font-weight:700">'+fmt(S.unlocked)+'</span> over 5 years</div>';
   }
   function bucketPills(){
-    var opts=[[1,'All prospective'],[2,'Land & expand'],[3,'All signed']];
+    var opts=[[1,'None signed'],[2,'Some signed'],[3,'All signed']];
     return '<div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:1.25rem;align-items:center">'
       +'<span style="font-size:13px;color:var(--text-muted);margin-right:2px">Preview portfolio:</span>'
       +opts.map(function(o){return '<button class="cf-pill" data-act="bucket" data-val="'+o[0]+'" aria-pressed="'+(S.bucket===o[0])+'">'+o[1]+'</button>';}).join('')+'</div>';
