@@ -143,7 +143,7 @@
   function savHi(s){return Math.round(s.savings*1.25/1000)*1000;}
   function tileVal(s){return est(s)?5*s.savings:fiveCash(s);}
   function solModes(s){var m=['cash'];if(s.loan)m.push('loan');if(s.lease)m.push('lease');return m;}
-  function curMode(s){var ms=solModes(s);var m=S.mode[s.id]||'cash';return ms.indexOf(m)>=0?m:'cash';}
+  function curMode(s){var ms=solModes(s);var d=s.loan?'loan':(s.lease?'lease':'cash');var m=S.mode[s.id]||d;return ms.indexOf(m)>=0?m:d;}
   function per(x){return S.period==='monthly'?fmt(x/12)+'/mo':fmt(x)+'/yr';}
   function perRange(lo,hi){return S.period==='monthly'?fmt(Math.round(lo/12))+'–'+fmt(Math.round(hi/12))+'/mo':fmtK(lo)+'–'+fmtK(hi)+'/yr';}
   function prospects(){return DATA.prospects.filter(function(p){return !S.signed[p.id];});}
@@ -166,13 +166,13 @@
     if(mode==='loan'){
       var m=pmtMo(nt,s.loan.aprPct,s.loan.termYears),ann=m*12,t=s.loan.termYears;
       return {hero:'+'+per(sav-ann), sub:'$0 down · '+t+'-yr loan @ '+s.loan.aprPct+'%',
-        chips:[['Savings','+'+per(sav)],['Loan payment','−'+per(ann)]],
+        chips:[['Savings','+'+per(sav),'var(--text-success)'],['Loan payment',per(ann)]],
         series:(function(){var a=[0],cum=0;for(var y=1;y<=10;y++){cum+=sav-(y<=t?ann:0);a.push(cum);}return a;})(), be:0.05, beLabel:'cash-flow positive from day one',
         takeaway:'$0 down; you net '+per(sav-ann)+' from day one — best near-term cash flow.'};
     }
     var la=s.lease.annualAtrium,t2=s.lease.termYears;
     return {hero:'+'+per(sav-la), sub:'$0 down · '+t2+'-yr lease',
-      chips:[['Savings','+'+per(sav)],['Lease cost','−'+per(la)],['Term',t2+' yrs']],
+      chips:[['Savings','+'+per(sav),'var(--text-success)'],['Lease cost',per(la)],['Term',t2+' yrs']],
       series:(function(){var a=[0],cum=0;for(var y=1;y<=10;y++){cum+=sav-la;a.push(cum);}return a;})(), be:0.05, beLabel:'cash-flow positive from year one',
       takeaway:'$0 down; net '+per(sav-la)+' a year, no ownership or upkeep.'};
   }
@@ -219,7 +219,7 @@
     var mode=curMode(s), e=econ(s,mode), ms=solModes(s);
     var hint={cash:'Buy outright',loan:'Finance',lease:'Rent'};
     var payseg=ms.map(function(m){return '<button data-sol="'+s.id+'" data-segmode="'+m+'" aria-pressed="'+(mode===m)+'"><span style="display:block">'+cap(m)+'</span><span style="display:block;font-size:11px;font-weight:500;opacity:.85">'+hint[m]+'</span></button>';}).join('');
-    var chips=e.chips.map(function(k){return '<div class="chip"><div class="k">'+k[0]+'</div><div class="v mono">'+k[1]+'</div></div>';}).join('');
+    var chips=e.chips.map(function(k){return '<div class="chip"><div class="k">'+k[0]+'</div><div class="v mono"'+(k[2]?' style="color:'+k[2]+'"':'')+'>'+k[1]+'</div></div>';}).join('');
     var savePct=Math.round((s.market-price(s))/s.market*100);
     return '<div class="card" data-row="'+s.id+'">'+cardHead(s)
       +'<div style="margin-bottom:12px"><span class="measured"><i class="ti ti-circle-check"></i> Measured from your data</span></div>'
