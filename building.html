@@ -140,14 +140,78 @@
       var opp=est(s)?'<span style="font-size:14px">'+perRange(savLo(s),savHi(s))+'</span><div style="font-size:11px;color:var(--text-muted);font-weight:500">estimate</div>':'<span style="font-size:16px">'+fmtK(fiveCash(s))+'</span><div style="font-size:11px;color:var(--text-muted);font-weight:500">5-yr cash</div>';
       return '<button class="band'+(est(s)?' est':'')+'" data-act="leaf" data-val="'+s.id+'"><span class="band-zone">'+esc(s.zone)+'</span><span style="flex:1;min-width:0"><span class="band-t">'+esc(s.type)+'</span>'+live+'</span><span class="band-opp">'+opp+'</span></button>';
     }).join('');
-    app.innerHTML='<div><h1 style="font-size:26px">Your building — by system</h1><p style="color:var(--text-muted);margin:.3rem 0 0;font-size:14px">Each floor is a system. Green = we see it live; dashed = no meter yet. Tap a system for the opportunity.</p></div>'
-      +'<div class="pills">'+pills+'</div>'+roof+'<div class="bld">'+(mine.length?bands:'<div class="card" style="text-align:center">All systems here are optimized.</div>')+'</div><div class="ground"></div>';
+    var opIdx=((PROPS.indexOf(S.prop))%OPS.props.length+OPS.props.length)%OPS.props.length;
+    var op=OPS.props[opIdx];
+    var hot=op.runPct>100?' <span style="display:inline-flex;align-items:center;gap:4px;font-size:12px;font-weight:600;color:var(--text-warning);background:var(--bg-warning);border:1px solid var(--border-warning);border-radius:99px;padding:3px 9px;white-space:nowrap;vertical-align:middle"><i class="ti ti-flame"></i> Running high · '+op.runPct+'% — check a system below</span>':'';
+    app.innerHTML='<div><h1 style="font-size:26px">Your building — by system'+hot+'</h1><p style="color:var(--text-muted);margin:.3rem 0 0;font-size:14px">Each floor is a system. Green = we see it live; dashed = no meter yet. Tap a system for the opportunity.</p></div>'
+      +'<div class="pills">'+pills+'</div>'+opsSection(op)+roof+'<div class="bld">'+(mine.length?bands:'<div class="card" style="text-align:center">All systems here are optimized.</div>')+'</div><div class="ground"></div>';
   }
   function renderLeaf(){
     var s=SOLS.find(function(x){return x.id===S.leafId;});
     if(!s||S.approved[s.id]){S.screen='home';return renderHome();}
     app.innerHTML='<div style="display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:16px">'+backPill()+(est(s)?'':'<span style="display:flex;align-items:center;gap:8px"><span style="font-size:13px;color:var(--text-muted)">Amounts:</span>'+perToggle()+'</span>')+'</div>'+solutionCard(s);
   }
+// OPERATIONAL LAYER for contracted / operating properties.
+// Paste inside each concept's IIFE, AFTER the shared fmtK/fmt/esc/etc and BEFORE render().
+// Answers, for properties Atrium already operates: "am I running high?", "am I saving?", "what's next year?"
+// Numbers are ABE-normalized for occupancy + weather. No CO2 lead. Plain wording. No tildes.
+
+var OPS={
+  portfolio:{contracted:8,total:20,savedToDate:412000,runPct:97,nextYearCost:1840000,approvable:210000,signup:380000},
+  props:[
+    {id:'h1',name:'Marina Bay Inn',rooms:120,savedToDate:112000,runPct:96,nextYearCost:392000,perRoomNight:12.10},
+    {id:'h2',name:'Riverside Lodge',rooms:96,savedToDate:88000,runPct:108,nextYearCost:318000,perRoomNight:13.60},
+    {id:'h3',name:'Cedar Court Hotel',rooms:150,savedToDate:141000,runPct:94,nextYearCost:471000,perRoomNight:11.40}
+  ],
+  // 24 monthly cost points ($). index 0..11 = last 12 months (realized), 12..23 = next 12 (forecast). today = 12.
+  series:(function(){var a=[];for(var i=0;i<24;i++){var seas=Math.round(9000*Math.sin(i/12*Math.PI*2));var without=182000+seas+(i<12?0:2000);var wth=without-(i<12?18000:22000);var appr=wth-(i<12?0:9000);a.push({without:without,wth:wth,appr:appr});}return a;})()
+};
+function runColor(p){return p<=100?'var(--text-success)':'var(--text-warning)';}
+function runLabel(p){return p<=100?'In line — running efficiently for your occupancy and weather':'Running high for your occupancy and weather — worth a look';}
+function opStat(sc){
+  var box='background:var(--surface-1);border:1px solid var(--border);border-radius:10px;padding:10px 12px';
+  var k='font-size:12px;color:var(--text-muted)',v='font-size:20px;font-weight:700;letter-spacing:-.01em';
+  var per=sc.perRoomNight!=null?'$'+sc.perRoomNight.toFixed(2)+' per occupied room-night':'';
+  return '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px">'
+    +'<div style="'+box+'"><div style="'+k+'">Saved to date</div><div class="mono" style="'+v+';color:var(--text-success)">'+fmtK(sc.savedToDate)+'</div></div>'
+    +'<div style="'+box+'"><div style="'+k+'">Now vs expected</div><div class="mono" style="'+v+';color:'+runColor(sc.runPct)+'">'+sc.runPct+'%</div></div>'
+    +'<div style="'+box+'"><div style="'+k+'">Next 12 months</div><div class="mono" style="'+v+'">'+fmtK(sc.nextYearCost)+'</div>'+(per?'<div style="font-size:11px;color:var(--text-muted);margin-top:2px">'+per+'</div>':'')+'</div>'
+    +'</div>';
+}
+function trajChart(){
+  var s=OPS.series,n=s.length,w=320,h=120,pad=10,today=12,all=[];
+  s.forEach(function(d){all.push(d.without,d.wth,d.appr);});
+  var mn=Math.min.apply(null,all),mx=Math.max.apply(null,all),sp=(mx-mn)||1;
+  function X(i){return pad+i/(n-1)*(w-2*pad);}
+  function Y(v){return pad+(1-(v-mn)/sp)*(h-2*pad);}
+  function poly(key,from,to){var p=[];for(var i=from;i<=to;i++)p.push(X(i).toFixed(1)+','+Y(s[i][key]).toFixed(1));return p.join(' ');}
+  var gap=[];for(var i=0;i<=today;i++)gap.push(X(i).toFixed(1)+','+Y(s[i].without).toFixed(1));for(var j=today;j>=0;j--)gap.push(X(j).toFixed(1)+','+Y(s[j].wth).toFixed(1));
+  return '<svg viewBox="0 0 '+w+' '+h+'" width="100%" height="'+h+'" preserveAspectRatio="none" style="display:block">'
+    +'<polygon points="'+gap.join(' ')+'" fill="hsl(86 45% 92%)"/>'
+    +'<line x1="'+X(today).toFixed(1)+'" x2="'+X(today).toFixed(1)+'" y1="'+pad+'" y2="'+(h-pad)+'" stroke="var(--border-strong)" stroke-dasharray="3 3"/>'
+    +'<polyline points="'+poly('without',0,n-1)+'" fill="none" stroke="var(--text-warning)" stroke-width="2" stroke-dasharray="4 3"/>'
+    +'<polyline points="'+poly('wth',0,today)+'" fill="none" stroke="var(--text-success)" stroke-width="2.5"/>'
+    +'<polyline points="'+poly('wth',today,n-1)+'" fill="none" stroke="var(--text-success)" stroke-width="2.5" stroke-dasharray="5 3"/>'
+    +'<polyline points="'+poly('appr',today,n-1)+'" fill="none" stroke="var(--primary)" stroke-width="2" stroke-dasharray="2 2"/>'
+    +'</svg>';
+}
+function opsLegend(){
+  return '<div style="display:flex;flex-wrap:wrap;gap:14px;font-size:11px;color:var(--text-secondary);margin-top:6px">'
+    +'<span style="color:var(--text-warning)">without Atrium</span>'
+    +'<span style="color:var(--text-success)">with Atrium (now and forecast)</span>'
+    +'<span style="color:var(--primary)">if you approve the proposed work</span>'
+    +'<span>vertical line = today</span></div>';
+}
+function opsSection(sc){
+  sc=sc||OPS.portfolio;var P=OPS.portfolio;
+  var more='Do nothing and next year runs about '+fmtK(P.nextYearCost)+'. Approve the proposed work to cut about '+fmtK(P.approvable)+' per year more'+(sc===P?', or bring your other '+(P.total-P.contracted)+' properties online for roughly '+fmtK(P.signup)+' per year on top':'')+'.';
+  return '<div class="card"><div style="font-size:16px;font-weight:700">How you’re doing</div>'
+    +'<div style="font-size:13px;color:var(--text-secondary);margin:2px 0 12px">'+runLabel(sc.runPct)+'.</div>'
+    +opStat(sc)
+    +'<div style="margin:14px 0 4px;font-size:13px;font-weight:600">Energy &amp; water cost — last 12 months and next 12</div>'
+    +trajChart()+opsLegend()
+    +'<div style="margin-top:12px;font-size:13px;color:var(--text-secondary)">'+more+'</div></div>';
+}
   function render(){ if(S.screen==='home')renderHome();else renderLeaf(); }
   app.addEventListener('click',function(e){
     var d=e.target.closest('[data-disc]'); if(d){S.disc[d.dataset.disc]=!S.disc[d.dataset.disc];render();return;}
