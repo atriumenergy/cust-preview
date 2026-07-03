@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Atrium — cash-flow (concept)</title>
+<title>Atrium — impact (concept)</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
@@ -66,28 +66,45 @@
   .disc-reply input{flex:1;border:1px solid var(--border);border-radius:8px;padding:8px 10px;font:inherit;font-size:13px;background:var(--surface-1)}
   .cf-fade{animation:cfOut .35s forwards}
   @keyframes cfOut{to{opacity:0;transform:scale(.96);height:0;margin:0;padding:0;border-width:0}}
-  /* --- Impact shell (appended) --- */
+  .sav-legend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:12px;color:var(--text-secondary);margin-top:8px}
+  .sav-legend span{display:inline-flex;align-items:center;gap:5px}
+  .sav-legend i.k{width:16px;height:0;border-top-width:2px;border-top-style:solid;display:inline-block}
+  /* --- Impact shell (dollars lead; carbon rides along) --- */
   :root{
     --eco:hsl(158 64% 30%);--bg-eco:hsl(158 45% 95%);--eco-border:hsl(158 40% 80%);
   }
   body.impact{background:hsl(150 25% 98%)}
   .impact .banner{background:var(--bg-eco);border-color:var(--eco-border)}
   .impact .cf-pill[aria-pressed="true"]{background:var(--eco);color:var(--primary-fg);border-color:var(--eco)}
-  .hero{margin-bottom:1.1rem}
-  .hero .eyebrow{color:var(--text-secondary);margin:0;font-size:14px}
-  .hero h1{margin:.2rem 0 .1rem;font-size:26px}
-  .hero .lede{color:var(--text-muted);margin:0 0 .8rem;font-size:13px}
-  .eco-word{color:var(--eco)}
-  .prog{background:var(--surface-2);border:1px solid var(--border);border-radius:12px;padding:14px 16px;box-shadow:var(--shadow)}
-  .prog .head{display:flex;justify-content:space-between;align-items:baseline;font-size:13px}
-  .track{height:10px;background:hsl(158 20% 92%);border-radius:99px;overflow:hidden;margin:8px 0 6px}
+  .eco-word{color:var(--eco);font-weight:600}
+  /* Action cards — the guiding hand: benefit NUMBER + VERB */
+  .act{display:block;width:100%;text-align:left;font:inherit;color:inherit;cursor:pointer;background:var(--surface-2);border:1px solid var(--border);border-radius:16px;padding:20px;box-shadow:var(--shadow);transition:transform .12s,box-shadow .12s,border-color .12s;margin-bottom:12px}
+  .act:hover{transform:translateY(-2px);box-shadow:var(--shadow-hover);border-color:var(--border-strong)}
+  .act.hero{border-color:hsl(86 45% 76%);background:linear-gradient(180deg,hsl(86 45% 97.5%),var(--surface-2) 62%)}
+  .act-top{display:flex;align-items:center;gap:9px;margin-bottom:8px}
+  .act-rank{width:22px;height:22px;border-radius:99px;background:var(--primary);color:var(--primary-fg);font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+  .act-label{font-size:14px;font-weight:600;color:var(--text-secondary)}
+  .act-amt{font-weight:700;letter-spacing:-.02em;line-height:1.02}
+  .act-amt .u{font-size:.42em;font-weight:600;color:var(--text-muted);letter-spacing:0}
+  .act-co2{font-size:13px;color:var(--text-muted);margin-top:5px}
+  .act-co2 .leaf{color:var(--eco)}
+  .act-sub{font-size:14px;color:var(--text-secondary);margin-top:8px}
+  .act-cta{display:inline-flex;align-items:center;gap:6px;margin-top:15px;background:var(--primary);color:var(--primary-fg);border-radius:10px;padding:10px 17px;font-size:14px;font-weight:600}
+  .saved-line{display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;text-align:left;font:inherit;background:none;border:none;border-top:1px solid var(--border);margin-top:4px;padding:15px 3px 3px;cursor:pointer;color:var(--text-secondary);font-size:14px}
+  .saved-line b{color:var(--text-success);font-weight:700}
+  .saved-line:hover{color:var(--text-primary)}
+  /* Net-zero, demoted: a quiet progress strip below the actions */
+  .prog{background:var(--surface-2);border:1px solid var(--border);border-radius:12px;padding:13px 15px;box-shadow:var(--shadow);margin-top:6px}
+  .prog .head{display:flex;justify-content:space-between;align-items:baseline;font-size:13px;gap:10px}
+  .prog .head .t{font-weight:600;color:var(--text-secondary);display:inline-flex;align-items:center;gap:6px}
+  .track{height:7px;background:hsl(158 20% 92%);border-radius:99px;overflow:hidden;margin:7px 0 5px}
   .track>div{height:100%;background:var(--eco);border-radius:99px;transition:width .35s}
   .co2band{display:flex;flex-wrap:wrap;align-items:center;gap:10px;background:var(--bg-eco);border:1px solid var(--eco-border);border-radius:10px;padding:11px 13px;margin-bottom:14px}
-  .catsq{display:flex;flex-direction:column;gap:6px;min-height:150px}
-  .catsq .big{font-size:27px;color:var(--eco)}
-  .catsq .unit{font-size:14px;color:var(--text-muted);font-weight:500}
-  .leafsq{display:flex;flex-direction:column;gap:6px;min-height:140px}
-  .leafsq .big{font-size:22px;color:var(--eco)}
+  .catsq{display:flex;flex-direction:column;gap:6px;min-height:132px}
+  .catsq .big{font-size:23px;color:var(--text-success)}
+  .catsq .unit{font-size:13px;color:var(--text-muted);font-weight:500}
+  .leafsq{display:flex;flex-direction:column;gap:6px;min-height:132px}
+  .leafsq .big{font-size:22px;color:var(--text-success)}
   .leafsq .unit{font-size:13px;color:var(--text-muted);font-weight:500}
 </style>
 </head>
@@ -119,9 +136,23 @@
       {id:'s8',prop:'Riverside Lodge',type:'Heat Pump Water Heaters',u:0,vendor:'Thermal Systems',install:'about 2 weeks',fidelity:'estimated',co2:40,dataNeed:'your water-heater metering',savings:12000},
       {id:'s9',prop:'Riverside Lodge',type:'Smart Thermostats',u:1,vendor:'Cozy Controls',install:'about 1 week',fidelity:'estimated',co2:22,dataNeed:'occupancy data',savings:12500},
       {id:'s7',prop:'Cedar Court Hotel',type:'Ozone Laundry',u:1,vendor:'PureWash',install:'about 1 week',fidelity:'estimated',co2:18,dataNeed:'laundry-room metering',savings:10000}
-    ]
+    ],
+    // properties Atrium already operates — these have savings history + a forecast
+    contracted:[
+      {id:'c1',name:'Marina Bay Inn',rooms:120,saved:174000,runPct:96,next12:392000,without12:470000,perRoomNight:12.10},
+      {id:'c2',name:'Cedar Court Hotel',rooms:150,saved:146000,runPct:94,next12:471000,without12:560000,perRoomNight:11.40},
+      {id:'c3',name:'Riverside Lodge',rooms:96,saved:92000,runPct:108,next12:318000,without12:372000,perRoomNight:13.60}
+    ],
+    savedByType:[
+      {type:'Solar + Batteries',saved:198000,pace:205000},
+      {type:'LED Lighting',saved:96000,pace:92000},
+      {type:'Heat Pump Water Heaters',saved:71000,pace:66000},
+      {type:'Smart Thermostats',saved:47000,pace:44000}
+    ],
+    // carbon avoided to date across the operating portfolio (measured)
+    tonsToDate:1180
   };
-  var S={screen:'home',bucket:2,solView:'type',group:null,leafId:null,period:'annual',signed:{},approved:{},approvedMode:{},mode:{},disc:{},unlocked:0};
+  var S={screen:'home',bucket:2,solView:'type',group:null,cat:null,leafId:null,savView:'property',savLeaf:null,period:'annual',signed:{},approved:{},approvedMode:{},mode:{},disc:{},unlocked:0};
   var UL=['Now','Soon','Later'];
   function fmtK(n){n=Math.round(n);var s=n<0?'-':'';n=Math.abs(n);if(n>=1e6)return s+'$'+(n/1e6).toFixed(2).replace(/\.?0+$/,'')+'M';if(n>=1e3)return s+'$'+Math.round(n/1e3)+'K';return s+'$'+n;}
   function fmt(n){return '$'+Math.round(n).toLocaleString();}
@@ -145,6 +176,11 @@
   function sols(){return DATA.solutions.filter(function(s){return !S.approved[s.id];});}
   function sumCf(a){return a.reduce(function(t,x){return t+x.cf;},0);}
   function sumTile(a){return a.reduce(function(t,x){return t+tileVal(x);},0);}
+  function sumSav(a){return a.reduce(function(t,x){return t+x.savings;},0);}
+  function sumCo2(a){return a.reduce(function(t,x){return t+(x.co2||0);},0);}
+  function distinctProps(a){var o={};a.forEach(function(s){o[s.prop]=1;});return Object.keys(o).length;}
+  function approveAnnualFor(name){return sols().filter(function(s){return s.prop===name;}).reduce(function(t,s){return t+s.savings;},0);}
+  function approveCountFor(name){return sols().filter(function(s){return s.prop===name;}).length;}
   function recSort(a,b){ if(a.u!==b.u)return a.u-b.u; if((!!b.note)!==(!!a.note))return (b.note?1:0)-(a.note?1:0); return tileVal(b)-tileVal(a); }
   function econ(s,mode){
     var sav=s.savings,nt=net(s),pay=payback(s);
@@ -234,71 +270,197 @@
       +discussion(s)+'</div>';
   }
   function unlockedBanner(){ if(!S.unlocked)return ''; return '<div style="display:flex;align-items:center;gap:8px;background:var(--bg-success);border:1px solid hsl(86 40% 82%);border-radius:var(--radius);padding:9px 13px;margin-bottom:1rem;font-size:14px;color:var(--text-success)"><i class="ti ti-sparkles"></i>Unlocked this session: <span style="font-weight:700">'+fmt(S.unlocked)+'</span> over 5 years</div>'; }
-  function backPill(){return '<button class="cf-pill" data-act="back" style="display:inline-flex;align-items:center;gap:4px"><i class="ti ti-arrow-left"></i> Path to net-zero</button>';}
+  function backPill(){return '<button class="cf-pill" data-act="back" style="display:inline-flex;align-items:center;gap:4px"><i class="ti ti-arrow-left"></i> Back</button>';}
   function perToggle(){return '<div class="seg"><button data-period="annual" aria-pressed="'+(S.period==='annual')+'">Annual</button><button data-period="monthly" aria-pressed="'+(S.period==='monthly')+'">Monthly</button></div>';}
-  /* --- Impact shell --- */
   function cars(co2){return Math.round(co2/4.6);}
-  function sumCo2(a){return a.reduce(function(t,x){return t+x.co2;},0);}
+  /* --- Impact shell: dollars lead, carbon rides along --- */
   var CATS=[
     {key:'power',title:'Generate clean power',icon:'ti-sun',match:function(s){return s.type==='Solar + Batteries';}},
     {key:'heat',title:'Electrify heating',icon:'ti-flame',match:function(s){return s.type==='Heat Pump Water Heaters';}},
     {key:'usage',title:'Cut waste & usage',icon:'ti-bulb',match:function(s){return ['LED Lighting','Smart Thermostats','Ozone Laundry'].indexOf(s.type)>=0;}}
   ];
-  function progress(){
+  function actionCard(rank,label,amt,unit,co2line,sub,cta,val,opts){
+    opts=opts||{};
+    return '<button class="act'+(opts.hero?' hero':'')+'" data-act="go" data-val="'+val+'">'
+      +'<div class="act-top"><span class="act-rank">'+rank+'</span><span class="act-label">'+label+'</span></div>'
+      +'<div class="act-amt" style="font-size:'+(opts.size||34)+'px;color:'+(opts.color||'var(--text-success)')+'">'+amt+'<span class="u"> '+unit+'</span></div>'
+      +(co2line?'<div class="act-co2">'+co2line+'</div>':'')
+      +'<div class="act-sub">'+sub+'</div>'
+      +'<div class="act-cta">'+cta+' <i class="ti ti-arrow-right"></i></div></button>';
+  }
+  function doneCard(label){
+    return '<div class="act"><div class="act-top"><span class="act-rank" style="background:var(--text-success)"><i class="ti ti-check"></i></span><span class="act-label">'+label+'</span></div><div style="font-size:18px;font-weight:600;color:var(--text-success);margin-top:4px"><i class="ti ti-circle-check"></i> All done</div></div>';
+  }
+  function netZeroStrip(){
     var total=sumCo2(DATA.solutions), committed=sumCo2(DATA.solutions.filter(function(s){return S.approved[s.id];})), pct=total?Math.round(committed/total*100):0;
     return '<div class="prog">'
-      +'<div class="head"><span style="font-weight:600">Path to net-zero</span><span style="color:var(--text-muted)">'+committed+' / '+total+' t CO₂/yr committed</span></div>'
+      +'<div class="head"><span class="t"><i class="ti ti-leaf" style="color:var(--eco)"></i> Path to net-zero</span><span style="color:var(--text-muted)">'+committed+' / '+total+' t CO₂/yr committed</span></div>'
       +'<div class="track"><div style="width:'+pct+'%"></div></div>'
-      +'<div style="font-size:13px;color:var(--text-secondary)">'+pct+'% of the avoidable footprint · the full plan takes about '+cars(total)+' cars off the road every year</div></div>';
+      +'<div style="font-size:12px;color:var(--text-muted)">'+pct+'% of your avoidable footprint · approving above moves this along</div></div>';
   }
   function renderHome(){
+    var live=sols(), pros=prospects();
+    var apprAnn=sumSav(live), apprCo2=sumCo2(live), np=distinctProps(live);
+    var cards='', rank=1;
+    // #1 — APPROVE (dollars lead; CO₂ rides along, muted)
+    if(live.length){
+      cards+=actionCard(rank++,'Approve proposed solutions','+'+fmtK(apprAnn),'a year',
+        '<i class="ti ti-leaf leaf"></i> cuts about <span class="eco-word">'+apprCo2+' tons</span> a year',
+        live.length+' projects across '+np+' hotels — savings start once you approve',
+        'Review &amp; approve','solutions',{size:40,hero:true});
+    } else cards+=doneCard('Proposed solutions');
+    // #2 — SIGN UP the rest
+    if(pros.length){
+      cards+=actionCard(rank++,'Bring your other properties online',fmtK(Math.round(sumCf(pros)/5)),'a year, idle',
+        '<i class="ti ti-leaf leaf"></i> more of your footprint, still on the table',
+        pros.length+' hotels aren’t connected yet — that saving is sitting idle',
+        'Add properties','signup',{size:32,color:'var(--text-warning)'});
+    } else cards+=doneCard('Your properties');
+    // #3 — quiet secondary: savings so far (opens the shared drill)
+    var tot=DATA.contracted.reduce(function(t,c){return t+c.saved;},0);
+    var saved='<button class="saved-line" data-act="go" data-val="savings"><span><i class="ti ti-trophy" style="color:var(--text-success)"></i> You’ve saved <b>'+fmtK(tot)+'</b> — and avoided about '+DATA.tonsToDate.toLocaleString()+' tons — so far</span><i class="ti ti-arrow-right"></i></button>';
+    var header='<div style="margin-bottom:1.1rem"><p style="color:var(--text-secondary);margin:0;font-size:14px">'+esc(DATA.portfolio)+'</p>'
+      +'<h1 style="margin:.15rem 0 0;font-size:21px">Your portfolio</h1>'
+      +'<p style="color:var(--text-muted);margin:.3rem 0 0;font-size:13px">'+DATA.contracted.length+' hotels saving with Atrium · every project pays for itself and lowers your footprint</p></div>';
+    app.innerHTML=header+unlockedBanner()+cards+saved+netZeroStrip();
+  }
+  function renderSolutions(){
     var live=sols();
     var sq=CATS.map(function(c){
       var g=live.filter(c.match);
-      if(!g.length)return '<div class="cf-sq" style="min-height:150px;opacity:.7"><span style="color:var(--text-secondary);font-size:14px;font-weight:500">'+c.title+'</span><br><span style="color:var(--eco);font-size:18px"><i class="ti ti-circle-check"></i> All committed</span></div>';
+      if(!g.length)return '<div class="cf-sq" style="min-height:132px;opacity:.7"><span style="color:var(--text-secondary);font-size:14px;font-weight:500">'+c.title+'</span><br><span style="color:var(--text-success);font-size:18px"><i class="ti ti-circle-check"></i> All approved</span></div>';
       var anyEst=g.some(est);
       return '<button class="cf-sq catsq" data-act="cat" data-val="'+c.key+'">'
         +'<span style="display:flex;align-items:center;gap:8px;color:var(--text-secondary);font-size:14px;font-weight:500"><i class="ti '+c.icon+'" style="font-size:18px;color:var(--eco)"></i>'+c.title+'</span>'
-        +'<span class="cf-amt big">'+sumCo2(g)+'<span class="unit"> t CO₂/yr</span></span>'
-        +'<span style="font-size:13px;color:var(--text-secondary)">'+fmtK(sumTile(g))+' over 5 yrs'+(anyEst?' · some estimated':'')+' · '+g.length+' project'+(g.length>1?'s':'')+'</span>'
+        +'<span class="cf-amt big">+'+fmtK(sumSav(g))+'<span class="unit"> a year</span></span>'
+        +'<span style="font-size:13px;color:var(--text-muted)"><i class="ti ti-leaf" style="color:var(--eco)"></i> '+sumCo2(g)+' t CO₂/yr · '+g.length+' project'+(g.length>1?'s':'')+(anyEst?' · some estimated':'')+'</span>'
         +'<span style="margin-top:auto;display:flex;justify-content:flex-end;color:var(--text-muted)"><i class="ti ti-arrow-right"></i></span></button>';
     }).join('');
-    var total=sumCo2(DATA.solutions);
-    app.innerHTML='<div class="hero"><p class="eyebrow">'+esc(DATA.portfolio)+'</p>'
-      +'<h1>Cut up to <span class="eco-word">'+total+' t CO₂/yr</span></h1>'
-      +'<p class="lede">Every project lowers your footprint and pays for itself. Here’s your path — and what it saves.</p>'
-      +progress()+'</div>'+unlockedBanner()+'<div class="grid" style="margin-top:1rem">'+sq+'</div>';
+    var appAnn=sumSav(live);
+    app.innerHTML='<div style="margin-bottom:1.25rem">'+backPill()+'<h1 style="margin:14px 0 0">Approve proposed solutions</h1>'
+      +'<p style="color:var(--text-secondary);margin:.3rem 0 0">Grouped by what each does. Approving the full set adds <b style="color:var(--text-success)">+'+fmtK(appAnn)+' a year</b> and cuts about <span class="eco-word">'+sumCo2(live)+' tons</span>.</p></div>'
+      +unlockedBanner()+(live.length?'<div class="grid">'+sq+'</div>':'<div class="cf-sq" style="text-align:center;padding:2rem"><i class="ti ti-circle-check" style="font-size:26px;color:var(--text-success)"></i><p style="margin:.5rem 0 0">Every proposed solution is approved.</p></div>');
   }
   function renderCat(){
     var c=CATS.find(function(x){return x.key===S.cat;});
-    if(!c){S.screen='home';return renderHome();}
+    if(!c){S.screen='solutions';return renderSolutions();}
     var live=sols().filter(c.match).sort(recSort);
-    if(!live.length){S.screen='home';return renderHome();}
+    if(!live.length){S.screen='solutions';return renderSolutions();}
     var grid=live.map(function(s){
       var cashTxt=est(s)?perRange(savLo(s),savHi(s)):fmtK(fiveCash(s))+' over 5 yrs';
       var tag=est(s)?'<span class="esttag"><i class="ti ti-help-circle"></i> estimate · connect data</span>':(s.note?'<span style="display:inline-flex;align-items:center;gap:4px;color:var(--text-warning);font-size:13px;font-weight:500"><i class="ti ti-clock"></i>'+esc(s.note)+'</span>':'<span style="color:var(--text-muted);font-size:13px"><i class="ti ti-calendar"></i> '+UL[s.u]+'</span>');
       return '<button class="cf-sq leafsq'+(est(s)?' est':'')+'" data-act="leaf" data-val="'+s.id+'">'
         +'<span style="font-size:15px;font-weight:600">'+esc(s.prop)+'</span>'
         +'<span style="font-size:13px;color:var(--text-muted)">'+esc(s.type)+'</span>'
-        +'<span class="cf-amt big">'+s.co2+'<span class="unit"> t CO₂/yr</span></span>'
-        +'<span style="font-size:13px;color:var(--text-secondary)">'+cashTxt+' · about '+cars(s.co2)+' cars off the road</span>'
+        +'<span class="cf-amt big">+'+fmtK(s.savings)+'<span class="unit"> a year</span></span>'
+        +'<span style="font-size:13px;color:var(--text-muted)"><i class="ti ti-leaf" style="color:var(--eco)"></i> '+s.co2+' t CO₂/yr · '+cashTxt+'</span>'
         +'<span style="margin-top:auto;display:flex;justify-content:space-between;align-items:center">'+tag+'<i class="ti ti-arrow-right" style="color:var(--text-muted)"></i></span></button>';
     }).join('');
-    var gTot=sumCo2(live);
     app.innerHTML='<div style="margin-bottom:1.25rem">'+backPill()+'<h1 style="margin:14px 0 0">'+esc(c.title)+'</h1>'
-      +'<p style="color:var(--text-secondary);margin:.3rem 0 0">'+gTot+' t CO₂/yr across '+live.length+' project'+(live.length>1?'s':'')+' · about '+cars(gTot)+' cars off the road. Emissions lead; the cash rides along.</p></div>'
+      +'<p style="color:var(--text-secondary);margin:.3rem 0 0">+'+fmtK(sumSav(live))+' a year across '+live.length+' project'+(live.length>1?'s':'')+' · '+sumCo2(live)+' t CO₂/yr avoided. Pick one to see the economics.</p></div>'
       +unlockedBanner()+'<div class="grid">'+grid+'</div>';
+  }
+  function renderSignup(){
+    var list=prospects();
+    var rows=list.map(function(p){
+      var cta=p.ready?'<button class="cf-btn" data-act="sign" data-val="'+p.id+'">Approve &amp; sign</button>':'<button class="cf-pill" data-act="step" data-val="'+p.id+'">'+p.step+'</button>';
+      return '<div data-row="'+p.id+'" style="display:flex;align-items:center;justify-content:space-between;gap:12px;background:var(--surface-2);border:1px '+(p.est?'dashed':'solid')+' '+(p.est?'var(--border-strong)':'var(--border)')+';border-radius:12px;padding:15px 16px;box-shadow:var(--shadow)"><div style="min-width:0"><p style="margin:0;font-weight:600">'+esc(p.name)+'</p><p style="margin:.15rem 0 0;font-size:13px;color:var(--text-muted)">'+(p.est?'Estimated · '+p.step:p.step)+'</p></div><div style="text-align:right;flex-shrink:0"><div class="cf-amt" style="font-size:19px;color:var(--text-success)">'+fmtK(p.cf)+'</div><div style="margin-top:7px">'+cta+'</div></div></div>';
+    }).join('');
+    app.innerHTML='<div style="margin-bottom:1.25rem">'+backPill()+'<h1 style="margin:14px 0 0">Sign up your properties</h1><p style="color:var(--text-secondary);margin:.3rem 0 0">Each property’s 5-year new cash flow once it’s saving with Atrium.</p></div>'+unlockedBanner()+(list.length?'<div style="display:flex;flex-direction:column;gap:10px">'+rows+'</div>':'<div class="cf-sq" style="text-align:center;padding:2rem"><i class="ti ti-circle-check" style="font-size:26px;color:var(--text-success)"></i><p style="margin:.5rem 0 0">Every property is signed up.</p></div>');
   }
   function renderLeaf(){
     var s=DATA.solutions.find(function(x){return x.id===S.leafId;});
     if(!s||S.approved[s.id]){S.screen='cat';return renderCat();}
     var head='<div style="display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:16px">'+backPill()+(est(s)?'':'<span style="display:flex;align-items:center;gap:8px"><span style="font-size:13px;color:var(--text-muted)">Amounts:</span>'+perToggle()+'</span>')+'</div>';
-    var co2band='<div class="co2band"><i class="ti ti-leaf" style="font-size:22px;color:var(--eco)"></i>'
-      +'<span style="font-size:22px;font-weight:700;color:var(--eco)">'+s.co2+' t CO₂/yr</span>'
-      +'<span style="font-size:13px;color:var(--text-secondary)">avoided · about '+cars(s.co2)+' cars off the road · '+(s.co2*10)+' t over 10 yrs</span></div>';
-    app.innerHTML=head+unlockedBanner()+co2band+solutionCard(s);
+    var co2band='<div class="co2band"><i class="ti ti-leaf" style="font-size:18px;color:var(--eco)"></i>'
+      +'<span style="font-size:13px;color:var(--text-secondary)">Also avoids <span class="eco-word">'+s.co2+' t CO₂/yr</span> · about '+cars(s.co2)+' cars off the road · '+(s.co2*10)+' t over 10 yrs</span></div>';
+    app.innerHTML=head+unlockedBanner()+solutionCard(s)+co2band;
   }
-  function render(){ if(S.screen==='home')renderHome();else if(S.screen==='cat')renderCat();else if(S.screen==='leaf')renderLeaf(); }
+  function trajChart(sc,apprAnn){
+    var wm=sc.next12/12, wom=sc.without12/12, am=(sc.next12-(apprAnn||0))/12;
+    var n=24,w=340,h=132,padX=8,padT=16,padB=8,today=11,s=[];
+    for(var i=0;i<n;i++){var seas=Math.sin(i/12*Math.PI*2);s.push({without:wom*(1+0.06*seas),wth:wm*(1+0.06*seas),appr:am*(1+0.06*seas)});}
+    var all=[];s.forEach(function(d){all.push(d.without,d.wth);if(apprAnn)all.push(d.appr);});
+    var mn=Math.min.apply(null,all),mx=Math.max.apply(null,all),sp=(mx-mn)||1;mn-=sp*0.14;mx+=sp*0.08;sp=mx-mn;
+    function X(i){return padX+i/(n-1)*(w-2*padX);}
+    function Y(v){return padT+(1-(v-mn)/sp)*(h-padT-padB);}
+    function poly(key,from,to){var p=[];for(var i=from;i<=to;i++)p.push(X(i).toFixed(1)+','+Y(s[i][key]).toFixed(1));return p.join(' ');}
+    var gap=[];for(var i=0;i<=today;i++)gap.push(X(i).toFixed(1)+','+Y(s[i].without).toFixed(1));for(var j=today;j>=0;j--)gap.push(X(j).toFixed(1)+','+Y(s[j].wth).toFixed(1));
+    return '<svg viewBox="0 0 '+w+' '+h+'" width="100%" height="'+h+'" preserveAspectRatio="none" style="display:block">'
+      +'<polygon points="'+gap.join(' ')+'" fill="hsl(86 45% 92%)"/>'
+      +'<line x1="'+X(today).toFixed(1)+'" x2="'+X(today).toFixed(1)+'" y1="'+padT+'" y2="'+(h-padB)+'" stroke="var(--border-strong)" stroke-dasharray="3 3"/>'
+      +'<polyline points="'+poly('without',0,n-1)+'" fill="none" stroke="var(--text-warning)" stroke-width="2" stroke-dasharray="5 3"/>'
+      +'<polyline points="'+poly('wth',0,today)+'" fill="none" stroke="var(--text-success)" stroke-width="2.5"/>'
+      +'<polyline points="'+poly('wth',today,n-1)+'" fill="none" stroke="var(--text-success)" stroke-width="2.5" stroke-dasharray="5 3"/>'
+      +(apprAnn?'<polyline points="'+poly('appr',today,n-1)+'" fill="none" stroke="var(--primary)" stroke-width="2" stroke-dasharray="2 3"/>':'')
+      +'</svg>';
+  }
+  function cumChart(saved,pace){
+    var n=24,w=340,h=118,padX=8,padT=12,padB=8,today=12,s=[],cum=0,pp=saved/12,pf=pace/12;
+    for(var i=0;i<=n;i++){s.push(cum);cum+=(i<12?pp:pf);}
+    var mx=s[n]||1;
+    function X(i){return padX+i/n*(w-2*padX);}
+    function Y(v){return padT+(1-v/mx)*(h-padT-padB);}
+    function poly(from,to){var p=[];for(var i=from;i<=to;i++)p.push(X(i).toFixed(1)+','+Y(s[i]).toFixed(1));return p.join(' ');}
+    var area=poly(0,today)+' '+X(today).toFixed(1)+','+Y(0).toFixed(1)+' '+X(0).toFixed(1)+','+Y(0).toFixed(1);
+    return '<svg viewBox="0 0 '+w+' '+h+'" width="100%" height="'+h+'" preserveAspectRatio="none" style="display:block">'
+      +'<polygon points="'+area+'" fill="hsl(86 45% 93%)"/>'
+      +'<line x1="'+X(today).toFixed(1)+'" x2="'+X(today).toFixed(1)+'" y1="'+padT+'" y2="'+(h-padB)+'" stroke="var(--border-strong)" stroke-dasharray="3 3"/>'
+      +'<polyline points="'+poly(0,today)+'" fill="none" stroke="var(--text-success)" stroke-width="2.5"/>'
+      +'<polyline points="'+poly(today,n)+'" fill="none" stroke="var(--text-success)" stroke-width="2.5" stroke-dasharray="5 3"/></svg>';
+  }
+  function savAxis(){return '<div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text-muted);margin-top:2px"><span>12 mo ago</span><span>today</span><span>12 mo ahead</span></div>';}
+  function renderSavings(){
+    var byProp=S.savView==='property';
+    var toggle='<div style="display:flex;gap:6px;margin-bottom:1rem"><button class="cf-pill" data-act="savview" data-val="property" aria-pressed="'+byProp+'">By property</button><button class="cf-pill" data-act="savview" data-val="type" aria-pressed="'+(!byProp)+'">By solution type</button></div>';
+    var grid;
+    if(byProp){
+      grid=DATA.contracted.map(function(c){
+        var high=c.runPct>100;
+        var status=high?'<span style="display:inline-flex;align-items:center;gap:4px;color:var(--text-warning);font-size:13px;font-weight:500"><i class="ti ti-alert-triangle"></i> Running high</span>':'<span style="display:inline-flex;align-items:center;gap:4px;color:var(--text-success);font-size:13px;font-weight:500"><i class="ti ti-circle-check"></i> In line</span>';
+        return '<button class="cf-sq" data-act="savleaf" data-val="'+c.id+'" style="display:flex;flex-direction:column;gap:5px;min-height:130px"><span style="font-size:15px;font-weight:600">'+esc(c.name)+'</span><span style="font-size:12px;color:var(--text-muted)">Saved to date</span><span class="cf-amt" style="font-size:24px;color:var(--text-success);margin-top:-3px">'+fmtK(c.saved)+'</span><span style="margin-top:auto;display:flex;justify-content:space-between;align-items:center">'+status+'<i class="ti ti-arrow-right" style="color:var(--text-muted)"></i></span></button>';
+      }).join('');
+    } else {
+      grid=DATA.savedByType.map(function(t){
+        return '<button class="cf-sq" data-act="savleaf" data-val="'+esc(t.type)+'" style="display:flex;flex-direction:column;gap:5px;min-height:130px"><span style="font-size:15px;font-weight:600">'+esc(t.type)+'</span><span style="font-size:12px;color:var(--text-muted)">Saved to date</span><span class="cf-amt" style="font-size:24px;color:var(--text-success);margin-top:-3px">'+fmtK(t.saved)+'</span><span style="margin-top:auto;display:flex;justify-content:space-between;align-items:center"><span style="color:var(--text-muted);font-size:13px">on pace for +'+fmtK(t.pace)+'/yr</span><i class="ti ti-arrow-right" style="color:var(--text-muted)"></i></span></button>';
+      }).join('');
+    }
+    var tot=DATA.contracted.reduce(function(t,c){return t+c.saved;},0);
+    app.innerHTML='<div style="margin-bottom:1.1rem">'+backPill()+'<h1 style="margin:14px 0 0;font-size:23px">Savings so far</h1><p style="color:var(--text-secondary);margin:.3rem 0 0">You’ve saved <b style="color:var(--text-success)">'+fmtK(tot)+'</b> with Atrium. Open any '+(byProp?'hotel':'solution type')+' to see where it’s headed.</p></div>'+toggle+'<div class="grid">'+grid+'</div>';
+  }
+  function renderSavingsLeaf(){
+    if(S.savView==='property'){
+      var c=DATA.contracted.find(function(x){return x.id===S.savLeaf;});
+      if(!c){S.screen='savings';return renderSavings();}
+      var apprAnn=approveAnnualFor(c.name),apprN=approveCountFor(c.name),high=c.runPct>100;
+      var chips='<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;margin:14px 0">'
+        +'<div class="chip"><div class="k">Saved to date</div><div class="v mono" style="color:var(--text-success)">'+fmtK(c.saved)+'</div></div>'
+        +'<div class="chip"><div class="k">Now vs expected</div><div class="v mono" style="color:'+(high?'var(--text-warning)':'var(--text-success)')+'">'+c.runPct+'%</div></div>'
+        +'<div class="chip"><div class="k">Next 12 months</div><div class="v mono">'+fmtK(c.next12)+'</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">$'+c.perRoomNight.toFixed(2)+' per occupied room-night</div></div></div>';
+      var legend='<div class="sav-legend"><span><i class="k" style="border-color:var(--text-warning);border-top-style:dashed"></i> without Atrium</span><span><i class="k" style="border-color:var(--text-success)"></i> with Atrium</span>'+(apprAnn?'<span><i class="k" style="border-color:var(--primary);border-top-style:dashed"></i> if you approve the proposed work</span>':'')+'<span>vertical line = today</span></div>';
+      var cta=apprAnn?'<div style="margin-top:16px;background:var(--bg-success);border:1px solid hsl(86 40% 82%);border-radius:12px;padding:14px 16px"><div style="font-size:14px">Approve the '+apprN+' proposed project'+(apprN>1?'s':'')+' at '+esc(c.name)+' to save about <b>'+fmtK(apprAnn)+' a year</b> more.</div><button class="cf-btn" data-act="approvehere" data-val="'+esc(c.name)+'" style="margin-top:10px"><i class="ti ti-check"></i> Review &amp; approve here</button></div>':'';
+      app.innerHTML='<div style="margin-bottom:1.1rem">'+backPill()+'<h1 style="margin:14px 0 0;font-size:23px">'+esc(c.name)+'</h1><p style="color:var(--text-secondary);margin:.3rem 0 0">'+(high?'Running a little high for your occupancy and weather — worth a look.':'Running in line with your occupancy and weather.')+'</p></div>'
+        +'<div class="card"><div style="font-size:12px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:.04em;margin-bottom:8px">Energy &amp; water cost — last 12 months and next 12</div>'+trajChart(c,apprAnn)+savAxis()+legend+chips
+        +'<div style="font-size:13px;color:var(--text-secondary)">The shaded gap is what you’ve saved versus running these buildings without Atrium.</div>'+cta+'</div>';
+    } else {
+      var t=DATA.savedByType.find(function(x){return x.type===S.savLeaf;});
+      if(!t){S.screen='savings';return renderSavings();}
+      var live=sols().filter(function(s){return s.type===t.type;}),aa=sumSav(live),an=live.length;
+      var cta2=aa?'<div style="margin-top:16px;background:var(--bg-success);border:1px solid hsl(86 40% 82%);border-radius:12px;padding:14px 16px"><div style="font-size:14px">You have '+an+' more '+esc(t.type)+' project'+(an>1?'s':'')+' proposed — approve to add about <b>'+fmtK(aa)+' a year</b>.</div><button class="cf-btn" data-act="approvetype" data-val="'+esc(t.type)+'" style="margin-top:10px"><i class="ti ti-check"></i> Review &amp; approve</button></div>':'';
+      app.innerHTML='<div style="margin-bottom:1.1rem">'+backPill()+'<h1 style="margin:14px 0 0;font-size:23px">'+esc(t.type)+'</h1><p style="color:var(--text-secondary);margin:.3rem 0 0">Cumulative savings across your portfolio.</p></div>'
+        +'<div class="card"><div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:10px"><div><div style="font-size:12px;color:var(--text-muted)">Saved to date</div><div class="mono" style="font-size:27px;font-weight:700;color:var(--text-success);letter-spacing:-.02em">'+fmtK(t.saved)+'</div></div><div style="text-align:right"><div style="font-size:12px;color:var(--text-muted)">On pace next year</div><div class="mono" style="font-size:18px;font-weight:700">+'+fmtK(t.pace)+'</div></div></div>'+cumChart(t.saved,t.pace)+savAxis()
+        +'<div class="sav-legend"><span><i class="k" style="border-color:var(--text-success)"></i> saved so far</span><span><i class="k" style="border-color:var(--text-success);border-top-style:dashed"></i> forecast</span></div>'+cta2+'</div>';
+    }
+  }
+  function render(){
+    if(S.screen==='home')renderHome();
+    else if(S.screen==='solutions')renderSolutions();
+    else if(S.screen==='cat')renderCat();
+    else if(S.screen==='signup')renderSignup();
+    else if(S.screen==='leaf')renderLeaf();
+    else if(S.screen==='savings')renderSavings();
+    else if(S.screen==='savleaf')renderSavingsLeaf();
+  }
   function unlockRow(id,amt,then){var row=app.querySelector('[data-row="'+id+'"]');S.unlocked+=amt;if(row){row.classList.add('cf-fade');setTimeout(then,340);}else then();}
   app.addEventListener('click',function(e){
     var d=e.target.closest('[data-disc]'); if(d){S.disc[d.dataset.disc]=!S.disc[d.dataset.disc];render();return;}
@@ -308,9 +470,16 @@
     if(el.dataset.approve){var s=DATA.solutions.find(function(x){return x.id===el.dataset.approve;});var m=curMode(s);unlockRow(s.id,fiveCash(s),function(){S.approved[s.id]=1;S.approvedMode[s.id]=m;S.screen='cat';render();});return;}
     var a=el.dataset.act, v=el.dataset.val;
     if(a==='connect'){el.textContent='Request sent →';el.disabled=true;el.style.opacity=.7;}
+    else if(a==='go'){S.screen=v;render();}
     else if(a==='cat'){S.cat=v;S.screen='cat';render();}
     else if(a==='leaf'){S.leafId=v;S.screen='leaf';render();}
-    else if(a==='back'){S.screen=(S.screen==='leaf')?'cat':'home';render();}
+    else if(a==='savview'){S.savView=v;render();}
+    else if(a==='savleaf'){S.savLeaf=v;S.screen='savleaf';render();}
+    else if(a==='approvehere'){var mh=sols().filter(function(s){return s.prop===v;}).sort(recSort)[0];if(mh){S.leafId=mh.id;S.screen='leaf';}else S.screen='solutions';render();}
+    else if(a==='approvetype'){var mt=sols().filter(function(s){return s.type===v;}).sort(recSort)[0];if(mt){S.leafId=mt.id;S.screen='leaf';}else S.screen='solutions';render();}
+    else if(a==='back'){var B={leaf:'cat',cat:'solutions',solutions:'home',signup:'home',savleaf:'savings',savings:'home'};S.screen=B[S.screen]||'home';render();}
+    else if(a==='step'){el.textContent='We’ll guide you →';el.disabled=true;el.style.opacity=.6;}
+    else if(a==='sign'){var p=DATA.prospects.find(function(x){return x.id===v;});unlockRow(v,p.cf,function(){S.signed[v]=1;render();});}
   });
   render();
 })();

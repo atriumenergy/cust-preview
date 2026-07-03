@@ -99,6 +99,26 @@
   .pl-need{font-size:12px;color:var(--text-warning);font-weight:500;display:inline-flex;align-items:center;gap:4px}
   .pl-sectlabel{font-size:12px;color:var(--text-muted);text-transform:uppercase;letter-spacing:.05em;font-weight:600;margin:20px 2px 9px}
   .pl-quickrow{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+  .pl-cta{display:inline-flex;align-items:center;gap:7px;background:var(--primary);color:var(--primary-fg);border:1px solid var(--primary);border-radius:10px;padding:11px 18px;cursor:pointer;font:inherit;font-size:15px;font-weight:600}
+  .pl-cta:hover{filter:brightness(1.18)}
+  .pl-cta:disabled{opacity:.55;cursor:default;filter:none}
+  .pl-hero-row{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap}
+  .pl-signline{display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;text-align:left;font:inherit;background:var(--surface-2);border:1px solid var(--border-strong);border-radius:12px;padding:13px 15px;box-shadow:var(--shadow);cursor:pointer;color:var(--text-primary);margin-top:14px}
+  .pl-signline:hover{border-color:var(--text-muted)}
+  .pl-signline .amt{color:var(--text-warning);font-weight:700}
+  .pl-savedline{display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;text-align:left;font:inherit;background:none;border:none;padding:12px 3px 2px;cursor:pointer;color:var(--text-secondary);font-size:14px;margin-top:6px}
+  .pl-savedline b{color:var(--text-success);font-weight:700}
+  .pl-savedline:hover{color:var(--text-primary)}
+  .sav-legend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:12px;color:var(--text-secondary);margin-top:8px}
+  .sav-legend span{display:inline-flex;align-items:center;gap:5px}
+  .sav-legend i.k{width:16px;height:0;border-top-width:2px;border-top-style:solid;display:inline-block}
+  @media (max-width:560px){
+    .pl-metrics{grid-template-columns:1fr}
+    .pl-hero-row{align-items:stretch}
+    .pl-hero-row .pl-cta{width:100%;justify-content:center}
+    .pl-row{flex-wrap:wrap}
+    .pl-fig{text-align:left;width:100%;padding-left:57px}
+  }
 </style>
 </head>
 <body>
@@ -129,9 +149,21 @@
       {id:'s8',prop:'Riverside Lodge',type:'Heat Pump Water Heaters',u:0,vendor:'Thermal Systems',install:'about 2 weeks',fidelity:'estimated',dataNeed:'your water-heater metering',savings:12000},
       {id:'s9',prop:'Riverside Lodge',type:'Smart Thermostats',u:1,vendor:'Cozy Controls',install:'about 1 week',fidelity:'estimated',dataNeed:'occupancy data',savings:12500},
       {id:'s7',prop:'Cedar Court Hotel',type:'Ozone Laundry',u:1,vendor:'PureWash',install:'about 1 week',fidelity:'estimated',dataNeed:'laundry-room metering',savings:10000}
+    ],
+    // properties Atrium already operates — these have savings history + a forecast
+    contracted:[
+      {id:'c1',name:'Marina Bay Inn',rooms:120,saved:174000,runPct:96,next12:392000,without12:470000,perRoomNight:12.10},
+      {id:'c2',name:'Cedar Court Hotel',rooms:150,saved:146000,runPct:94,next12:471000,without12:560000,perRoomNight:11.40},
+      {id:'c3',name:'Riverside Lodge',rooms:96,saved:92000,runPct:108,next12:318000,without12:372000,perRoomNight:13.60}
+    ],
+    savedByType:[
+      {type:'Solar + Batteries',saved:198000,pace:205000},
+      {type:'LED Lighting',saved:96000,pace:92000},
+      {type:'Heat Pump Water Heaters',saved:71000,pace:66000},
+      {type:'Smart Thermostats',saved:47000,pace:44000}
     ]
   };
-  var S={screen:'home',bucket:2,solView:'type',group:null,leafId:null,period:'annual',signed:{},approved:{},approvedMode:{},mode:{},disc:{},unlocked:0};
+  var S={screen:'home',bucket:2,solView:'type',group:null,leafId:null,savView:'property',savLeaf:null,period:'annual',signed:{},approved:{},approvedMode:{},mode:{},disc:{},unlocked:0};
   var UL=['Now','Soon','Later'];
   function fmtK(n){n=Math.round(n);var s=n<0?'-':'';n=Math.abs(n);if(n>=1e6)return s+'$'+(n/1e6).toFixed(2).replace(/\.?0+$/,'')+'M';if(n>=1e3)return s+'$'+Math.round(n/1e3)+'K';return s+'$'+n;}
   function fmt(n){return '$'+Math.round(n).toLocaleString();}
@@ -155,6 +187,10 @@
   function sols(){return DATA.solutions.filter(function(s){return !S.approved[s.id];});}
   function sumCf(a){return a.reduce(function(t,x){return t+x.cf;},0);}
   function sumTile(a){return a.reduce(function(t,x){return t+tileVal(x);},0);}
+  function sumSav(a){return a.reduce(function(t,x){return t+x.savings;},0);}
+  function distinctProps(a){var o={};a.forEach(function(s){o[s.prop]=1;});return Object.keys(o).length;}
+  function approveAnnualFor(name){return sols().filter(function(s){return s.prop===name;}).reduce(function(t,s){return t+s.savings;},0);}
+  function approveCountFor(name){return sols().filter(function(s){return s.prop===name;}).length;}
   function recSort(a,b){ if(a.u!==b.u)return a.u-b.u; if((!!b.note)!==(!!a.note))return (b.note?1:0)-(a.note?1:0); return tileVal(b)-tileVal(a); }
   function econ(s,mode){
     var sav=s.savings,nt=net(s),pay=payback(s);
@@ -247,32 +283,117 @@
   function backPill(){return '<button class="cf-pill" data-act="back" style="display:inline-flex;align-items:center;gap:4px"><i class="ti ti-arrow-left"></i> Back to plan</button>';}
   function perToggle(){return '<div class="seg"><button data-period="annual" aria-pressed="'+(S.period==='annual')+'">Annual</button><button data-period="monthly" aria-pressed="'+(S.period==='monthly')+'">Monthly</button></div>';}
 
+  /* ===== Shared savings/forecast drill — verbatim from cashflow.html ===== */
+  function trajChart(sc,apprAnn){
+    var wm=sc.next12/12, wom=sc.without12/12, am=(sc.next12-(apprAnn||0))/12;
+    var n=24,w=340,h=132,padX=8,padT=16,padB=8,today=11,s=[];
+    for(var i=0;i<n;i++){var seas=Math.sin(i/12*Math.PI*2);s.push({without:wom*(1+0.06*seas),wth:wm*(1+0.06*seas),appr:am*(1+0.06*seas)});}
+    var all=[];s.forEach(function(d){all.push(d.without,d.wth);if(apprAnn)all.push(d.appr);});
+    var mn=Math.min.apply(null,all),mx=Math.max.apply(null,all),sp=(mx-mn)||1;mn-=sp*0.14;mx+=sp*0.08;sp=mx-mn;
+    function X(i){return padX+i/(n-1)*(w-2*padX);}
+    function Y(v){return padT+(1-(v-mn)/sp)*(h-padT-padB);}
+    function poly(key,from,to){var p=[];for(var i=from;i<=to;i++)p.push(X(i).toFixed(1)+','+Y(s[i][key]).toFixed(1));return p.join(' ');}
+    var gap=[];for(var i=0;i<=today;i++)gap.push(X(i).toFixed(1)+','+Y(s[i].without).toFixed(1));for(var j=today;j>=0;j--)gap.push(X(j).toFixed(1)+','+Y(s[j].wth).toFixed(1));
+    return '<svg viewBox="0 0 '+w+' '+h+'" width="100%" height="'+h+'" preserveAspectRatio="none" style="display:block">'
+      +'<polygon points="'+gap.join(' ')+'" fill="hsl(86 45% 92%)"/>'
+      +'<line x1="'+X(today).toFixed(1)+'" x2="'+X(today).toFixed(1)+'" y1="'+padT+'" y2="'+(h-padB)+'" stroke="var(--border-strong)" stroke-dasharray="3 3"/>'
+      +'<polyline points="'+poly('without',0,n-1)+'" fill="none" stroke="var(--text-warning)" stroke-width="2" stroke-dasharray="5 3"/>'
+      +'<polyline points="'+poly('wth',0,today)+'" fill="none" stroke="var(--text-success)" stroke-width="2.5"/>'
+      +'<polyline points="'+poly('wth',today,n-1)+'" fill="none" stroke="var(--text-success)" stroke-width="2.5" stroke-dasharray="5 3"/>'
+      +(apprAnn?'<polyline points="'+poly('appr',today,n-1)+'" fill="none" stroke="var(--primary)" stroke-width="2" stroke-dasharray="2 3"/>':'')
+      +'</svg>';
+  }
+  function cumChart(saved,pace){
+    var n=24,w=340,h=118,padX=8,padT=12,padB=8,today=12,s=[],cum=0,pp=saved/12,pf=pace/12;
+    for(var i=0;i<=n;i++){s.push(cum);cum+=(i<12?pp:pf);}
+    var mx=s[n]||1;
+    function X(i){return padX+i/n*(w-2*padX);}
+    function Y(v){return padT+(1-v/mx)*(h-padT-padB);}
+    function poly(from,to){var p=[];for(var i=from;i<=to;i++)p.push(X(i).toFixed(1)+','+Y(s[i]).toFixed(1));return p.join(' ');}
+    var area=poly(0,today)+' '+X(today).toFixed(1)+','+Y(0).toFixed(1)+' '+X(0).toFixed(1)+','+Y(0).toFixed(1);
+    return '<svg viewBox="0 0 '+w+' '+h+'" width="100%" height="'+h+'" preserveAspectRatio="none" style="display:block">'
+      +'<polygon points="'+area+'" fill="hsl(86 45% 93%)"/>'
+      +'<line x1="'+X(today).toFixed(1)+'" x2="'+X(today).toFixed(1)+'" y1="'+padT+'" y2="'+(h-padB)+'" stroke="var(--border-strong)" stroke-dasharray="3 3"/>'
+      +'<polyline points="'+poly(0,today)+'" fill="none" stroke="var(--text-success)" stroke-width="2.5"/>'
+      +'<polyline points="'+poly(today,n)+'" fill="none" stroke="var(--text-success)" stroke-width="2.5" stroke-dasharray="5 3"/></svg>';
+  }
+  function savAxis(){return '<div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text-muted);margin-top:2px"><span>12 mo ago</span><span>today</span><span>12 mo ahead</span></div>';}
+  function renderSavings(){
+    var byProp=S.savView==='property';
+    var toggle='<div style="display:flex;gap:6px;margin-bottom:1rem"><button class="cf-pill" data-act="savview" data-val="property" aria-pressed="'+byProp+'">By property</button><button class="cf-pill" data-act="savview" data-val="type" aria-pressed="'+(!byProp)+'">By solution type</button></div>';
+    var grid;
+    if(byProp){
+      grid=DATA.contracted.map(function(c){
+        var high=c.runPct>100;
+        var status=high?'<span style="display:inline-flex;align-items:center;gap:4px;color:var(--text-warning);font-size:13px;font-weight:500"><i class="ti ti-alert-triangle"></i> Running high</span>':'<span style="display:inline-flex;align-items:center;gap:4px;color:var(--text-success);font-size:13px;font-weight:500"><i class="ti ti-circle-check"></i> In line</span>';
+        return '<button class="cf-sq" data-act="savleaf" data-val="'+c.id+'" style="display:flex;flex-direction:column;gap:5px;min-height:130px"><span style="font-size:15px;font-weight:600">'+esc(c.name)+'</span><span style="font-size:12px;color:var(--text-muted)">Saved to date</span><span class="cf-amt" style="font-size:24px;color:var(--text-success);margin-top:-3px">'+fmtK(c.saved)+'</span><span style="margin-top:auto;display:flex;justify-content:space-between;align-items:center">'+status+'<i class="ti ti-arrow-right" style="color:var(--text-muted)"></i></span></button>';
+      }).join('');
+    } else {
+      grid=DATA.savedByType.map(function(t){
+        return '<button class="cf-sq" data-act="savleaf" data-val="'+esc(t.type)+'" style="display:flex;flex-direction:column;gap:5px;min-height:130px"><span style="font-size:15px;font-weight:600">'+esc(t.type)+'</span><span style="font-size:12px;color:var(--text-muted)">Saved to date</span><span class="cf-amt" style="font-size:24px;color:var(--text-success);margin-top:-3px">'+fmtK(t.saved)+'</span><span style="margin-top:auto;display:flex;justify-content:space-between;align-items:center"><span style="color:var(--text-muted);font-size:13px">on pace for +'+fmtK(t.pace)+'/yr</span><i class="ti ti-arrow-right" style="color:var(--text-muted)"></i></span></button>';
+      }).join('');
+    }
+    var tot=DATA.contracted.reduce(function(t,c){return t+c.saved;},0);
+    app.innerHTML='<div style="margin-bottom:1.1rem">'+backPill()+'<h1 style="margin:14px 0 0;font-size:23px">Savings so far</h1><p style="color:var(--text-secondary);margin:.3rem 0 0">You’ve saved <b style="color:var(--text-success)">'+fmtK(tot)+'</b> with Atrium. Open any '+(byProp?'hotel':'solution type')+' to see where it’s headed.</p></div>'+toggle+'<div class="grid">'+grid+'</div>';
+  }
+  function renderSavingsLeaf(){
+    if(S.savView==='property'){
+      var c=DATA.contracted.find(function(x){return x.id===S.savLeaf;});
+      if(!c){S.screen='savings';return renderSavings();}
+      var apprAnn=approveAnnualFor(c.name),apprN=approveCountFor(c.name),high=c.runPct>100;
+      var chips='<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;margin:14px 0">'
+        +'<div class="chip"><div class="k">Saved to date</div><div class="v mono" style="color:var(--text-success)">'+fmtK(c.saved)+'</div></div>'
+        +'<div class="chip"><div class="k">Now vs expected</div><div class="v mono" style="color:'+(high?'var(--text-warning)':'var(--text-success)')+'">'+c.runPct+'%</div></div>'
+        +'<div class="chip"><div class="k">Next 12 months</div><div class="v mono">'+fmtK(c.next12)+'</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">$'+c.perRoomNight.toFixed(2)+' per occupied room-night</div></div></div>';
+      var legend='<div class="sav-legend"><span><i class="k" style="border-color:var(--text-warning);border-top-style:dashed"></i> without Atrium</span><span><i class="k" style="border-color:var(--text-success)"></i> with Atrium</span>'+(apprAnn?'<span><i class="k" style="border-color:var(--primary);border-top-style:dashed"></i> if you approve the proposed work</span>':'')+'<span>vertical line = today</span></div>';
+      var cta=apprAnn?'<div style="margin-top:16px;background:var(--bg-success);border:1px solid hsl(86 40% 82%);border-radius:12px;padding:14px 16px"><div style="font-size:14px">Approve the '+apprN+' proposed project'+(apprN>1?'s':'')+' at '+esc(c.name)+' to save about <b>'+fmtK(apprAnn)+' a year</b> more.</div><button class="cf-btn" data-act="approvehere" data-val="'+esc(c.name)+'" style="margin-top:10px"><i class="ti ti-check"></i> Review &amp; approve here</button></div>':'';
+      app.innerHTML='<div style="margin-bottom:1.1rem">'+backPill()+'<h1 style="margin:14px 0 0;font-size:23px">'+esc(c.name)+'</h1><p style="color:var(--text-secondary);margin:.3rem 0 0">'+(high?'Running a little high for your occupancy and weather — worth a look.':'Running in line with your occupancy and weather.')+'</p></div>'
+        +'<div class="card"><div style="font-size:12px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:.04em;margin-bottom:8px">Energy &amp; water cost — last 12 months and next 12</div>'+trajChart(c,apprAnn)+savAxis()+legend+chips
+        +'<div style="font-size:13px;color:var(--text-secondary)">The shaded gap is what you’ve saved versus running these buildings without Atrium.</div>'+cta+'</div>';
+    } else {
+      var t=DATA.savedByType.find(function(x){return x.type===S.savLeaf;});
+      if(!t){S.screen='savings';return renderSavings();}
+      var live=sols().filter(function(s){return s.type===t.type;}),aa=sumSav(live),an=live.length;
+      var cta2=aa?'<div style="margin-top:16px;background:var(--bg-success);border:1px solid hsl(86 40% 82%);border-radius:12px;padding:14px 16px"><div style="font-size:14px">You have '+an+' more '+esc(t.type)+' project'+(an>1?'s':'')+' proposed — approve to add about <b>'+fmtK(aa)+' a year</b>.</div><button class="cf-btn" data-act="approvetype" data-val="'+esc(t.type)+'" style="margin-top:10px"><i class="ti ti-check"></i> Review &amp; approve</button></div>':'';
+      app.innerHTML='<div style="margin-bottom:1.1rem">'+backPill()+'<h1 style="margin:14px 0 0;font-size:23px">'+esc(t.type)+'</h1><p style="color:var(--text-secondary);margin:.3rem 0 0">Cumulative savings across your portfolio.</p></div>'
+        +'<div class="card"><div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:10px"><div><div style="font-size:12px;color:var(--text-muted)">Saved to date</div><div class="mono" style="font-size:27px;font-weight:700;color:var(--text-success);letter-spacing:-.02em">'+fmtK(t.saved)+'</div></div><div style="text-align:right"><div style="font-size:12px;color:var(--text-muted)">On pace next year</div><div class="mono" style="font-size:18px;font-weight:700">+'+fmtK(t.pace)+'</div></div></div>'+cumChart(t.saved,t.pace)+savAxis()
+        +'<div class="sav-legend"><span><i class="k" style="border-color:var(--text-success)"></i> saved so far</span><span><i class="k" style="border-color:var(--text-success);border-top-style:dashed"></i> forecast</span></div>'+cta2+'</div>';
+    }
+  }
+
   /* ===== Planner shell logic ===== */
-  // Included set: measured solutions default ON; estimated are never includable.
-  // Use S.excl to track measured rows the user has toggled OFF.
+  // Sandbox default: every proposed solution starts SELECTED (the recommended
+  // approve set). S.excl tracks any project the owner has toggled OFF. The
+  // outcome number sums annual savings across the selected set (full set about $208K).
   S.excl={};
   function measured(){return DATA.solutions.filter(function(s){return !est(s);});}
   function estimated(){return DATA.solutions.filter(function(s){return est(s);});}
-  function included(){return measured().filter(function(s){return !S.excl[s.id];});}
-  function on(s){return !est(s) && !S.excl[s.id];}
+  function included(){return DATA.solutions.filter(function(s){return !S.excl[s.id];});}
+  function on(s){return !S.excl[s.id];}
 
+  // Guiding-hand outcome readout — leads with benefit NUMBER + a VERB.
   function summaryStrip(){
     var inc=included();
-    var totalCash=inc.reduce(function(t,s){return t+fiveCash(s);},0);
     var totalSav=inc.reduce(function(t,s){return t+s.savings;},0);
-    var totalUp=inc.reduce(function(t,s){return t+net(s);},0);
-    var n=inc.length, nTot=measured().length;
+    var totalCash=inc.reduce(function(t,s){return t+tileVal(s);},0);
+    var n=inc.length, nTot=DATA.solutions.length;
+    var props=distinctProps(inc);
+    var lead=n?'With these selected, savings start once you approve.'
+              :'Select at least one project to see your gain.';
+    var cta=n?'<button class="pl-cta" data-act="approve-selected"><i class="ti ti-check"></i> Review &amp; approve</button>'
+             :'<button class="pl-cta" disabled><i class="ti ti-check"></i> Review &amp; approve</button>';
     return '<div class="pl-sticky"><div class="pl-sumcard">'
-      +'<div class="pl-sumtop">'
-        +'<div><div class="pl-sumlead">This plan · 5-year net cash flow</div>'
-          +'<div class="pl-hero mono">'+fmtK(totalCash)+'</div></div>'
-        +'<div class="pl-count mono">'+n+' of '+nTot+' projects included</div></div>'
-      +'<div class="pl-metrics">'
-        +'<div class="pl-metric"><div class="k">Annual savings</div><div class="v mono" style="color:var(--text-success)">'+fmtK(totalSav)+'/yr</div></div>'
-        +'<div class="pl-metric"><div class="k">Upfront (net)</div><div class="v mono">'+fmtK(totalUp)+'</div></div>'
-        +'<div class="pl-metric"><div class="k">Projects in plan</div><div class="v mono">'+n+'</div></div></div>'
-      +'<div class="pl-quickrow"><button class="cf-pill" data-act="all" aria-pressed="false"><i class="ti ti-checks"></i> Include all</button>'
-        +'<button class="cf-pill" data-act="none" aria-pressed="false"><i class="ti ti-square-off"></i> Clear all</button></div>'
+      +'<div class="pl-hero-row">'
+        +'<div><div class="pl-sumlead">Your gain with this plan</div>'
+          +'<div class="pl-hero mono">'+(n?'+':'')+fmtK(totalSav)+' <span style="font-size:.44em;font-weight:600;color:var(--text-muted);letter-spacing:0">a year</span></div>'
+          +'<div class="pl-count">'+lead+'</div></div>'
+        +cta+'</div>'
+      +'<div class="pl-metrics" style="margin-top:14px">'
+        +'<div class="pl-metric"><div class="k">Projects selected</div><div class="v mono">'+n+' of '+nTot+'</div></div>'
+        +'<div class="pl-metric"><div class="k">Hotels</div><div class="v mono">'+props+'</div></div>'
+        +'<div class="pl-metric"><div class="k">5-year cash flow</div><div class="v mono" style="color:var(--text-success)">'+fmtK(totalCash)+'</div></div></div>'
+      +'<div class="pl-quickrow"><button class="cf-pill" data-act="all"><i class="ti ti-checks"></i> Select all</button>'
+        +'<button class="cf-pill" data-act="none"><i class="ti ti-square-off"></i> Clear all</button></div>'
       +'</div></div>';
   }
 
@@ -283,19 +404,33 @@
     var name='<button class="pl-nm-btn" data-act="leaf" data-val="'+s.id+'">'+esc(s.type)+' <i class="ti ti-chevron-right"></i></button>';
     if(isEst){
       var lo=savLo(s),hi=savHi(s);
-      return '<div class="pl-row dash" data-row="'+s.id+'">'
-        +'<button class="pl-tog" aria-pressed="false" disabled title="Connect data to include"></button>'
+      return '<div class="pl-row dash'+(included?'':' off')+'" data-row="'+s.id+'">'
+        +'<button class="pl-tog" data-act="toggle" data-val="'+s.id+'" aria-pressed="'+included+'" title="'+(included?'Selected — click to remove':'Not selected — click to add')+'"></button>'
         +'<div class="pl-name">'+name+'<div class="pl-sub">'+sub+'</div>'
-          +'<div class="pl-need" style="margin-top:4px"><i class="ti ti-plug-connected"></i> Connect data to include</div></div>'
-        +'<div class="pl-fig off-fig"><div class="big mono">'+perRange(lo,hi)+'</div><div class="small">estimate · not in totals</div></div>'
+          +'<div class="pl-need" style="margin-top:4px"><i class="ti ti-plug-connected"></i> Estimate — connect data to firm up</div></div>'
+        +'<div class="pl-fig'+(included?'':' off-fig')+'"><div class="big mono">'+perRange(lo,hi)+'</div><div class="small">estimate</div></div>'
         +'</div>';
     }
     return '<div class="pl-row'+(included?'':' off')+'" data-row="'+s.id+'">'
-      +'<button class="pl-tog" data-act="toggle" data-val="'+s.id+'" aria-pressed="'+included+'" title="'+(included?'Included — click to remove':'Excluded — click to include')+'"></button>'
+      +'<button class="pl-tog" data-act="toggle" data-val="'+s.id+'" aria-pressed="'+included+'" title="'+(included?'Selected — click to remove':'Not selected — click to add')+'"></button>'
       +'<div class="pl-name">'+name+'<div class="pl-sub">'+sub+'</div></div>'
       +'<div class="pl-fig'+(included?'':' off-fig')+'"><div class="big mono">'+per(s.savings)+'</div>'
         +'<div class="small mono">'+fmtK(fiveCash(s))+' over 5 yrs</div></div>'
       +'</div>';
+  }
+
+  // #2 sign-up: a control to add the rest of the portfolio.
+  function signupLine(){
+    var list=prospects();
+    if(!list.length)return '';
+    var idle=Math.round(sumCf(list)/5);
+    return '<button class="pl-signline" data-act="go" data-val="signup"><span><i class="ti ti-plus" style="color:var(--text-warning)"></i> Add more properties to your plan — <span class="amt">'+fmtK(idle)+' a year</span> more</span><i class="ti ti-arrow-right" style="color:var(--text-muted)"></i></button>';
+  }
+
+  // #3 savings baseline (quiet): opens the shared savings drill.
+  function savedLine(){
+    var tot=DATA.contracted.reduce(function(t,c){return t+c.saved;},0);
+    return '<button class="pl-savedline" data-act="go" data-val="savings"><span><i class="ti ti-trophy" style="color:var(--text-success)"></i> You’ve already saved <b>'+fmtK(tot)+'</b> so far</span><i class="ti ti-arrow-right"></i></button>';
   }
 
   function renderPlanner(){
@@ -305,10 +440,10 @@
         +'<div><p style="color:var(--text-secondary);margin:0;font-size:14px">'+esc(DATA.portfolio)+'</p>'
         +'<h1 style="margin:.2rem 0 0;font-size:26px">Plan your savings</h1></div>'
         +'<span style="display:flex;align-items:center;gap:8px"><span style="font-size:13px;color:var(--text-muted)">Amounts:</span>'+perToggle()+'</span></div>'
-      +'<p style="color:var(--text-muted);margin:.3rem 0 0;font-size:13px">Toggle projects in or out and watch the portfolio numbers move. Include everything, or model just the set you want to start with.</p>';
-    var measRows='<div class="pl-sectlabel">Measured projects · toggle to include</div><div style="display:flex;flex-direction:column;gap:10px">'+meas.map(plRow).join('')+'</div>';
-    var estRows=ests.length?'<div class="pl-sectlabel">Estimated projects · connect data to include</div><div style="display:flex;flex-direction:column;gap:10px">'+ests.map(plRow).join('')+'</div>':'';
-    app.innerHTML=head+summaryStrip()+measRows+estRows;
+      +'<p style="color:var(--text-muted);margin:.3rem 0 0;font-size:13px">Your recommended set is selected. Toggle any project off to see the number move, then approve the set you want.</p>';
+    var measRows='<div class="pl-sectlabel">Ready to approve · measured from your data</div><div style="display:flex;flex-direction:column;gap:10px">'+meas.map(plRow).join('')+'</div>';
+    var estRows=ests.length?'<div class="pl-sectlabel">Early estimates · connect data to firm up</div><div style="display:flex;flex-direction:column;gap:10px">'+ests.map(plRow).join('')+'</div>':'';
+    app.innerHTML=head+summaryStrip()+measRows+estRows+signupLine()+savedLine();
   }
 
   function renderLeaf(){
@@ -318,21 +453,38 @@
     app.innerHTML=head+solutionCard(s);
   }
 
-  function render(){ if(S.screen==='leaf')renderLeaf(); else renderPlanner(); }
+  function renderSignup(){
+    var list=prospects();
+    var rows=list.map(function(p){
+      var cta=p.ready?'<button class="cf-btn" data-act="sign" data-val="'+p.id+'">Approve &amp; sign</button>':'<button class="cf-pill" data-act="step" data-val="'+p.id+'">'+p.step+'</button>';
+      return '<div data-row="'+p.id+'" style="display:flex;align-items:center;justify-content:space-between;gap:12px;background:var(--surface-2);border:1px '+(p.est?'dashed':'solid')+' '+(p.est?'var(--border-strong)':'var(--border)')+';border-radius:12px;padding:15px 16px;box-shadow:var(--shadow)"><div style="min-width:0"><p style="margin:0;font-weight:600">'+esc(p.name)+'</p><p style="margin:.15rem 0 0;font-size:13px;color:var(--text-muted)">'+(p.est?'Estimated · '+p.step:p.step)+'</p></div><div style="text-align:right;flex-shrink:0"><div class="cf-amt" style="font-size:19px;color:var(--text-success)">'+fmtK(p.cf)+'</div><div style="margin-top:7px">'+cta+'</div></div></div>';
+    }).join('');
+    app.innerHTML='<div style="margin-bottom:1.25rem">'+backPill()+'<h1 style="margin:14px 0 0">Add properties to your plan</h1><p style="color:var(--text-secondary);margin:.3rem 0 0">Each property’s 5-year new cash flow once it’s saving with Atrium.</p></div>'+(list.length?'<div style="display:flex;flex-direction:column;gap:10px">'+rows+'</div>':'<div class="cf-sq" style="text-align:center;padding:2rem"><i class="ti ti-circle-check" style="font-size:26px;color:var(--text-success)"></i><p style="margin:.5rem 0 0">Every property is in your plan.</p></div>');
+  }
+
+  function render(){ if(S.screen==='leaf')renderLeaf(); else if(S.screen==='signup')renderSignup(); else if(S.screen==='savings')renderSavings(); else if(S.screen==='savleaf')renderSavingsLeaf(); else renderPlanner(); }
 
   app.addEventListener('click',function(e){
     var d=e.target.closest('[data-disc]'); if(d){S.disc[d.dataset.disc]=!S.disc[d.dataset.disc];render();return;}
     var pertog=e.target.closest('[data-period]'); if(pertog){S.period=pertog.dataset.period;render();return;}
     var seg=e.target.closest('[data-segmode]'); if(seg){S.mode[seg.dataset.sol]=seg.dataset.segmode;render();return;}
     var el=e.target.closest('[data-act],[data-approve]'); if(!el)return;
-    if(el.dataset.approve){var s=DATA.solutions.find(function(x){return x.id===el.dataset.approve;});S.approved[s.id]=1;S.excl[s.id]=1;S.screen='home';render();return;}
+    if(el.dataset.approve){var s=DATA.solutions.find(function(x){return x.id===el.dataset.approve;});var m=curMode(s);S.approved[s.id]=1;S.approvedMode[s.id]=m;S.excl[s.id]=0;S.screen='home';render();return;}
     var a=el.dataset.act, v=el.dataset.val;
     if(a==='connect'){el.textContent='Request sent →';el.disabled=true;el.style.opacity=.7;}
     else if(a==='toggle'){S.excl[v]=!S.excl[v];render();}
     else if(a==='all'){S.excl={};render();}
-    else if(a==='none'){measured().forEach(function(s){S.excl[s.id]=1;});render();}
+    else if(a==='none'){DATA.solutions.forEach(function(s){S.excl[s.id]=1;});render();}
     else if(a==='leaf'){S.leafId=v;S.screen='leaf';render();}
-    else if(a==='back'){S.screen='home';render();}
+    else if(a==='go'){S.screen=v;render();}
+    else if(a==='savview'){S.savView=v;render();}
+    else if(a==='savleaf'){S.savLeaf=v;S.screen='savleaf';render();}
+    else if(a==='approve-selected'){var sel=included().filter(function(s){return !est(s);}).sort(recSort)[0]||included().sort(recSort)[0];if(sel){S.leafId=sel.id;S.screen='leaf';}render();}
+    else if(a==='approvehere'){var mh=sols().filter(function(s){return s.prop===v;}).sort(recSort)[0];if(mh){S.leafId=mh.id;S.screen='leaf';}else S.screen='home';render();}
+    else if(a==='approvetype'){var mt=sols().filter(function(s){return s.type===v;}).sort(recSort)[0];if(mt){S.leafId=mt.id;S.screen='leaf';}else S.screen='home';render();}
+    else if(a==='step'){el.textContent='We’ll guide you →';el.disabled=true;el.style.opacity=.6;}
+    else if(a==='sign'){var p=DATA.prospects.find(function(x){return x.id===v;});S.signed[v]=1;render();}
+    else if(a==='back'){var B={leaf:'home',signup:'home',savleaf:'savings',savings:'home'};S.screen=B[S.screen]||'home';render();}
   });
   render();
 })();

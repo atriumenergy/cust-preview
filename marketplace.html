@@ -66,6 +66,9 @@
   .disc-reply input{flex:1;border:1px solid var(--border);border-radius:8px;padding:8px 10px;font:inherit;font-size:13px;background:var(--surface-1)}
   .cf-fade{animation:cfOut .35s forwards}
   @keyframes cfOut{to{opacity:0;transform:scale(.96);height:0;margin:0;padding:0;border-width:0}}
+  .sav-legend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:12px;color:var(--text-secondary);margin-top:8px}
+  .sav-legend span{display:inline-flex;align-items:center;gap:5px}
+  .sav-legend i.k{width:16px;height:0;border-top-width:2px;border-top-style:solid;display:inline-block}
 
   /* ---- Marketplace shell (append-only) ---- */
   .mk-head{margin-bottom:1.25rem}
@@ -104,7 +107,7 @@
   .mk-badge.time{color:var(--text-warning);background:var(--bg-warning);border:1px solid var(--border-warning)}
   .mk-badge.win{color:var(--primary);background:hsl(240 60% 96%);border:1px solid hsl(240 40% 90%)}
   .mk-cart{position:sticky;bottom:14px;z-index:5;margin-top:1.5rem;display:flex;align-items:center;gap:14px;background:var(--surface-2);border:1px solid var(--border-strong);border-radius:14px;padding:13px 16px;box-shadow:0 8px 24px rgba(16,18,40,.14)}
-  .mk-cart.empty{border-style:dashed;box-shadow:var(--shadow);color:var(--text-muted)}
+  .mk-cart.empty{position:static;border-style:dashed;box-shadow:var(--shadow);color:var(--text-muted)}
   .mk-cart-ico{width:38px;height:38px;flex-shrink:0;border-radius:10px;display:flex;align-items:center;justify-content:center;background:hsl(240 60% 96%);color:var(--primary);font-size:20px}
   .mk-cart.empty .mk-cart-ico{background:hsl(240 20% 96%);color:var(--text-muted)}
   .mk-cart-body{min-width:0;flex:1}
@@ -112,6 +115,45 @@
   .mk-cart-v{font-size:15px;font-weight:600;letter-spacing:-.01em}
   .mk-cart-v b{color:var(--text-success);font-weight:700}
   .mk-cart-cta{flex-shrink:0}
+
+  /* ---- Storefront hero + guiding-hand entries ---- */
+  .mk-topbar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:1.15rem}
+  .mk-brand{display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--primary)}
+  /* Orders-style savings link — the quiet #3 entry */
+  .mk-orders{display:inline-flex;align-items:center;gap:7px;background:none;border:none;cursor:pointer;font:inherit;font-size:13px;font-weight:500;color:var(--text-secondary);padding:6px 2px;border-radius:8px}
+  .mk-orders:hover{color:var(--text-primary)}
+  .mk-orders b{color:var(--text-success);font-weight:700}
+  .mk-orders .ic{width:24px;height:24px;border-radius:7px;display:flex;align-items:center;justify-content:center;background:var(--bg-success);color:var(--text-success);font-size:15px}
+  /* Featured hero — the matched/recommended APPROVE bundle (#1) */
+  .mk-hero{position:relative;display:block;width:100%;text-align:left;font:inherit;color:inherit;cursor:pointer;background:linear-gradient(180deg,hsl(86 45% 97.5%),var(--surface-2) 64%);border:1px solid hsl(86 45% 76%);border-radius:18px;box-shadow:var(--shadow);padding:22px;transition:transform .12s,box-shadow .12s,border-color .12s;overflow:hidden}
+  .mk-hero:hover{transform:translateY(-2px);box-shadow:var(--shadow-hover)}
+  .mk-hero-tag{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--primary);background:hsl(240 60% 96%);border:1px solid hsl(240 40% 90%);border-radius:99px;padding:4px 11px}
+  .mk-hero-label{font-size:15px;font-weight:600;color:var(--text-secondary);margin-top:13px}
+  .mk-hero-amt{font-weight:700;letter-spacing:-.02em;line-height:1;color:var(--text-success);font-size:52px;margin-top:3px}
+  .mk-hero-amt .u{font-size:.32em;font-weight:600;color:var(--text-muted);letter-spacing:0}
+  .mk-hero-sub{font-size:14px;color:var(--text-secondary);margin-top:9px;max-width:46ch}
+  .mk-hero-cta{display:inline-flex;align-items:center;gap:7px;margin-top:17px;background:var(--primary);color:var(--primary-fg);border-radius:11px;padding:12px 20px;font-size:15px;font-weight:600}
+  .mk-hero-bundle{display:flex;flex-wrap:wrap;gap:6px;margin-top:15px}
+  .mk-hero-chip{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:500;color:var(--text-secondary);background:var(--surface-2);border:1px solid var(--border);border-radius:99px;padding:5px 11px}
+  .mk-hero-chip b{color:var(--text-success);font-weight:700}
+  /* Sign-up strip — #2 */
+  .mk-signup{display:flex;align-items:center;gap:14px;width:100%;text-align:left;font:inherit;color:inherit;cursor:pointer;background:var(--surface-2);border:1px solid var(--border);border-radius:14px;box-shadow:var(--shadow);padding:16px 18px;margin-top:14px;transition:transform .12s,box-shadow .12s,border-color .12s}
+  .mk-signup:hover{transform:translateY(-2px);box-shadow:var(--shadow-hover);border-color:var(--border-strong)}
+  .mk-signup-ico{width:42px;height:42px;flex-shrink:0;border-radius:11px;display:flex;align-items:center;justify-content:center;background:var(--bg-warning);color:var(--text-warning);font-size:21px}
+  .mk-signup-body{min-width:0;flex:1}
+  .mk-signup-k{font-size:13px;color:var(--text-secondary)}
+  .mk-signup-k b{color:var(--text-warning);font-weight:700}
+  .mk-signup-v{font-size:15px;font-weight:600;letter-spacing:-.01em;margin-top:1px}
+  .mk-signup-cta{flex-shrink:0;display:inline-flex;align-items:center;gap:6px;color:var(--primary);font-size:14px;font-weight:600}
+  @media (max-width:540px){
+    .mk-hero-amt{font-size:42px}
+    .mk-hero-cta{width:100%;justify-content:center}
+    .mk-signup{flex-wrap:wrap}
+    .mk-signup-cta{width:100%;justify-content:center;background:var(--primary);color:var(--primary-fg);border-radius:10px;padding:10px}
+    .mk-cart{flex-wrap:wrap}
+    .mk-cart-cta,.mk-cart-cta .cf-btn{width:100%}
+    .mk-cart-cta .cf-btn{justify-content:center}
+  }
 </style>
 </head>
 <body>
@@ -142,9 +184,21 @@
       {id:'s8',prop:'Riverside Lodge',type:'Heat Pump Water Heaters',u:0,vendor:'Thermal Systems',install:'about 2 weeks',fidelity:'estimated',dataNeed:'your water-heater metering',savings:12000},
       {id:'s9',prop:'Riverside Lodge',type:'Smart Thermostats',u:1,vendor:'Cozy Controls',install:'about 1 week',fidelity:'estimated',dataNeed:'occupancy data',savings:12500},
       {id:'s7',prop:'Cedar Court Hotel',type:'Ozone Laundry',u:1,vendor:'PureWash',install:'about 1 week',fidelity:'estimated',dataNeed:'laundry-room metering',savings:10000}
+    ],
+    // properties Atrium already operates — these have savings history + a forecast
+    contracted:[
+      {id:'c1',name:'Marina Bay Inn',rooms:120,saved:174000,runPct:96,next12:392000,without12:470000,perRoomNight:12.10},
+      {id:'c2',name:'Cedar Court Hotel',rooms:150,saved:146000,runPct:94,next12:471000,without12:560000,perRoomNight:11.40},
+      {id:'c3',name:'Riverside Lodge',rooms:96,saved:92000,runPct:108,next12:318000,without12:372000,perRoomNight:13.60}
+    ],
+    savedByType:[
+      {type:'Solar + Batteries',saved:198000,pace:205000},
+      {type:'LED Lighting',saved:96000,pace:92000},
+      {type:'Heat Pump Water Heaters',saved:71000,pace:66000},
+      {type:'Smart Thermostats',saved:47000,pace:44000}
     ]
   };
-  var S={screen:'home',bucket:2,solView:'type',group:null,leafId:null,period:'annual',signed:{},approved:{},approvedMode:{},mode:{},disc:{},unlocked:0};
+  var S={screen:'home',bucket:2,solView:'type',group:null,leafId:null,savView:'property',savLeaf:null,period:'annual',signed:{},approved:{},approvedMode:{},mode:{},disc:{},unlocked:0};
   var UL=['Now','Soon','Later'];
   function fmtK(n){n=Math.round(n);var s=n<0?'-':'';n=Math.abs(n);if(n>=1e6)return s+'$'+(n/1e6).toFixed(2).replace(/\.?0+$/,'')+'M';if(n>=1e3)return s+'$'+Math.round(n/1e3)+'K';return s+'$'+n;}
   function fmt(n){return '$'+Math.round(n).toLocaleString();}
@@ -168,6 +222,10 @@
   function sols(){return DATA.solutions.filter(function(s){return !S.approved[s.id];});}
   function sumCf(a){return a.reduce(function(t,x){return t+x.cf;},0);}
   function sumTile(a){return a.reduce(function(t,x){return t+tileVal(x);},0);}
+  function sumSav(a){return a.reduce(function(t,x){return t+x.savings;},0);}
+  function distinctProps(a){var o={};a.forEach(function(s){o[s.prop]=1;});return Object.keys(o).length;}
+  function approveAnnualFor(name){return sols().filter(function(s){return s.prop===name;}).reduce(function(t,s){return t+s.savings;},0);}
+  function approveCountFor(name){return sols().filter(function(s){return s.prop===name;}).length;}
   function recSort(a,b){ if(a.u!==b.u)return a.u-b.u; if((!!b.note)!==(!!a.note))return (b.note?1:0)-(a.note?1:0); return tileVal(b)-tileVal(a); }
   function econ(s,mode){
     var sav=s.savings,nt=net(s),pay=payback(s);
@@ -257,7 +315,7 @@
       +discussion(s)+'</div>';
   }
   function unlockedBanner(){ if(!S.unlocked)return ''; return '<div style="display:flex;align-items:center;gap:8px;background:var(--bg-success);border:1px solid hsl(86 40% 82%);border-radius:var(--radius);padding:9px 13px;margin-bottom:1rem;font-size:14px;color:var(--text-success)"><i class="ti ti-sparkles"></i>Unlocked this session: <span style="font-weight:700">'+fmt(S.unlocked)+'</span> over 5 years</div>'; }
-  function backPill(){return '<button class="cf-pill" data-act="back" style="display:inline-flex;align-items:center;gap:4px"><i class="ti ti-arrow-left"></i> Back to shop</button>';}
+  function backPill(){var toShop=S.screen==='leaf'||S.screen==='signup'||S.screen==='savings';return '<button class="cf-pill" data-act="back" style="display:inline-flex;align-items:center;gap:4px"><i class="ti ti-arrow-left"></i> '+(toShop?'Back to shop':'Back')+'</button>';}
   function perToggle(){return '<div class="seg"><button data-period="annual" aria-pressed="'+(S.period==='annual')+'">Annual</button><button data-period="monthly" aria-pressed="'+(S.period==='monthly')+'">Monthly</button></div>';}
 
   /* ---- Marketplace shell (append-only) ---- */
@@ -310,17 +368,54 @@
       +'<div class="mk-cart-cta"><button class="cf-btn" data-act="review"><i class="ti ti-arrow-right"></i> Review plan</button></div></div>';
   }
 
+  // #1 — featured hero: the matched/recommended APPROVE bundle, benefit number + verb
+  function heroBundle(){
+    var all=sols();                                   // every proposed upgrade → the headline number
+    if(!all.length) return '';
+    var ann=sumSav(all), props=distinctProps(all);
+    var priced=all.filter(function(s){return !est(s);}); // the ones you can approve right now
+    var pick=priced.slice().sort(recSort).slice(0,3);
+    var chips=pick.map(function(s){return '<span class="mk-hero-chip"><i class="ti ti-bolt"></i> '+esc(s.type)+' <b>+'+fmtK(s.savings)+'/yr</b></span>';}).join('')
+      +(all.length>pick.length?'<span class="mk-hero-chip">+'+(all.length-pick.length)+' more</span>':'');
+    var sub=priced.length===all.length
+      ? all.length+' upgrades matched across '+props+' hotel'+(props>1?'s':'')+', priced from your own meter data. Savings start once you approve.'
+      : priced.length+' priced and ready to approve now across '+props+' hotel'+(props>1?'s':'')+'; the rest are estimates awaiting your data.';
+    return '<button class="mk-hero" data-act="review">'
+      +'<span class="mk-hero-tag"><i class="ti ti-award"></i> Matched to your properties</span>'
+      +'<div class="mk-hero-label">Your matched upgrades</div>'
+      +'<div class="mk-hero-amt mono">+'+fmtK(ann)+'<span class="u"> a year</span></div>'
+      +'<div class="mk-hero-sub">'+sub+'</div>'
+      +'<div class="mk-hero-bundle">'+chips+'</div>'
+      +'<span class="mk-hero-cta"><i class="ti ti-checks"></i> Review &amp; approve <i class="ti ti-arrow-right"></i></span>'
+    +'</button>';
+  }
+  // #2 — sign-up strip
+  function signupStrip(){
+    var list=prospects(); if(!list.length) return '';
+    var idle=Math.round(sumCf(list)/5);
+    return '<button class="mk-signup" data-act="go" data-val="signup">'
+      +'<span class="mk-signup-ico"><i class="ti ti-building-plus"></i></span>'
+      +'<span class="mk-signup-body"><span class="mk-signup-v">Add properties to shop for their upgrades</span>'
+      +'<span class="mk-signup-k"><b>'+fmtK(idle)+' a year</b> is waiting across '+list.length+' more hotel'+(list.length>1?'s':'')+' not yet connected.</span></span>'
+      +'<span class="mk-signup-cta">Add properties <i class="ti ti-arrow-right"></i></span>'
+    +'</button>';
+  }
+  // #3 — quiet "orders" style savings link
+  function ordersLink(){
+    var tot=DATA.contracted.reduce(function(t,c){return t+c.saved;},0);
+    return '<button class="mk-orders" data-act="go" data-val="savings"><span class="ic"><i class="ti ti-receipt"></i></span> Your savings so far: <b>'+fmtK(tot)+'</b> <i class="ti ti-chevron-right"></i></button>';
+  }
+
   function renderShop(){
     var live=sols();
     var ready=live.filter(function(s){return !est(s);}).sort(recSort);
     var pending=live.filter(est);
-    var head='<div class="mk-head"><span class="mk-eyebrow"><i class="ti ti-building-store"></i> Upgrade marketplace</span>'
-      +'<p style="color:var(--text-secondary);margin:.5rem 0 0;font-size:14px">'+esc(DATA.portfolio)+'</p>'
-      +'<h1 style="margin:.15rem 0 0;font-size:28px">Shop vetted energy upgrades</h1>'
-      +'<p style="color:var(--text-muted);margin:.3rem 0 0;font-size:13px">A curated shelf, priced from your own meter data. Add upgrades to build a plan, then open any one to review and approve.</p></div>';
+    var head='<div class="mk-topbar"><span class="mk-brand"><i class="ti ti-building-store"></i> '+esc(DATA.portfolio)+' · Upgrade marketplace</span>'+ordersLink()+'</div>';
+    var hero=heroBundle();
+    var sign=signupStrip();
     var body='';
     if(ready.length){
-      body+='<div class="mk-shelf-label"><h2><i class="ti ti-sparkles" style="color:var(--primary)"></i> Priced &amp; ready</h2><span>'+ready.length+' upgrade'+(ready.length>1?'s':'')+', measured from your data</span></div>'
+      body+='<div class="mk-shelf-label"><h2><i class="ti ti-shopping-bag" style="color:var(--primary)"></i> Browse the shelf</h2><span>'+ready.length+' upgrade'+(ready.length>1?'s':'')+', priced from your data — open any for the economics</span></div>'
         +'<div class="grid">'+ready.map(productCard).join('')+'</div>';
     }
     if(pending.length){
@@ -330,9 +425,94 @@
     if(!ready.length&&!pending.length){
       body='<div class="cf-sq" style="text-align:center;padding:2rem"><i class="ti ti-circle-check" style="font-size:26px;color:var(--text-success)"></i><p style="margin:.5rem 0 0">Every upgrade on the shelf is approved.</p></div>';
     }
-    app.innerHTML=head+unlockedBanner()+body+cartBar();
+    app.innerHTML=head+unlockedBanner()+hero+sign+body+cartBar();
   }
 
+  function renderSignup(){
+    var list=prospects();
+    var rows=list.map(function(p){
+      var cta=p.ready?'<button class="cf-btn" data-act="sign" data-val="'+p.id+'">Approve &amp; sign</button>':'<button class="cf-pill" data-act="step" data-val="'+p.id+'">'+p.step+'</button>';
+      return '<div data-row="'+p.id+'" style="display:flex;align-items:center;justify-content:space-between;gap:12px;background:var(--surface-2);border:1px '+(p.est?'dashed':'solid')+' '+(p.est?'var(--border-strong)':'var(--border)')+';border-radius:12px;padding:15px 16px;box-shadow:var(--shadow)"><div style="min-width:0"><p style="margin:0;font-weight:600">'+esc(p.name)+'</p><p style="margin:.15rem 0 0;font-size:13px;color:var(--text-muted)">'+(p.est?'Estimated · '+p.step:p.step)+'</p></div><div style="text-align:right;flex-shrink:0"><div class="cf-amt" style="font-size:19px;color:var(--text-success)">'+fmtK(Math.round(p.cf/5))+'/yr</div><div style="margin-top:7px">'+cta+'</div></div></div>';
+    }).join('');
+    app.innerHTML='<div style="margin-bottom:1.25rem">'+backPill()+'<h1 style="margin:14px 0 0">Add your properties to the marketplace</h1><p style="color:var(--text-secondary);margin:.3rem 0 0">Once a property is connected, its upgrades appear on the shelf — priced from its own meter data. Figures show the yearly saving once it’s live with Atrium.</p></div>'+unlockedBanner()+(list.length?'<div style="display:flex;flex-direction:column;gap:10px">'+rows+'</div>':'<div class="cf-sq" style="text-align:center;padding:2rem"><i class="ti ti-circle-check" style="font-size:26px;color:var(--text-success)"></i><p style="margin:.5rem 0 0">Every property is on the marketplace.</p></div>');
+  }
+
+  function trajChart(sc,apprAnn){
+    var wm=sc.next12/12, wom=sc.without12/12, am=(sc.next12-(apprAnn||0))/12;
+    var n=24,w=340,h=132,padX=8,padT=16,padB=8,today=11,s=[];
+    for(var i=0;i<n;i++){var seas=Math.sin(i/12*Math.PI*2);s.push({without:wom*(1+0.06*seas),wth:wm*(1+0.06*seas),appr:am*(1+0.06*seas)});}
+    var all=[];s.forEach(function(d){all.push(d.without,d.wth);if(apprAnn)all.push(d.appr);});
+    var mn=Math.min.apply(null,all),mx=Math.max.apply(null,all),sp=(mx-mn)||1;mn-=sp*0.14;mx+=sp*0.08;sp=mx-mn;
+    function X(i){return padX+i/(n-1)*(w-2*padX);}
+    function Y(v){return padT+(1-(v-mn)/sp)*(h-padT-padB);}
+    function poly(key,from,to){var p=[];for(var i=from;i<=to;i++)p.push(X(i).toFixed(1)+','+Y(s[i][key]).toFixed(1));return p.join(' ');}
+    var gap=[];for(var i=0;i<=today;i++)gap.push(X(i).toFixed(1)+','+Y(s[i].without).toFixed(1));for(var j=today;j>=0;j--)gap.push(X(j).toFixed(1)+','+Y(s[j].wth).toFixed(1));
+    return '<svg viewBox="0 0 '+w+' '+h+'" width="100%" height="'+h+'" preserveAspectRatio="none" style="display:block">'
+      +'<polygon points="'+gap.join(' ')+'" fill="hsl(86 45% 92%)"/>'
+      +'<line x1="'+X(today).toFixed(1)+'" x2="'+X(today).toFixed(1)+'" y1="'+padT+'" y2="'+(h-padB)+'" stroke="var(--border-strong)" stroke-dasharray="3 3"/>'
+      +'<polyline points="'+poly('without',0,n-1)+'" fill="none" stroke="var(--text-warning)" stroke-width="2" stroke-dasharray="5 3"/>'
+      +'<polyline points="'+poly('wth',0,today)+'" fill="none" stroke="var(--text-success)" stroke-width="2.5"/>'
+      +'<polyline points="'+poly('wth',today,n-1)+'" fill="none" stroke="var(--text-success)" stroke-width="2.5" stroke-dasharray="5 3"/>'
+      +(apprAnn?'<polyline points="'+poly('appr',today,n-1)+'" fill="none" stroke="var(--primary)" stroke-width="2" stroke-dasharray="2 3"/>':'')
+      +'</svg>';
+  }
+  function cumChart(saved,pace){
+    var n=24,w=340,h=118,padX=8,padT=12,padB=8,today=12,s=[],cum=0,pp=saved/12,pf=pace/12;
+    for(var i=0;i<=n;i++){s.push(cum);cum+=(i<12?pp:pf);}
+    var mx=s[n]||1;
+    function X(i){return padX+i/n*(w-2*padX);}
+    function Y(v){return padT+(1-v/mx)*(h-padT-padB);}
+    function poly(from,to){var p=[];for(var i=from;i<=to;i++)p.push(X(i).toFixed(1)+','+Y(s[i]).toFixed(1));return p.join(' ');}
+    var area=poly(0,today)+' '+X(today).toFixed(1)+','+Y(0).toFixed(1)+' '+X(0).toFixed(1)+','+Y(0).toFixed(1);
+    return '<svg viewBox="0 0 '+w+' '+h+'" width="100%" height="'+h+'" preserveAspectRatio="none" style="display:block">'
+      +'<polygon points="'+area+'" fill="hsl(86 45% 93%)"/>'
+      +'<line x1="'+X(today).toFixed(1)+'" x2="'+X(today).toFixed(1)+'" y1="'+padT+'" y2="'+(h-padB)+'" stroke="var(--border-strong)" stroke-dasharray="3 3"/>'
+      +'<polyline points="'+poly(0,today)+'" fill="none" stroke="var(--text-success)" stroke-width="2.5"/>'
+      +'<polyline points="'+poly(today,n)+'" fill="none" stroke="var(--text-success)" stroke-width="2.5" stroke-dasharray="5 3"/></svg>';
+  }
+  function savAxis(){return '<div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text-muted);margin-top:2px"><span>12 mo ago</span><span>today</span><span>12 mo ahead</span></div>';}
+  function renderSavings(){
+    var byProp=S.savView==='property';
+    var toggle='<div style="display:flex;gap:6px;margin-bottom:1rem"><button class="cf-pill" data-act="savview" data-val="property" aria-pressed="'+byProp+'">By property</button><button class="cf-pill" data-act="savview" data-val="type" aria-pressed="'+(!byProp)+'">By solution type</button></div>';
+    var grid;
+    if(byProp){
+      grid=DATA.contracted.map(function(c){
+        var high=c.runPct>100;
+        var status=high?'<span style="display:inline-flex;align-items:center;gap:4px;color:var(--text-warning);font-size:13px;font-weight:500"><i class="ti ti-alert-triangle"></i> Running high</span>':'<span style="display:inline-flex;align-items:center;gap:4px;color:var(--text-success);font-size:13px;font-weight:500"><i class="ti ti-circle-check"></i> In line</span>';
+        return '<button class="cf-sq" data-act="savleaf" data-val="'+c.id+'" style="display:flex;flex-direction:column;gap:5px;min-height:130px"><span style="font-size:15px;font-weight:600">'+esc(c.name)+'</span><span style="font-size:12px;color:var(--text-muted)">Saved to date</span><span class="cf-amt" style="font-size:24px;color:var(--text-success);margin-top:-3px">'+fmtK(c.saved)+'</span><span style="margin-top:auto;display:flex;justify-content:space-between;align-items:center">'+status+'<i class="ti ti-arrow-right" style="color:var(--text-muted)"></i></span></button>';
+      }).join('');
+    } else {
+      grid=DATA.savedByType.map(function(t){
+        return '<button class="cf-sq" data-act="savleaf" data-val="'+esc(t.type)+'" style="display:flex;flex-direction:column;gap:5px;min-height:130px"><span style="font-size:15px;font-weight:600">'+esc(t.type)+'</span><span style="font-size:12px;color:var(--text-muted)">Saved to date</span><span class="cf-amt" style="font-size:24px;color:var(--text-success);margin-top:-3px">'+fmtK(t.saved)+'</span><span style="margin-top:auto;display:flex;justify-content:space-between;align-items:center"><span style="color:var(--text-muted);font-size:13px">on pace for +'+fmtK(t.pace)+'/yr</span><i class="ti ti-arrow-right" style="color:var(--text-muted)"></i></span></button>';
+      }).join('');
+    }
+    var tot=DATA.contracted.reduce(function(t,c){return t+c.saved;},0);
+    app.innerHTML='<div style="margin-bottom:1.1rem">'+backPill()+'<h1 style="margin:14px 0 0;font-size:23px">Savings so far</h1><p style="color:var(--text-secondary);margin:.3rem 0 0">You’ve saved <b style="color:var(--text-success)">'+fmtK(tot)+'</b> with Atrium. Open any '+(byProp?'hotel':'solution type')+' to see where it’s headed.</p></div>'+toggle+'<div class="grid">'+grid+'</div>';
+  }
+  function renderSavingsLeaf(){
+    if(S.savView==='property'){
+      var c=DATA.contracted.find(function(x){return x.id===S.savLeaf;});
+      if(!c){S.screen='savings';return renderSavings();}
+      var apprAnn=approveAnnualFor(c.name),apprN=approveCountFor(c.name),high=c.runPct>100;
+      var chips='<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;margin:14px 0">'
+        +'<div class="chip"><div class="k">Saved to date</div><div class="v mono" style="color:var(--text-success)">'+fmtK(c.saved)+'</div></div>'
+        +'<div class="chip"><div class="k">Now vs expected</div><div class="v mono" style="color:'+(high?'var(--text-warning)':'var(--text-success)')+'">'+c.runPct+'%</div></div>'
+        +'<div class="chip"><div class="k">Next 12 months</div><div class="v mono">'+fmtK(c.next12)+'</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">$'+c.perRoomNight.toFixed(2)+' per occupied room-night</div></div></div>';
+      var legend='<div class="sav-legend"><span><i class="k" style="border-color:var(--text-warning);border-top-style:dashed"></i> without Atrium</span><span><i class="k" style="border-color:var(--text-success)"></i> with Atrium</span>'+(apprAnn?'<span><i class="k" style="border-color:var(--primary);border-top-style:dashed"></i> if you approve the proposed work</span>':'')+'<span>vertical line = today</span></div>';
+      var cta=apprAnn?'<div style="margin-top:16px;background:var(--bg-success);border:1px solid hsl(86 40% 82%);border-radius:12px;padding:14px 16px"><div style="font-size:14px">Approve the '+apprN+' proposed project'+(apprN>1?'s':'')+' at '+esc(c.name)+' to save about <b>'+fmtK(apprAnn)+' a year</b> more.</div><button class="cf-btn" data-act="approvehere" data-val="'+esc(c.name)+'" style="margin-top:10px"><i class="ti ti-check"></i> Review &amp; approve here</button></div>':'';
+      app.innerHTML='<div style="margin-bottom:1.1rem">'+backPill()+'<h1 style="margin:14px 0 0;font-size:23px">'+esc(c.name)+'</h1><p style="color:var(--text-secondary);margin:.3rem 0 0">'+(high?'Running a little high for your occupancy and weather — worth a look.':'Running in line with your occupancy and weather.')+'</p></div>'
+        +'<div class="card"><div style="font-size:12px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:.04em;margin-bottom:8px">Energy &amp; water cost — last 12 months and next 12</div>'+trajChart(c,apprAnn)+savAxis()+legend+chips
+        +'<div style="font-size:13px;color:var(--text-secondary)">The shaded gap is what you’ve saved versus running these buildings without Atrium.</div>'+cta+'</div>';
+    } else {
+      var t=DATA.savedByType.find(function(x){return x.type===S.savLeaf;});
+      if(!t){S.screen='savings';return renderSavings();}
+      var live=sols().filter(function(s){return s.type===t.type;}),aa=sumSav(live),an=live.length;
+      var cta2=aa?'<div style="margin-top:16px;background:var(--bg-success);border:1px solid hsl(86 40% 82%);border-radius:12px;padding:14px 16px"><div style="font-size:14px">You have '+an+' more '+esc(t.type)+' project'+(an>1?'s':'')+' proposed — approve to add about <b>'+fmtK(aa)+' a year</b>.</div><button class="cf-btn" data-act="approvetype" data-val="'+esc(t.type)+'" style="margin-top:10px"><i class="ti ti-check"></i> Review &amp; approve</button></div>':'';
+      app.innerHTML='<div style="margin-bottom:1.1rem">'+backPill()+'<h1 style="margin:14px 0 0;font-size:23px">'+esc(t.type)+'</h1><p style="color:var(--text-secondary);margin:.3rem 0 0">Cumulative savings across your portfolio.</p></div>'
+        +'<div class="card"><div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:10px"><div><div style="font-size:12px;color:var(--text-muted)">Saved to date</div><div class="mono" style="font-size:27px;font-weight:700;color:var(--text-success);letter-spacing:-.02em">'+fmtK(t.saved)+'</div></div><div style="text-align:right"><div style="font-size:12px;color:var(--text-muted)">On pace next year</div><div class="mono" style="font-size:18px;font-weight:700">+'+fmtK(t.pace)+'</div></div></div>'+cumChart(t.saved,t.pace)+savAxis()
+        +'<div class="sav-legend"><span><i class="k" style="border-color:var(--text-success)"></i> saved so far</span><span><i class="k" style="border-color:var(--text-success);border-top-style:dashed"></i> forecast</span></div>'+cta2+'</div>';
+    }
+  }
   function renderLeaf(){
     var s=DATA.solutions.find(function(x){return x.id===S.leafId;});
     if(!s||S.approved[s.id]){S.screen='home';return renderShop();}
@@ -343,7 +523,7 @@
     app.innerHTML=head+unlockedBanner()+solutionCard(s)+cartBar();
   }
 
-  function render(){ if(S.screen==='leaf')renderLeaf();else renderShop(); }
+  function render(){ if(S.screen==='leaf')renderLeaf();else if(S.screen==='signup')renderSignup();else if(S.screen==='savings')renderSavings();else if(S.screen==='savleaf')renderSavingsLeaf();else renderShop(); }
   function unlockRow(id,amt,then){var row=app.querySelector('[data-row="'+id+'"]');S.unlocked+=amt;if(row){row.classList.add('cf-fade');setTimeout(then,340);}else then();}
   app.addEventListener('click',function(e){
     var d=e.target.closest('[data-disc]'); if(d){S.disc[d.dataset.disc]=!S.disc[d.dataset.disc];render();return;}
@@ -354,9 +534,16 @@
     var a=el.dataset.act, v=el.dataset.val;
     if(a==='connect'){el.textContent='Request sent →';el.disabled=true;el.style.opacity=.7;}
     else if(a==='add'){S.cart[v]=!S.cart[v];render();}
-    else if(a==='review'){var it=cartItems();if(it.length){S.leafId=it[0].id;S.screen='leaf';}render();}
+    else if(a==='review'){var it=cartItems();if(!it.length)it=sols().filter(function(s){return !est(s);}).sort(recSort);if(it.length){S.leafId=it[0].id;S.screen='leaf';}render();}
+    else if(a==='go'){S.screen=v;render();}
     else if(a==='leaf'){S.leafId=v;S.screen='leaf';render();}
-    else if(a==='back'){S.screen='home';render();}
+    else if(a==='savview'){S.savView=v;render();}
+    else if(a==='savleaf'){S.savLeaf=v;S.screen='savleaf';render();}
+    else if(a==='approvehere'){var mh=sols().filter(function(s){return s.prop===v;}).sort(recSort)[0];if(mh){S.leafId=mh.id;S.screen='leaf';}else S.screen='home';render();}
+    else if(a==='approvetype'){var mt=sols().filter(function(s){return s.type===v;}).sort(recSort)[0];if(mt){S.leafId=mt.id;S.screen='leaf';}else S.screen='home';render();}
+    else if(a==='step'){el.textContent='We’ll guide you →';el.disabled=true;el.style.opacity=.6;}
+    else if(a==='sign'){var p=DATA.prospects.find(function(x){return x.id===v;});unlockRow(v,p.cf,function(){S.signed[v]=1;render();});}
+    else if(a==='back'){var B={leaf:'home',signup:'home',savleaf:'savings',savings:'home'};S.screen=B[S.screen]||'home';render();}
   });
   render();
 })();
