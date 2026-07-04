@@ -66,56 +66,61 @@
   .disc-reply input{flex:1;border:1px solid var(--border);border-radius:8px;padding:8px 10px;font:inherit;font-size:13px;background:var(--surface-1)}
   .cf-fade{animation:cfOut .35s forwards}
   @keyframes cfOut{to{opacity:0;transform:scale(.96);height:0;margin:0;padding:0;border-width:0}}
-  /* --- timeline / roadmap shell --- */
-  .tl-scroll{overflow-x:auto;margin:0 -18px;padding:4px 18px 10px}
-  .tl-row{display:flex;min-width:660px}
-  .tl-col{flex:1;min-width:170px}
-  .tl-col.cap{flex:0 0 78px;min-width:78px}
-  .tl-node{position:relative;height:28px;margin-bottom:10px}
-  .tl-line{position:absolute;top:12px;left:0;right:0;height:3px;background:var(--border-strong)}
-  .tl-node.start .tl-line{left:50%}
-  .tl-node.end .tl-line{right:50%}
-  .tl-dot{position:absolute;top:5px;left:50%;transform:translateX(-50%);width:16px;height:16px;border-radius:50%;background:var(--primary);border:3px solid var(--surface-0);box-shadow:0 0 0 1px var(--border-strong);z-index:1}
-  .tl-node.warn .tl-dot{background:var(--text-warning)}
-  .tl-node.goal .tl-dot{background:var(--text-success)}
-  .tl-node.muted .tl-dot{background:var(--text-muted)}
-  .tl-inner{padding:0 7px}
-  .tl-time{font-size:13px;font-weight:700;text-align:center}
-  .tl-cum{font-size:12px;color:var(--text-success);font-weight:600;text-align:center;margin-bottom:12px}
-  .tl-event{display:block;width:100%;text-align:left;background:var(--surface-2);border:1px solid var(--border);border-left:3px solid var(--primary);border-radius:8px;padding:10px 12px;margin-bottom:8px;cursor:pointer;box-shadow:var(--shadow);font:inherit;color:inherit;transition:transform .12s,box-shadow .12s}
+  /* --- timeline / roadmap shell (Now-centered) --- */
+  /* Three zones: compact past (left) · expanded NOW (center focus) · compact future (right).
+     On desktop they sit side by side with NOW widest; on mobile they stack past→NOW→future. */
+  .tl-rail{display:grid;grid-template-columns:minmax(0,0.8fr) minmax(0,1.5fr) minmax(0,0.8fr);gap:14px;align-items:start;margin-bottom:6px}
+  .tl-zone{min-width:0}
+  .tl-zonelabel{display:flex;align-items:center;gap:6px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-muted);margin:0 2px 8px}
+  /* compact summary card shared by past + collapsed future buckets */
+  .tl-sum{display:block;width:100%;text-align:left;font:inherit;color:inherit;background:var(--surface-2);border:1px solid var(--border);border-radius:12px;padding:13px 14px;box-shadow:var(--shadow);margin-bottom:10px}
+  button.tl-sum{cursor:pointer;transition:transform .12s,box-shadow .12s,border-color .12s}
+  button.tl-sum:hover{transform:translateY(-1px);box-shadow:var(--shadow-hover);border-color:var(--border-strong)}
+  .tl-sum.past{border-left:3px solid var(--text-success)}
+  .tl-sum.now{border-left:3px solid var(--text-warning)}
+  .tl-sum.done{border-left:3px solid var(--text-muted)}
+  .tl-sum-top{display:flex;align-items:baseline;justify-content:space-between;gap:10px}
+  .tl-sum-t{font-size:14px;font-weight:700;overflow-wrap:anywhere}
+  .tl-sum-chev{flex-shrink:0;color:var(--text-muted);display:inline-flex;align-items:center;gap:4px;font-size:12px;font-weight:600}
+  .tl-sum-meta{font-size:12px;color:var(--text-muted);margin-top:3px;overflow-wrap:anywhere}
+  .tl-sum-add{font-size:13px;font-weight:700;color:var(--text-success);margin-top:6px}
+  .tl-sum-add .u{font-size:11px;font-weight:600;color:var(--text-muted)}
+  .tl-run{font-size:11px;color:var(--text-muted);margin-top:5px}
+  /* the centered NOW focus */
+  .tl-focus{background:linear-gradient(180deg,hsl(38 90% 97.5%),var(--surface-2) 60%);border:1px solid var(--border-warning);border-radius:14px;padding:15px 15px 6px;box-shadow:var(--shadow)}
+  .tl-focus-head{display:flex;align-items:baseline;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:2px}
+  .tl-focus-t{font-size:16px;font-weight:800;letter-spacing:-.01em;display:inline-flex;align-items:center;gap:6px}
+  .tl-focus-run{font-size:12px;color:var(--text-secondary);font-weight:600}
+  .tl-focus-sub{font-size:12px;color:var(--text-secondary);margin:2px 0 12px;overflow-wrap:anywhere}
+  .tl-banked{display:inline-flex;align-items:center;gap:6px;background:var(--bg-success);border:1px solid hsl(86 40% 82%);border-radius:8px;padding:7px 11px;font:inherit;font-size:12px;font-weight:600;color:var(--text-success);cursor:pointer;margin-top:2px}
+  .tl-banked:hover{filter:brightness(.97)}
+  /* event cards inside NOW — text wraps, never clips */
+  .tl-event{display:block;width:100%;text-align:left;background:var(--surface-2);border:1px solid var(--border);border-left:3px solid var(--primary);border-radius:8px;padding:10px 12px;margin-bottom:8px;cursor:pointer;box-shadow:var(--shadow);font:inherit;color:inherit;transition:transform .12s,box-shadow .12s;overflow-wrap:anywhere}
   .tl-event:hover{transform:translateY(-1px);box-shadow:var(--shadow-hover)}
   .tl-event.warn{border-left-color:var(--text-warning)}
   .tl-event.est{border-left-color:var(--text-warning);border-style:dashed;border-left-style:solid}
+  .tl-ev-foot{display:flex;justify-content:space-between;align-items:flex-end;gap:8px;flex-wrap:wrap}
+  .tl-ev-foot > span{min-width:0;overflow-wrap:anywhere}
+  /* guiding-hand action banner */
   .tl-cta{display:flex;align-items:center;justify-content:space-between;gap:14px;width:100%;text-align:left;font:inherit;color:inherit;cursor:pointer;background:linear-gradient(180deg,hsl(86 45% 97.5%),var(--surface-2) 62%);border:1px solid hsl(86 45% 76%);border-radius:14px;padding:16px 18px;box-shadow:var(--shadow);margin-bottom:18px;transition:transform .12s,box-shadow .12s}
   .tl-cta:hover{transform:translateY(-1px);box-shadow:var(--shadow-hover)}
   .tl-cta-main{display:flex;flex-direction:column;min-width:0}
   .tl-cta-k{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-muted)}
-  .tl-cta-t{font-size:16px;font-weight:700;margin-top:2px}
-  .tl-cta-s{font-size:13px;color:var(--text-secondary);margin-top:2px}
+  .tl-cta-t{font-size:16px;font-weight:700;margin-top:2px;overflow-wrap:anywhere}
+  .tl-cta-s{font-size:13px;color:var(--text-secondary);margin-top:2px;overflow-wrap:anywhere}
   .tl-cta-side{display:flex;flex-direction:column;align-items:flex-end;flex-shrink:0}
   .tl-cta-amt{font-size:26px;font-weight:700;color:var(--text-success);letter-spacing:-.02em;line-height:1}
   .tl-cta-u{font-size:12px;font-weight:600;color:var(--text-muted)}
   .tl-cta-go{display:inline-flex;align-items:center;gap:4px;margin-top:8px;background:var(--primary);color:var(--primary-fg);border-radius:8px;padding:6px 12px;font-size:13px;font-weight:600}
-  .tl-done{font-size:12px;color:var(--text-secondary);margin-top:2px}
-  .tl-banked{display:inline-flex;align-items:center;gap:6px;background:var(--bg-success);border:1px solid hsl(86 40% 82%);border-radius:8px;padding:6px 10px;font:inherit;font-size:12px;font-weight:600;color:var(--text-success);cursor:pointer;margin-top:4px}
-  .tl-banked:hover{filter:brightness(.97)}
   .sav-legend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:12px;color:var(--text-secondary);margin-top:8px}
   .sav-legend span{display:inline-flex;align-items:center;gap:5px}
   .sav-legend i.k{width:16px;height:0;border-top-width:2px;border-top-style:solid;display:inline-block}
+  @media (max-width:760px){
+    .tl-rail{grid-template-columns:1fr}
+  }
   @media (max-width:640px){
     .tl-cta{flex-direction:column;align-items:stretch;gap:10px}
     .tl-cta-side{align-items:flex-start}
-    .tl-scroll{overflow-x:visible;margin:0;padding:0}
-    .tl-row{flex-direction:column;min-width:0}
-    .tl-col{min-width:0;border-left:3px solid var(--border-strong);padding:0 0 8px 16px;margin:0 0 4px}
-    .tl-col.cap{flex:auto}
-    .tl-col.past{border-left-color:var(--text-success)}
-    .tl-col.today{border-left-color:var(--primary)}
-    .tl-col.now{border-left-color:var(--text-warning)}
-    .tl-node{display:none}
-    .tl-time,.tl-cum{text-align:left}
-    .tl-time{font-size:15px}
-    .tl-cum{margin-bottom:8px}
   }
 </style>
 </head>
@@ -165,7 +170,7 @@
       {type:'Smart Thermostats',saved:47000,pace:44000}
     ]
   };
-  var S={screen:'home',bucket:2,solView:'type',group:null,leafId:null,savView:'property',savLeaf:null,period:'annual',signed:{},approved:{},approvedMode:{},mode:{},disc:{},unlocked:0};
+  var S={screen:'home',bucket:2,solView:'type',group:null,leafId:null,savView:'property',savLeaf:null,period:'annual',signed:{},approved:{},approvedMode:{},mode:{},disc:{},openBucket:{},unlocked:0};
   var UL=['Now','Soon','Later'];
   function fmtK(n){n=Math.round(n);var s=n<0?'-':'';n=Math.abs(n);if(n>=1e6)return s+'$'+(n/1e6).toFixed(2).replace(/\.?0+$/,'')+'M';if(n>=1e3)return s+'$'+Math.round(n/1e3)+'K';return s+'$'+n;}
   function fmt(n){return '$'+Math.round(n).toLocaleString();}
@@ -289,17 +294,33 @@
     var isEst=est(s), warn=!!s.note, lead=s.install.replace(/·.*/,'').trim();
     var cls=isEst?' est':(warn?' warn':'');
     var foot=warn
-      ? '<span style="font-size:11px;color:var(--text-warning);font-weight:600;white-space:nowrap"><i class="ti ti-clock"></i> '+esc(s.note)+'</span>'
+      ? '<span style="font-size:11px;color:var(--text-warning);font-weight:600"><i class="ti ti-clock"></i> '+esc(s.note)+'</span>'
       : (isEst
-          ? '<span class="esttag" style="font-size:11px;white-space:nowrap"><i class="ti ti-help-circle"></i> estimate · connect data</span>'
-          : '<span style="font-size:11px;color:var(--text-muted);white-space:nowrap">starts '+esc(lead)+'</span>');
+          ? '<span class="esttag" style="font-size:11px"><i class="ti ti-help-circle"></i> estimate · connect data</span>'
+          : '<span style="font-size:11px;color:var(--text-muted)">starts '+esc(lead)+'</span>');
     var amt=isEst
-      ? '<span class="mono" style="font-size:14px;font-weight:700;color:var(--text-success)">'+fmtRange(savLo(s),savHi(s))+'<span style="font-size:11px;color:var(--text-muted);font-weight:500">/yr est.</span></span>'
-      : '<span class="mono" style="font-size:15px;font-weight:700;color:var(--text-success)">'+fmtK(s.savings)+'<span style="font-size:11px;color:var(--text-muted);font-weight:500">/yr</span></span>';
+      ? '<span class="mono" style="font-size:14px;font-weight:700;color:var(--text-success);white-space:nowrap">'+fmtRange(savLo(s),savHi(s))+'<span style="font-size:11px;color:var(--text-muted);font-weight:500"> /yr est.</span></span>'
+      : '<span class="mono" style="font-size:15px;font-weight:700;color:var(--text-success);white-space:nowrap">'+fmtK(s.savings)+'<span style="font-size:11px;color:var(--text-muted);font-weight:500"> /yr</span></span>';
     return '<button class="tl-event'+cls+'" data-act="leaf" data-val="'+s.id+'">'
       +'<div style="font-weight:600;font-size:14px">'+esc(s.prop)+'</div>'
       +'<div style="font-size:12px;color:var(--text-muted);margin:1px 0 6px">'+esc(s.type)+'</div>'
-      +'<div style="display:flex;justify-content:space-between;align-items:center;gap:6px">'+amt+foot+'</div></button>';
+      +'<div class="tl-ev-foot">'+amt+foot+'</div></button>';
+  }
+  // one compact, collapsible future bucket (right zone). Expands in place to show its cards.
+  function futureBucket(b){
+    var list=b.list, add=list.reduce(function(t,s){return t+s.savings;},0), open=!!S.openBucket[b.u];
+    if(!list.length){
+      return '<div class="tl-sum done"><div class="tl-sum-top"><span class="tl-sum-t">'+b.title+'</span></div>'
+        +'<div class="tl-sum-meta"><i class="ti ti-circle-check" style="color:var(--text-muted)"></i> nothing pending</div></div>';
+    }
+    var np=distinctProps(list);
+    return '<button class="tl-sum now" data-act="togbucket" data-val="'+b.u+'" aria-expanded="'+open+'">'
+      +'<div class="tl-sum-top"><span class="tl-sum-t">'+b.title+'</span>'
+        +'<span class="tl-sum-chev">'+(open?'Hide':'Show')+' <i class="ti ti-chevron-'+(open?'up':'down')+'"></i></span></div>'
+      +'<div class="tl-sum-meta">'+list.length+' project'+(list.length>1?'s':'')+' · '+np+' hotel'+(np>1?'s':'')+'</div>'
+      +'<div class="tl-sum-add">+'+fmtK(add)+'<span class="u"> /yr this adds</span></div>'
+      +'<div class="tl-run">running total '+fmtK(b.run)+'/yr</div></button>'
+      +(open?'<div style="margin:2px 0 10px">'+list.map(eventCard).join('')+'</div>':'');
   }
   function renderHome(){
     var live=sols();
@@ -315,34 +336,38 @@
       +'<span class="tl-cta-s">'+live.length+' projects · '+np+' hotels'+(timeSensitive?' · some rebates end soon':'')+'</span></span>'
       +'<span class="tl-cta-side"><span class="tl-cta-amt">+'+fmtK(appAnn)+'<span class="tl-cta-u"> a year</span></span>'
       +'<span class="tl-cta-go">Review <i class="ti ti-arrow-right"></i></span></span></button>':'';
-    // Rail: past (done + saving) -> today -> future (to approve)
-    var cols='';
-    cols+='<div class="tl-col cap past"><div class="tl-node start goal"><div class="tl-line"></div><div class="tl-dot"></div></div><div class="tl-inner"><div class="tl-time">Signed on</div><div class="tl-cum" style="color:var(--text-muted)">$0/yr</div></div></div>';
-    DATA.completed.forEach(function(c){
-      cols+='<div class="tl-col past"><div class="tl-node goal"><div class="tl-line"></div><div class="tl-dot"></div></div>'
-        +'<div class="tl-inner"><div class="tl-time">'+esc(c.when)+'</div><div class="tl-cum">'+fmtK(c.run)+'/yr</div>'
-        +'<div class="tl-done"><i class="ti ti-circle-check" style="color:var(--text-success)"></i> '+esc(c.label)+'</div></div></div>';
+    // running savings rate stepping forward in time, so each bucket can show what it adds
+    var runNow=currentRun+nowList.reduce(function(t,s){return t+s.savings;},0);
+    var run=runNow;
+    var futures=[{u:1,title:'Next 3 months'},{u:2,title:'Later this year'}].map(function(b){
+      b.list=byU(b.u); run+=b.list.reduce(function(t,s){return t+s.savings;},0); b.run=run; return b;
     });
-    cols+='<div class="tl-col today"><div class="tl-node"><div class="tl-line"></div><div class="tl-dot" style="background:var(--primary);width:20px;height:20px;top:3px"></div></div>'
-      +'<div class="tl-inner"><div class="tl-time" style="color:var(--primary)">Today</div><div class="tl-cum">'+fmtK(currentRun)+'/yr</div>'
-      +'<button class="tl-banked" data-act="go" data-val="savings"><i class="ti ti-trophy"></i> '+fmtK(banked)+' saved so far <i class="ti ti-arrow-right"></i></button></div></div>';
-    var buckets=[{u:0,title:'Now',now:true},{u:1,title:'Next 3 months'},{u:2,title:'Later this year'}];
-    var run=currentRun;
-    buckets.forEach(function(b){
-      var list=byU(b.u); run+=list.reduce(function(t,s){return t+s.savings;},0);
-      var ev=list.length?list.map(eventCard).join(''):'<div style="font-size:12px;color:var(--text-muted);padding:10px 0"><i class="ti ti-circle-check"></i> nothing pending</div>';
-      cols+='<div class="tl-col future'+(b.now?' now':'')+'"><div class="tl-node'+(b.now?' warn':'')+'"><div class="tl-line"></div><div class="tl-dot"></div></div>'
-        +'<div class="tl-inner"><div class="tl-time">'+b.title+'</div><div class="tl-cum">'+fmtK(run)+'/yr</div>'+ev+'</div></div>';
-    });
-    cols+='<div class="tl-col cap future"><div class="tl-node end goal"><div class="tl-line"></div><div class="tl-dot"></div></div><div class="tl-inner"><div class="tl-time">All approved</div><div class="tl-cum">'+fmtK(run)+'/yr</div></div></div>';
-    var signup=prospects().length?'<button class="cf-pill" data-act="setup" style="margin-top:2px"><i class="ti ti-building-community"></i> '+prospects().length+' more properties aren’t on your timeline yet — add them for '+fmtK(Math.round(sumCf(prospects())/5))+'/yr more →</button>':'';
+    // ---- PAST zone (left): one compact summary, not a wall ----
+    var doneLabels=DATA.completed.map(function(c){return esc(c.label);}).join(' · ');
+    var pastZone='<div class="tl-zone"><div class="tl-zonelabel"><i class="ti ti-circle-check"></i> What you’ve done</div>'
+      +'<div class="tl-sum past"><div class="tl-sum-top"><span class="tl-sum-t">Installed &amp; saving</span></div>'
+        +'<div class="tl-sum-meta">'+doneLabels+'</div>'
+        +'<div class="tl-sum-add">'+fmtK(currentRun)+'<span class="u"> /yr saved today</span></div>'
+        +'<button class="tl-banked" data-act="go" data-val="savings"><i class="ti ti-trophy"></i> '+fmtK(banked)+' saved so far <i class="ti ti-arrow-right"></i></button></div></div>';
+    // ---- NOW focus (center): expanded, the actionable anchor ----
+    var nowEv=nowList.length?nowList.map(eventCard).join(''):'<div style="font-size:13px;color:var(--text-secondary);padding:8px 0 12px"><i class="ti ti-circle-check" style="color:var(--text-success)"></i> Nothing needs approval right now — you’re all caught up.</div>';
+    var nowFocus='<div class="tl-zone"><div class="tl-zonelabel" style="color:var(--text-warning)"><i class="ti ti-player-play"></i> Now — do this next</div>'
+      +'<div class="tl-focus"><div class="tl-focus-head"><span class="tl-focus-t">Now</span>'
+        +'<span class="tl-focus-run">'+fmtK(runNow)+'/yr once approved</span></div>'
+      +'<div class="tl-focus-sub">'+(nowList.length?nowList.length+' ready to approve'+(timeSensitive?' · some rebates end soon':''):'You’re caught up here')+'</div>'
+      +nowEv+'</div></div>';
+    // ---- FUTURE zone (right): collapsed summaries, expand on tap ----
+    var futureZone='<div class="tl-zone"><div class="tl-zonelabel"><i class="ti ti-calendar"></i> Coming up</div>'
+      +futures.map(futureBucket).join('')
+      +'<div class="tl-run" style="margin:2px 2px 0">All approved: '+fmtK(run)+'/yr</div></div>';
+    var signup=prospects().length?'<button class="cf-pill" data-act="setup" style="margin-top:14px;color:var(--text-success)"><i class="ti ti-building-community"></i> '+prospects().length+' of your other properties are ready to join the timeline — bring them online whenever you’re ready for '+fmtK(Math.round(sumCf(prospects())/5))+'/yr more →</button>':'';
     var header='<div style="margin-bottom:14px"><p style="color:var(--text-secondary);margin:0;font-size:14px">'+esc(DATA.portfolio)+'</p>'
       +'<h1 style="margin:.15rem 0 0;font-size:21px">Your savings timeline</h1>'
-      +'<p style="color:var(--text-muted);margin:.3rem 0 0;font-size:13px">'+DATA.contracted.length+' hotels saving today · what you’ve done on the left, what’s next on the right</p></div>';
+      +'<p style="color:var(--text-muted);margin:.3rem 0 0;font-size:13px">'+DATA.contracted.length+' hotels saving today · what you’ve done, what’s worth doing now, and what’s coming up</p></div>';
     app.innerHTML=header+banner+unlockedBanner()
-      +'<div class="tl-scroll"><div class="tl-row">'+cols+'</div></div>'
+      +'<div class="tl-rail">'+pastZone+nowFocus+futureZone+'</div>'
       +signup
-      +'<p style="color:var(--text-muted);font-size:12px;margin-top:10px"><i class="ti ti-arrow-move-right"></i> Left of “Today” is what you’ve installed and what it saves each year; right of it is proposed work to approve. Tap any card for the economics.</p>';
+      +'<p style="color:var(--text-muted);font-size:12px;margin-top:10px"><i class="ti ti-info-circle"></i> The center is what’s worth approving now. Coming-up work is tucked away — tap a bucket to open it. Tap any card for the economics.</p>';
   }
   function renderSetup(){
     var list=prospects();
@@ -454,6 +479,7 @@
     if(el.dataset.approve){var s=DATA.solutions.find(function(x){return x.id===el.dataset.approve;});var m=curMode(s);unlockRow(s.id,fiveCash(s),function(){S.approved[s.id]=1;S.approvedMode[s.id]=m;S.screen='home';render();});return;}
     var a=el.dataset.act, v=el.dataset.val;
     if(a==='connect'){el.textContent='Request sent →';el.disabled=true;el.style.opacity=.7;}
+    else if(a==='togbucket'){S.openBucket[v]=!S.openBucket[v];render();}
     else if(a==='setup'){S.screen='setup';render();}
     else if(a==='leaf'){S.leafId=v;S.screen='leaf';render();}
     else if(a==='go'){S.screen=v;render();}
