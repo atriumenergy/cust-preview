@@ -25,35 +25,37 @@
   h1{font-weight:700;margin:0;letter-spacing:-.01em}
   .mono{font-variant-numeric:tabular-nums}
   .banner{display:flex;align-items:center;gap:8px;background:hsl(240 40% 97%);border:1px solid var(--border);border-radius:var(--radius);padding:9px 13px;color:var(--text-secondary);font-size:13px;margin-bottom:20px}
-  .sec{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-muted);margin:20px 0 8px}
-  .item{display:flex;align-items:center;gap:12px;width:100%;text-align:left;background:var(--surface-2);border:1px solid var(--border);border-radius:12px;padding:13px 14px;margin-bottom:8px;cursor:pointer;box-shadow:var(--shadow);font:inherit;color:inherit;transition:transform .12s,box-shadow .12s}
-  .item:hover{transform:translateY(-1px);box-shadow:var(--shadow-hover)}
-  .item.blocked{border-style:dashed;border-color:var(--border-strong)}
+  .sec{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-muted);margin:22px 0 8px}
+  .sec:first-of-type{margin-top:0}
+  /* real inbox: one summary row per line */
+  .item{display:flex;align-items:center;gap:12px;width:100%;text-align:left;background:var(--surface-2);border:1px solid var(--border);border-radius:12px;padding:13px 14px;margin-bottom:8px;cursor:pointer;box-shadow:var(--shadow);font:inherit;color:inherit;transition:transform .12s,box-shadow .12s,border-color .12s}
+  .item:hover{transform:translateY(-1px);box-shadow:var(--shadow-hover);border-color:var(--border-strong)}
+  .item.blocked{border-style:dashed;border-color:var(--border-strong);box-shadow:none}
   .item.done{opacity:.5;cursor:default;box-shadow:none}
+  .item-body{min-width:0;flex:1}
   .ic{width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:17px}
   .ic.act{background:hsl(240 40% 96%);color:var(--primary)}
   .ic.warn{background:var(--bg-warning);color:var(--text-warning)}
   .ic.ok{background:var(--bg-success);color:var(--text-success)}
-  .it-t{font-weight:600;font-size:14px}
-  .it-s{font-size:12px;color:var(--text-muted)}
+  .it-t{font-weight:600;font-size:14px;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .it-s{font-size:12px;color:var(--text-muted);display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .chip{flex-shrink:0;font-size:12px;font-weight:700;padding:3px 9px;border-radius:99px;white-space:nowrap}
   .chip.money{color:var(--text-success);background:var(--bg-success);border:1px solid hsl(86 40% 82%)}
   .chip.accent{color:var(--primary);background:hsl(240 60% 96%);border:1px solid hsl(240 40% 90%)}
   .chip.warn{color:var(--text-warning);background:var(--bg-warning);border:1px solid var(--border-warning)}
-  /* lead action tiles (the guiding hand) */
-  .act{display:block;width:100%;text-align:left;font:inherit;color:inherit;cursor:pointer;background:var(--surface-2);border:1px solid var(--border);border-radius:16px;padding:20px;box-shadow:var(--shadow);transition:transform .12s,box-shadow .12s,border-color .12s;margin-bottom:12px}
-  .act:hover{transform:translateY(-2px);box-shadow:var(--shadow-hover);border-color:var(--border-strong)}
-  .act.hero{border-color:hsl(86 45% 76%);background:linear-gradient(180deg,hsl(86 45% 97.5%),var(--surface-2) 62%)}
-  .act-top{display:flex;align-items:center;gap:9px;margin-bottom:8px}
-  .act-rank{width:22px;height:22px;border-radius:99px;background:var(--primary);color:var(--primary-fg);font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-  .act-label{font-size:14px;font-weight:600;color:var(--text-secondary)}
-  .act-amt{font-weight:700;letter-spacing:-.02em;line-height:1.02}
-  .act-amt .u{font-size:.42em;font-weight:600;color:var(--text-muted);letter-spacing:0}
-  .act-sub{font-size:14px;color:var(--text-secondary);margin-top:6px}
-  .act-cta{display:inline-flex;align-items:center;gap:6px;margin-top:15px;background:var(--primary);color:var(--primary-fg);border-radius:10px;padding:10px 17px;font-size:14px;font-weight:600}
-  .saved-line{display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;text-align:left;font:inherit;background:none;border:none;border-top:1px solid var(--border);margin-top:14px;padding:15px 3px 3px;cursor:pointer;color:var(--text-secondary);font-size:14px}
+  .chip.soft{color:var(--text-muted);background:hsl(240 20% 96%);border:1px solid var(--border)}
+  /* quiet, secondary savings row at the foot of the inbox */
+  .saved-line{display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;text-align:left;font:inherit;background:none;border:none;border-top:1px solid var(--border);margin-top:16px;padding:15px 3px 3px;cursor:pointer;color:var(--text-secondary);font-size:14px}
   .saved-line b{color:var(--text-success);font-weight:700}
   .saved-line:hover{color:var(--text-primary)}
+  /* detail view: clean item-context header above the reused leaf */
+  .dhead{display:flex;align-items:flex-start;gap:12px;margin:14px 0 4px}
+  .dhead .ic{width:38px;height:38px;font-size:19px}
+  .dhead-body{min-width:0;flex:1}
+  .dhead-t{font-size:19px;font-weight:700;letter-spacing:-.01em;line-height:1.25;overflow-wrap:anywhere}
+  .dhead-s{font-size:13px;color:var(--text-muted);margin-top:2px;overflow-wrap:anywhere}
+  .dhead-chip{flex-shrink:0}
+  .thread-cta{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:14px}
   .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px}
   .cf-sq{background:var(--surface-2);border:1px solid var(--border);border-radius:14px;padding:18px;cursor:pointer;transition:transform .12s,box-shadow .12s,border-color .12s;text-align:left;width:100%;font:inherit;color:inherit;box-shadow:var(--shadow)}
   .cf-sq:hover{transform:translateY(-2px);box-shadow:var(--shadow-hover);border-color:var(--border-strong)}
@@ -96,11 +98,9 @@
   .disc-reply input{flex:1;border:1px solid var(--border);border-radius:8px;padding:8px 10px;font:inherit;font-size:13px;background:var(--surface-1)}
   @media (max-width:520px){
     .wrap{padding:14px 13px 56px}
-    .act{padding:17px}
-    .act-amt{font-size:30px!important}
-    .act-cta{width:100%;justify-content:center;padding:12px 17px}
     .item{padding:14px 13px}
     .it-t{font-size:15px}
+    .dhead-t{font-size:18px}
     .payseg{flex-wrap:wrap}
     .payseg button{min-width:calc(33% - 6px)}
     .grid{grid-template-columns:1fr}
@@ -150,17 +150,19 @@
     ]
   };
   var SOL={}; DATA.solutions.forEach(function(s){SOL[s.id]=s;});
-  // Inbox triage queue — the specific items that need a touch, in priority order.
-  // The aggregate approve/sign-up leads are computed from DATA, not from this list.
+  // A real inbox: each entry is ONE summary row. `pri` sets the order — the ordering
+  // itself is the guiding hand: approve-on-contracted first, then messages, then the
+  // sign-up invite, then quiet waiting-on-data items. The savings row is separate (foot).
+  // `title` = subject; `sum` = one-line summary; `sub` = the property/context line.
   var ITEMS=[
-    {id:'i1',sec:'need',kind:'reply',solId:'s1',icon:'ti-message',iconc:'accent',title:'Reply to Dana about the battery phasing',sub:'Marina Bay Inn · Solar + Batteries',chip:'1 new',chipc:'accent'},
-    {id:'i2',sec:'need',kind:'approve',solId:'s5',icon:'ti-bolt',iconc:'act',title:'Approve — Solar + Batteries',sub:'Cedar Court Hotel',chip:'money'},
-    {id:'i3',sec:'need',kind:'approve',solId:'s2',icon:'ti-bolt',iconc:'act',title:'Approve — Heat Pump Water Heaters',sub:'Marina Bay Inn',chip:'money'},
-    {id:'i4',sec:'need',kind:'sign',propId:'Summit Ridge Suites',icon:'ti-file-check',iconc:'act',title:'Approve & sign — proposal ready',sub:'Summit Ridge Suites',chip:'$180K',chipc:'money'},
-    {id:'i5',sec:'wait',kind:'blocked',solId:'s8',icon:'ti-plug-connected',iconc:'warn',title:'Connect water-heater metering',sub:'Riverside Lodge · Heat Pump Water Heaters',chip:'blocked',chipc:'warn'},
-    {id:'i6',sec:'wait',kind:'blocked',solId:'s9',icon:'ti-plug-connected',iconc:'warn',title:'Connect occupancy data',sub:'Riverside Lodge · Smart Thermostats',chip:'blocked',chipc:'warn'},
-    {id:'i7',sec:'wait',kind:'audit',propId:'Grandview Hotel',icon:'ti-clipboard-check',iconc:'warn',title:'Complete your audit to unlock proposals',sub:'Grandview Hotel',chip:'blocked',chipc:'warn'}
-  ];
+    {id:'i2',pri:1,sec:'approve',kind:'approve',solId:'s5',icon:'ti-bolt',iconc:'act',title:'Approve: Solar + Batteries',sum:'Firm quote ready — savings start once you approve.',sub:'Cedar Court Hotel',chip:'money'},
+    {id:'i3',pri:2,sec:'approve',kind:'approve',solId:'s2',icon:'ti-bolt',iconc:'act',title:'Approve: Heat Pump Water Heaters',sum:'Firm quote ready — savings start once you approve.',sub:'Marina Bay Inn',chip:'money'},
+    {id:'i1',pri:3,sec:'msg',kind:'reply',solId:'s1',icon:'ti-message',iconc:'accent',title:'Dana replied about the battery phasing',sum:'“Happy to phase the battery portion — let me know.”',sub:'Marina Bay Inn · Solar + Batteries',chip:'1 new',chipc:'accent'},
+    {id:'i8',pri:4,sec:'signup',kind:'signup',icon:'ti-building-community',iconc:'ok',title:'Bring your other properties online',sum:'Two proposals are ready; more start whenever you are.',sub:'Summit Ridge Suites, Harbor Point Hotel and 4 more',chip:'invite',chipc:'soft'},
+    {id:'i5',pri:5,sec:'wait',kind:'blocked',solId:'s8',icon:'ti-plug-connected',iconc:'warn',title:'Connect water-heater metering',sum:'Turns the Riverside estimate into a firm, guaranteed quote.',sub:'Riverside Lodge · Heat Pump Water Heaters',chip:'to unlock',chipc:'warn'},
+    {id:'i6',pri:6,sec:'wait',kind:'blocked',solId:'s9',icon:'ti-plug-connected',iconc:'warn',title:'Connect occupancy data',sum:'Turns the Riverside estimate into a firm, guaranteed quote.',sub:'Riverside Lodge · Smart Thermostats',chip:'to unlock',chipc:'warn'},
+    {id:'i7',pri:7,sec:'wait',kind:'audit',propId:'Grandview Hotel',icon:'ti-clipboard-check',iconc:'ok',title:'Schedule your audit',sum:'About an hour on-site unlocks firm proposals here.',sub:'Grandview Hotel',chip:'when you’re ready',chipc:'soft'}
+  ].sort(function(a,b){return a.pri-b.pri;});
   var S={screen:'home',itemId:null,period:'annual',savView:'property',savLeaf:null,mode:{},disc:{},approved:{},done:{}};
   var UL=['Now','Soon','Later'];
   function fmtK(n){n=Math.round(n);var s=n<0?'-':'';n=Math.abs(n);if(n>=1e6)return s+'$'+(n/1e6).toFixed(2).replace(/\.?0+$/,'')+'M';if(n>=1e3)return s+'$'+Math.round(n/1e3)+'K';return s+'$'+n;}
@@ -216,55 +218,70 @@
   }
   function itemRow(it){
     var done=S.done[it.id];
-    return '<button class="item'+(it.sec==='wait'?' blocked':'')+(done?' done':'')+'"'+(done?' disabled':'')+' data-item="'+it.id+'"><span class="ic '+(done?'ok':it.iconc)+'"><i class="ti '+(done?'ti-check':it.icon)+'"></i></span><span style="min-width:0;flex:1"><span class="it-t" style="display:block">'+esc(it.title)+'</span><span class="it-s">'+esc(it.sub)+'</span></span>'+(done?'<span class="chip" style="color:var(--text-muted)">done</span>':chipFor(it))+'</button>';
-  }
-  function actionTile(rank,label,amt,unit,sub,cta,act,val,opts){
-    opts=opts||{};
-    return '<button class="act'+(opts.hero?' hero':'')+'" data-act="'+act+'" data-val="'+esc(val)+'">'
-      +'<div class="act-top"><span class="act-rank">'+rank+'</span><span class="act-label">'+label+'</span></div>'
-      +'<div class="act-amt" style="font-size:'+(opts.size||34)+'px;color:'+(opts.color||'var(--text-success)')+'">'+amt+'<span class="u"> '+unit+'</span></div>'
-      +'<div class="act-sub">'+sub+'</div>'
-      +'<div class="act-cta">'+cta+' <i class="ti ti-arrow-right"></i></div></button>';
+    return '<button class="item'+(it.sec==='wait'?' blocked':'')+(done?' done':'')+'"'+(done?' disabled':'')+' data-item="'+it.id+'">'
+      +'<span class="ic '+(done?'ok':it.iconc)+'"><i class="ti '+(done?'ti-check':it.icon)+'"></i></span>'
+      +'<span class="item-body"><span class="it-t">'+esc(it.title)+'</span><span class="it-s">'+esc(it.sub)+'</span></span>'
+      +(done?'<span class="chip soft">done</span>':chipFor(it))+'</button>';
   }
   function renderHome(){
-    var need=ITEMS.filter(function(i){return i.sec==='need';}), wait=ITEMS.filter(function(i){return i.sec==='wait';});
-    var openNeed=need.filter(function(i){return !S.done[i.id];}).length;
-    var live=sols(), apprN=live.length, apprHotels=distinctProps(live), apprAnn=sumSav(live);
-    var pros=prospects(), idleAnn=Math.round(sumCf(pros)/5);
+    var open=ITEMS.filter(function(i){return !S.done[i.id];});
+    var actionable=open.filter(function(i){return i.sec==='approve'||i.sec==='msg';}).length;
     var header='<div style="margin-bottom:1.1rem"><p style="color:var(--text-secondary);margin:0;font-size:14px">'+esc(DATA.portfolio)+'</p>'
       +'<h1 style="font-size:24px;margin:.15rem 0 0">Your inbox</h1>'
-      +'<p style="color:var(--text-muted);margin:.3rem 0 0;font-size:14px">'+openNeed+' things need you. Clear them one at a time — the top one first.</p></div>';
-    // #1 — APPROVE, benefit number leads. #2 — SIGN UP. Ordering is the guiding hand.
-    var lead='';
-    if(apprN){
-      lead+=actionTile(1,'Approve proposed solutions','+'+fmtK(apprAnn),'a year',
-        'Approve '+apprN+' proposed projects across '+apprHotels+' hotels — savings start once you approve',
-        'Review &amp; approve','approveall','',{size:40,hero:true});
-    }
-    if(pros.length){
-      lead+=actionTile(2,'Bring your other properties online',fmtK(idleAnn),'a year, idle',
-        pros.length+' properties aren’t connected yet — that saving is sitting on the table',
-        'Add properties','go','signup',{size:32,color:'var(--text-warning)'});
-    }
-    var list='<div class="sec">One at a time</div>'+need.map(itemRow).join('')
-      +'<div class="sec">Waiting on data — connect it to unlock these</div>'+wait.map(itemRow).join('');
-    // Quiet, for-your-records savings digest — opens the shared savings drill. Never the hero.
+      +'<p style="color:var(--text-muted);margin:.3rem 0 0;font-size:14px">'+(actionable?actionable+' thing'+(actionable>1?'s':'')+' need you — the most useful at the top. Open one at a time.':'You’re all caught up.')+'</p></div>';
+    // Pure summary list, already in priority order (ITEMS is pre-sorted by `pri`).
+    // No cash-flow-style benefit tiles up top — the ORDER is the guiding hand.
+    var list=ITEMS.map(itemRow).join('');
+    // Quiet, secondary savings digest — opens the shared savings drill. Never a hero.
     var tot=DATA.contracted.reduce(function(t,c){return t+c.saved;},0);
     var saved='<button class="saved-line" data-act="go" data-val="savings"><span><i class="ti ti-trophy" style="color:var(--text-success)"></i> Your savings so far: <b>'+fmtK(tot)+'</b> — see where it’s going</span><i class="ti ti-arrow-right"></i></button>';
-    app.innerHTML=header+lead+list+saved;
+    app.innerHTML=header+list+saved;
   }
-  function propPanel(name,body,cta){
-    app.innerHTML='<div style="margin-bottom:16px">'+backPill()+'</div><div class="card"><div style="font-size:18px;font-weight:700;margin-bottom:4px">'+esc(name)+'</div><p style="color:var(--text-secondary);font-size:14px;margin:0 0 14px">'+body+'</p><button class="cf-btn" data-act="dopanel"><i class="ti ti-arrow-right"></i> '+cta+'</button></div>';
+  // ---- one-item-at-a-time detail views (each with Back to inbox) ----
+  function detailHeader(icon,iconc,title,sub,chipHtml){
+    return '<div style="margin-bottom:12px">'+backPill()+'</div>'
+      +'<div class="dhead"><span class="ic '+iconc+'"><i class="ti '+icon+'"></i></span>'
+      +'<span class="dhead-body"><span class="dhead-t">'+esc(title)+'</span>'+(sub?'<span class="dhead-s">'+esc(sub)+'</span>':'')+'</span>'
+      +(chipHtml?'<span class="dhead-chip">'+chipHtml+'</span>':'')+'</div>';
+  }
+  function propPanel(name,icon,body,cta){
+    app.innerHTML=detailHeader(icon,'warn','Schedule your audit',name,'')
+      +'<div class="card"><p style="color:var(--text-secondary);font-size:14px;margin:0 0 14px">'+body+'</p><button class="cf-btn" data-act="dopanel"><i class="ti ti-arrow-right"></i> '+cta+'</button></div>';
+  }
+  function renderThread(it){
+    // Message/question item → the discussion thread on its own, above a quick approve path.
+    var s=SOL[it.solId];
+    S.disc[s.id]=true; // thread expanded by default in this focused view
+    app.innerHTML=detailHeader('ti-message','accent',it.title,it.sub,'<span class="chip accent">'+esc(it.chip)+'</span>')
+      +'<div class="card">'+discussion(s)
+      +'<div class="thread-cta"><button class="cf-btn" data-act="openleaf" data-val="'+s.id+'"><i class="ti ti-bolt"></i> Open the proposal</button>'
+      +'<span style="font-size:13px;color:var(--text-muted)">Reply above, or review the numbers.</span></div></div>';
+  }
+  function renderSignupList(){
+    // Sign-up invite item → the sign-up list (all prospects). Encouraging, never chiding.
+    var pros=prospects();
+    var rows=pros.map(function(p){
+      var cta=p.ready?'<button class="cf-btn sm" data-act="dopanel">Approve &amp; sign</button>':'<button class="cf-pill" data-act="dopanel">'+esc(p.step)+'</button>';
+      return '<div style="display:flex;align-items:center;justify-content:space-between;gap:12px;background:var(--surface-2);border:1px '+(p.est?'dashed':'solid')+' '+(p.est?'var(--border-strong)':'var(--border)')+';border-radius:12px;padding:14px 15px;box-shadow:'+(p.est?'none':'var(--shadow)')+'"><div style="min-width:0"><p style="margin:0;font-weight:600">'+esc(p.name)+'</p><p style="margin:.15rem 0 0;font-size:13px;color:var(--text-muted)">'+(p.est?'Estimated · '+esc(p.step):esc(p.step))+'</p></div><div style="text-align:right;flex-shrink:0"><div class="cf-amt mono" style="font-size:18px;color:var(--text-success)">'+fmtK(p.cf)+'</div><div style="margin-top:7px">'+cta+'</div></div></div>';
+    }).join('');
+    app.innerHTML='<div style="margin-bottom:14px">'+backPill()+'</div>'
+      +'<div style="margin-bottom:1rem"><h1 style="font-size:22px;margin:0">Bring your other properties online</h1><p style="color:var(--text-secondary);margin:.3rem 0 0;font-size:14px">Two proposals are ready now; the rest can start whenever you are. Each figure is that property’s 5-year new cash flow with Atrium.</p></div>'
+      +'<div style="display:flex;flex-direction:column;gap:10px">'+rows+'</div>';
   }
   function leafShell(s){
-    return '<div style="display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:16px">'+backPill()+(est(s)?'':'<span style="display:flex;align-items:center;gap:8px"><span style="font-size:13px;color:var(--text-muted)">Amounts:</span>'+perToggle()+'</span>')+'</div>'+solutionCard(s);
+    // Clean item-context header (subject flows normally, chip right-aligned) + the shared leaf.
+    var chip=est(s)?'':'<span class="chip money mono">'+fmtK(fiveCash(s))+'</span>';
+    var head=detailHeader('ti-bolt','act','Approve: '+s.type,s.prop,chip);
+    var amounts=est(s)?'':'<div style="display:flex;justify-content:flex-end;align-items:center;gap:8px;margin-bottom:12px"><span style="font-size:13px;color:var(--text-muted)">Amounts:</span>'+perToggle()+'</div>';
+    return head+amounts+solutionCard(s);
   }
   function renderLeaf(){
-    // Direct solution leaf (opened from an aggregate approve tile or the savings drill).
+    // Direct solution leaf (opened from a message thread or the savings drill).
     if(S.leafId){var sd=SOL[S.leafId];if(sd){app.innerHTML=leafShell(sd);return;}S.leafId=null;}
     var it=ITEMS.find(function(x){return x.id===S.itemId;}); if(!it){S.screen='home';return renderHome();}
-    if(it.kind==='sign'){return propPanel(it.propId,'The proposal for this property is ready to review and sign. This would open the full property agreement.','Review & sign');}
-    if(it.kind==='audit'){return propPanel(it.propId,'We need an energy audit before we can propose firm, guaranteed projects here. It takes about an hour on-site.','Schedule the audit');}
+    if(it.kind==='reply'){return renderThread(it);}
+    if(it.kind==='signup'){return renderSignupList();}
+    if(it.kind==='audit'){return propPanel(it.propId,'ti-clipboard-check','We need an energy audit before we can propose firm, guaranteed projects here. It takes about an hour on-site, and unlocks proposals for this property.','Schedule the audit');}
     app.innerHTML=leafShell(SOL[it.solId]);
   }
   function trajChart(sc,apprAnn){
@@ -349,15 +366,15 @@
     var pertog=e.target.closest('[data-period]'); if(pertog){S.period=pertog.dataset.period;render();return;}
     var seg=e.target.closest('[data-segmode]'); if(seg){S.mode[seg.dataset.sol]=seg.dataset.segmode;render();return;}
     var ap=e.target.closest('[data-approve]'); if(ap){S.approved[ap.dataset.approve]=1;if(!S.leafId&&S.itemId)S.done[S.itemId]=1;S.leafId=null;S.itemId=null;S.screen='home';render();return;}
-    var it=e.target.closest('[data-item]'); if(it){S.leafId=null;S.itemId=it.dataset.item;var i=ITEMS.find(function(x){return x.id===S.itemId;});if(i&&i.kind==='reply'&&i.solId)S.disc[i.solId]=true;S.screen='leaf';render();return;}
+    var it=e.target.closest('[data-item]'); if(it){S.leafId=null;S.itemId=it.dataset.item;S.screen='leaf';render();return;}
     var el=e.target.closest('[data-act]'); if(!el)return;
     var a=el.dataset.act, v=el.dataset.val;
     if(a==='back'){var B={savleaf:'savings',savings:'home'};S.screen=B[S.screen]||'home';S.itemId=null;S.leafId=null;render();}
     else if(a==='go'){S.screen=v;render();}
     else if(a==='savview'){S.savView=v;render();}
     else if(a==='savleaf'){S.savLeaf=v;S.screen='savleaf';render();}
-    // No group/list screen in this concept — open the most-urgent matching leaf directly.
-    else if(a==='approveall'){var m0=sols().slice().sort(recSort)[0];if(m0){S.itemId=null;S.leafId=m0.id;S.screen='leaf';}else S.screen='home';render();}
+    // Open a specific solution leaf in place (from a message thread, or the savings drill).
+    else if(a==='openleaf'){S.leafId=v;S.screen='leaf';render();}
     else if(a==='approvehere'){var mh=sols().filter(function(s){return s.prop===v;}).sort(recSort)[0];if(mh){S.itemId=null;S.leafId=mh.id;S.screen='leaf';}else S.screen='home';render();}
     else if(a==='approvetype'){var mt=sols().filter(function(s){return s.type===v;}).sort(recSort)[0];if(mt){S.itemId=null;S.leafId=mt.id;S.screen='leaf';}else S.screen='home';render();}
     else if(a==='connect'||a==='dopanel'){if(S.itemId)S.done[S.itemId]=1;S.screen='home';render();}
