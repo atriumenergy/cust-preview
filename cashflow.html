@@ -182,17 +182,21 @@
       takeaway:'$0 down; net '+per(sav-la)+' a year, no ownership or upkeep.'};
   }
   function spark(series,be){
-    var w=300,h=72,pad=8,vals=series.concat([0]);
+    var w=300,h=72,padX=8,padT=8,padB=8,N=120;
+    function stepAt(yr){var i=Math.max(0,Math.min(series.length-2,Math.floor(yr)));return series[i+1]-series[i];}
+    var cum=series[0],pts=[[0,cum]];
+    for(var m=1;m<=N;m++){var yr=m/12;var mult=1+0.5*Math.sin((m-1)/12*2*Math.PI-Math.PI/2);cum+=stepAt(yr-1e-9)/12*mult;pts.push([yr,cum]);}
+    var vals=pts.map(function(p){return p[1];}).concat([0]);
     var mn=Math.min.apply(null,vals),mx=Math.max.apply(null,vals),sp=(mx-mn)||1;
-    function X(y){return pad+(y/10)*(w-2*pad);}
-    function Y(v){return pad+(1-(v-mn)/sp)*(h-2*pad);}
-    var pts=series.map(function(v,i){return X(i).toFixed(1)+','+Y(v).toFixed(1);}).join(' ');
-    var area=pts+' '+X(10).toFixed(1)+','+Y(mn).toFixed(1)+' '+X(0).toFixed(1)+','+Y(mn).toFixed(1);
+    function X(yr){return padX+(yr/10)*(w-2*padX);}
+    function Y(v){return padT+(1-(v-mn)/sp)*(h-padT-padB);}
+    var line=pts.map(function(p){return X(p[0]).toFixed(1)+','+Y(p[1]).toFixed(1);}).join(' ');
+    var area=line+' '+X(10).toFixed(1)+','+Y(mn).toFixed(1)+' '+X(0).toFixed(1)+','+Y(mn).toFixed(1);
     return '<svg viewBox="0 0 '+w+' '+h+'" width="100%" height="'+h+'" preserveAspectRatio="none" style="display:block">'
       +'<polygon points="'+area+'" fill="hsl(86 45% 95%)"/>'
-      +'<line x1="'+pad+'" x2="'+(w-pad)+'" y1="'+Y(0).toFixed(1)+'" y2="'+Y(0).toFixed(1)+'" stroke="var(--border-strong)" stroke-dasharray="3 3"/>'
-      +'<polyline points="'+pts+'" fill="none" stroke="var(--text-success)" stroke-width="2.5"/>'
-      +'<circle cx="'+X(be).toFixed(1)+'" cy="'+Y(0).toFixed(1)+'" r="3.5" fill="var(--primary)"/></svg>';
+      +'<line x1="'+padX+'" x2="'+(w-padX)+'" y1="'+Y(0).toFixed(1)+'" y2="'+Y(0).toFixed(1)+'" stroke="var(--border-strong)" stroke-dasharray="3 3"/>'
+      +'<line x1="'+X(be).toFixed(1)+'" x2="'+X(be).toFixed(1)+'" y1="'+padT+'" y2="'+(h-padB)+'" stroke="var(--primary)" stroke-width="1.5" stroke-dasharray="2 2" opacity=".5"/>'
+      +'<polyline points="'+line+'" fill="none" stroke="var(--text-success)" stroke-width="2.5"/></svg>';
   }
   var THREAD=[
     {name:'Dana · Atrium',text:'Here’s the proposal — happy to walk you through any of the numbers.',me:false,att:'proposal.pdf'},
