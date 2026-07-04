@@ -88,11 +88,13 @@
   .co-card-wrap .card{margin-bottom:0}
   .co-turn.card-turn{align-items:flex-start}
   .co-turn.card-turn .co-bubble{max-width:calc(100% - 35px);flex:1}
-  .co-chips{display:flex;flex-wrap:wrap;gap:8px;margin-left:35px}
-  .co-chip{border:1px solid var(--border-strong);background:var(--surface-2);border-radius:99px;padding:9px 15px;cursor:pointer;font:inherit;font-size:14px;font-weight:500;color:var(--primary);display:inline-flex;align-items:center;gap:6px;text-align:left;box-shadow:var(--shadow)}
-  .co-chip:hover{border-color:var(--primary);background:hsl(240 60% 98%)}
+  /* the owner's possible replies — sit on the owner's (right) side so they read as things "you" might say */
+  .co-chips{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:8px;margin-top:2px}
+  .co-chips-label{width:100%;text-align:right;font-size:11px;color:var(--text-muted);margin-bottom:1px}
+  .co-chip{border:1px solid hsl(240 40% 88%);background:hsl(240 60% 97%);border-radius:16px;border-bottom-right-radius:5px;padding:9px 15px;cursor:pointer;font:inherit;font-size:14px;font-weight:500;color:var(--primary);display:inline-flex;align-items:center;gap:6px;text-align:left;box-shadow:var(--shadow)}
+  .co-chip:hover{border-color:var(--primary);background:hsl(240 66% 95%)}
   .co-chip i{font-size:16px;opacity:.7}
-  .co-composer{display:flex;gap:8px;margin-top:16px;margin-left:35px}
+  .co-composer{display:flex;gap:8px;margin-top:16px}
   .co-composer input{flex:1;border:1px solid var(--border);border-radius:99px;padding:11px 16px;font:inherit;font-size:14px;background:var(--surface-2);color:var(--text-muted)}
   .co-send{width:42px;height:42px;border-radius:99px;flex-shrink:0;border:1px solid var(--border-strong);background:var(--surface-2);color:var(--text-muted);cursor:default;display:flex;align-items:center;justify-content:center}
   .co-typing .disc-msg{display:inline-flex;gap:4px;align-items:center}
@@ -388,7 +390,7 @@
 
   function renderChips(){
     if(!C.chips.length)return '';
-    return '<div class="co-chips">'+C.chips.map(function(c){
+    return '<div class="co-chips"><span class="co-chips-label">You could say…</span>'+C.chips.map(function(c){
       return '<button class="co-chip" data-chip="'+c.id+'"><i class="ti '+(c.icon||'ti-arrow-right')+'"></i>'+esc(c.label)+'</button>';
     }).join('')+'</div>';
   }
@@ -414,67 +416,69 @@
   function stepGreet(){
     var live=sols();
     var head=live.length
-      ? '<div style="font-size:14px;color:var(--text-secondary);margin-bottom:2px">You have '+live.length+' projects ready to approve across '+distinctProps(live)+' hotels — that’s</div>'
+      ? '<div style="font-size:14px;color:var(--text-secondary);margin-bottom:2px">You’ve got '+live.length+' projects ready to approve across '+distinctProps(live)+' hotels. Approve them all and that’s about</div>'
         +'<div class="mono" style="font-size:34px;font-weight:700;color:var(--text-success);letter-spacing:-.02em;line-height:1.05">+'+fmtK(sumSav(live))+'<span style="font-size:.42em;font-weight:600;color:var(--text-muted);letter-spacing:0"> a year</span></div>'
-        +'<div style="font-size:14px;margin-top:6px">Want to review them? A couple of rebates end <b>Aug 31</b>, so I’d start there.</div>'
-      : '<div style="font-size:14px">You’re all caught up — every proposed project is approved. Want to add the rest of your portfolio?</div>';
+        +'<div style="font-size:14px;margin-top:8px">A couple of rebates end <b>Aug 31</b>, so if you’ve got a minute I’d start there. Want to take a look together?</div>'
+      : '<div style="font-size:14px">You’re all caught up — every proposed project is approved. Whenever you’re ready, I’d love to bring the rest of your portfolio online too.</div>';
     C.turns=[
-      advTurn('Morning. I looked across all your properties overnight — here’s what I’d do first.'),
+      advTurn('Morning! I went through all your properties overnight — here’s what I’d do first.'),
       advTurn(head)
     ];
     C.chips=live.length?[
-      {id:'review',label:'Review & approve',icon:'ti-checks'},
-      {id:'add',label:'Add properties',icon:'ti-building-community'},
-      {id:'saved',label:'What have I saved?',icon:'ti-trophy'}
+      {id:'review',label:'Yes, let’s go through them',icon:'ti-checks'},
+      {id:'add',label:'What about my other properties?',icon:'ti-building-community'},
+      {id:'saved',label:'How much have I saved so far?',icon:'ti-trophy'}
     ]:[
-      {id:'add',label:'Add properties',icon:'ti-building-community'},
-      {id:'saved',label:'What have I saved?',icon:'ti-trophy'}
+      {id:'add',label:'Let’s bring more properties online',icon:'ti-building-community'},
+      {id:'saved',label:'How much have I saved so far?',icon:'ti-trophy'}
     ];
     renderCopilot();
   }
   // Priority 1 — Review & approve: surface the most-urgent proposed leaf as a card.
   function stepReview(){
     var live=sols();
-    if(!live.length){ C.turns.push(advTurn('Everything proposed is already approved — nice. Want to add the rest of your portfolio?')); C.chips=[{id:'add',label:'Add properties',icon:'ti-building-community'},{id:'saved',label:'What have I saved?',icon:'ti-trophy'}]; return renderCopilot(); }
+    if(!live.length){ C.turns.push(advTurn('Everything proposed is already approved — nicely done! Want to bring the rest of your portfolio online next?')); C.chips=[{id:'add',label:'Let’s bring more online',icon:'ti-building-community'},{id:'saved',label:'How much have I saved so far?',icon:'ti-trophy'}]; return renderCopilot(); }
     var top=live.slice().sort(recSort)[0];
-    C.turns.push(youTurn('Review & approve.'));
+    C.turns.push(youTurn('Sure, let’s go through them.'));
     C.turns.push(cardTurn(top.id, top.note
-      ? 'Let’s start with <b>'+esc(top.prop)+'’s '+esc(top.type)+'</b> — its '+esc(top.note).toLowerCase()+', and it’s cash-flow positive from day one. Approve right here, or ask me anything.'
-      : 'Let’s start with <b>'+esc(top.prop)+'’s '+esc(top.type)+'</b> — the biggest, soonest win. Approve right here, or ask me anything.'));
+      ? 'Great. Let’s start with <b>'+esc(top.prop)+'’s '+esc(top.type)+'</b> — its '+esc(top.note).toLowerCase()+', and it pays for itself from day one. Have a look, and just approve it right here when you’re happy.'
+      : 'Great. Let’s start with <b>'+esc(top.prop)+'’s '+esc(top.type)+'</b> — the biggest, soonest win. Have a look, and just approve it right here when you’re happy.'));
     C.chips=[
-      {id:'urgent',label:'What else is time-sensitive?',icon:'ti-clock'},
-      {id:'biggest',label:'Where’s the biggest payoff?',icon:'ti-trending-up'},
-      {id:'riverside',label:'What about Riverside Lodge?',icon:'ti-building'}
+      {id:'urgent',label:'Is anything else on a deadline?',icon:'ti-clock'},
+      {id:'biggest',label:'Which one saves the most?',icon:'ti-trending-up'},
+      {id:'riverside',label:'And Riverside Lodge?',icon:'ti-building'}
     ];
     renderCopilot();
   }
   // Priority 2 — Add properties: in-chat sign-up. Lists the properties not yet online.
   function stepAdd(){
     var list=prospects();
-    C.turns.push(youTurn('Add properties.'));
-    if(!list.length){ C.turns.push(advTurn('Every property is already on board — nothing left to add.')); C.chips=[{id:'review',label:'Review & approve',icon:'ti-checks'},{id:'saved',label:'What have I saved?',icon:'ti-trophy'}]; return renderCopilot(); }
+    C.turns.push(youTurn('What about my other properties?'));
+    if(!list.length){ C.turns.push(advTurn('Every property is already on board — that’s all of them! Nothing left for me to add.')); C.chips=[{id:'review',label:'Let’s go through the projects',icon:'ti-checks'},{id:'saved',label:'How much have I saved so far?',icon:'ti-trophy'}]; return renderCopilot(); }
     var idle=Math.round(sumCf(list)/5);
+    var ready=list.filter(function(p){return p.ready;}).length;
     var rows=list.map(function(p){
       var cta=p.ready?'<button class="cf-btn sm" data-act="sign" data-val="'+p.id+'">Approve &amp; sign</button>':'<button class="cf-pill" style="font-size:13px;padding:5px 11px" data-act="step" data-val="'+p.id+'">'+esc(p.step)+'</button>';
       return '<div data-row="'+p.id+'" style="display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--surface-2);border:1px '+(p.est?'dashed':'solid')+' '+(p.est?'var(--border-strong)':'var(--border)')+';border-radius:10px;padding:11px 12px"><div style="min-width:0"><div style="font-weight:600;font-size:14px">'+esc(p.name)+'</div><div style="font-size:12px;color:var(--text-muted)">'+(p.est?'Estimated · '+esc(p.step):esc(p.step))+'</div></div><div style="text-align:right;flex-shrink:0"><div class="cf-amt" style="font-size:16px;color:var(--text-success)">'+fmtK(p.cf)+'</div><div style="margin-top:5px">'+cta+'</div></div></div>';
     }).join('');
-    C.turns.push(advTurn('You’ve got <b>'+list.length+'</b> properties not on Atrium yet — about <b>'+fmtK(idle)+' a year</b> sitting on the table. The two with proposals ready you can sign right here; the rest just need a quick step from you.'
+    C.turns.push(advTurn('Love that you’re thinking about the rest. You’ve got <b>'+list.length+'</b> not on Atrium yet — together they could be worth around <b>'+fmtK(idle)+' a year</b> once they’re running. No rush at all, bring them online whenever you’re ready.'));
+    C.turns.push(advTurn('Here they are. '+(ready?'The '+(ready===1?'first one is':(ready+' at the top are'))+' ready to sign right now':'They each just need one quick step from you')+' — the rest I can walk you through:'
       +'<div style="display:flex;flex-direction:column;gap:8px;margin-top:10px">'+rows+'</div>'));
     C.chips=[
-      {id:'review',label:'Back to approving',icon:'ti-checks'},
-      {id:'saved',label:'What have I saved?',icon:'ti-trophy'}
+      {id:'review',label:'Let’s get back to approving',icon:'ti-checks'},
+      {id:'saved',label:'How much have I saved so far?',icon:'ti-trophy'}
     ];
     renderCopilot();
   }
   // Priority 3 — the savings brag/FOMO. A quiet chat reply + button into the shared drill.
   function stepSaved(){
     var tot=DATA.contracted.reduce(function(t,c){return t+c.saved;},0);
-    C.turns.push(youTurn('What have I saved?'));
-    C.turns.push(advTurn('You’ve saved <b style="color:var(--text-success)">'+fmtK(tot)+'</b> with Atrium so far, across '+DATA.contracted.length+' hotels — and it keeps compounding. Want to see where it’s going?'
-      +'<div style="margin-top:10px"><button class="cf-btn sm" data-act="go" data-val="savings"><i class="ti ti-chart-line"></i> See the breakdown</button></div>'));
+    C.turns.push(youTurn('How much have I saved so far?'));
+    C.turns.push(advTurn('Quite a lot! You’re at <b style="color:var(--text-success)">'+fmtK(tot)+'</b> with Atrium so far, across '+DATA.contracted.length+' hotels — and it keeps compounding every month. Want me to show you where it’s headed?'
+      +'<div style="margin-top:10px"><button class="cf-btn sm" data-act="go" data-val="savings"><i class="ti ti-chart-line"></i> Show me the breakdown</button></div>'));
     C.chips=[
-      {id:'review',label:'Review & approve',icon:'ti-checks'},
-      {id:'add',label:'Add properties',icon:'ti-building-community'}
+      {id:'review',label:'Let’s go through the projects',icon:'ti-checks'},
+      {id:'add',label:'What about my other properties?',icon:'ti-building-community'}
     ];
     renderCopilot();
   }
@@ -485,48 +489,48 @@
     C.turns.push(cardTurn(id,lead));
     // after a card, offer to look at the runner-up / other threads
     C.chips=[
-      {id:'urgent',label:'What else is time-sensitive?',icon:'ti-clock'},
-      {id:'riverside',label:'What about Riverside Lodge?',icon:'ti-building'},
-      {id:'biggest',label:'Where’s the biggest payoff?',icon:'ti-trending-up'}
+      {id:'urgent',label:'Is anything else on a deadline?',icon:'ti-clock'},
+      {id:'riverside',label:'And Riverside Lodge?',icon:'ti-building'},
+      {id:'biggest',label:'Which one saves the most?',icon:'ti-trending-up'}
     ];
     renderCopilot();
   }
 
   // "What's most urgent?" — advisor calls out the two rebate-driven Solar jobs.
   function stepUrgent(){
-    C.turns.push(youTurn('What’s most urgent?'));
-    C.turns.push(advTurn('Two things share the <b>Aug 31</b> rebate deadline: <b>Cedar Court</b> and <b>Marina Bay Inn</b>, both Solar + Batteries. Cedar Court is the smaller, faster install — I’d lock it in first, then Marina Bay. Here’s Cedar Court.'));
+    C.turns.push(youTurn('Is anything else on a deadline?'));
+    C.turns.push(advTurn('Yes — two share the <b>Aug 31</b> rebate deadline: <b>Cedar Court</b> and <b>Marina Bay Inn</b>, both Solar + Batteries. Cedar Court is the smaller, faster install, so I’d lock it in first and do Marina Bay next. Here’s Cedar Court:'));
     C.turns.push(cardTurn('s5',''));
     C.chips=[
       {id:'numbers-s1',label:'Show me Marina Bay’s numbers',icon:'ti-calculator'},
-      {id:'riverside',label:'What about Riverside Lodge?',icon:'ti-building'},
-      {id:'biggest',label:'Where’s the biggest payoff?',icon:'ti-trending-up'}
+      {id:'riverside',label:'And Riverside Lodge?',icon:'ti-building'},
+      {id:'biggest',label:'Which one saves the most?',icon:'ti-trending-up'}
     ];
     renderCopilot();
   }
 
   // "Biggest payoff" — advisor points at Marina Bay Solar (largest fiveCash).
   function stepBiggest(){
-    C.turns.push(youTurn('Where’s the biggest payoff?'));
-    C.turns.push(advTurn('Over five years, <b>Marina Bay Inn’s Solar + Batteries</b> nets the most by a wide margin — and it’s on the same Aug 31 rebate clock. It’s a bigger install, so let’s look together.'));
+    C.turns.push(youTurn('Which one saves the most?'));
+    C.turns.push(advTurn('That’d be <b>Marina Bay Inn’s Solar + Batteries</b> — over five years it nets the most by a wide margin, and it’s on that same Aug 31 rebate clock. It’s a bigger install, so let’s go through it together:'));
     C.turns.push(cardTurn('s1',''));
     C.chips=[
-      {id:'urgent',label:'What else is time-sensitive?',icon:'ti-clock'},
-      {id:'riverside',label:'What about Riverside Lodge?',icon:'ti-building'},
-      {id:'numbers-s5',label:'Back to Cedar Court',icon:'ti-arrow-back-up'}
+      {id:'urgent',label:'Is anything else on a deadline?',icon:'ti-clock'},
+      {id:'riverside',label:'And Riverside Lodge?',icon:'ti-building'},
+      {id:'numbers-s5',label:'Take me back to Cedar Court',icon:'ti-arrow-back-up'}
     ];
     renderCopilot();
   }
 
   // "Riverside Lodge" — the estimated path (connect data). Uses s8 (estimated).
   function stepRiverside(){
-    C.turns.push(youTurn('What about Riverside Lodge?'));
-    C.turns.push(advTurn('Riverside is promising but I’m still working from rough estimates — I don’t have its meter data yet. Best early candidate is <b>Heat Pump Water Heaters</b>. Connect the metering and I’ll turn this into a firm, guaranteed quote.'));
+    C.turns.push(youTurn('And Riverside Lodge?'));
+    C.turns.push(advTurn('Riverside looks promising, but I’m still working from rough estimates there — I don’t have its meter data yet. The best early candidate is <b>Heat Pump Water Heaters</b>. If you connect the metering, I’ll turn this into a firm, guaranteed quote for you.'));
     C.turns.push(cardTurn('s8',''));
     C.chips=[
       {id:'numbers-s5',label:'Show me a ready one instead',icon:'ti-calculator'},
-      {id:'urgent',label:'What’s most urgent?',icon:'ti-clock'},
-      {id:'biggest',label:'Where’s the biggest payoff?',icon:'ti-trending-up'}
+      {id:'urgent',label:'Is anything else on a deadline?',icon:'ti-clock'},
+      {id:'biggest',label:'Which one saves the most?',icon:'ti-trending-up'}
     ];
     renderCopilot();
   }
@@ -536,8 +540,8 @@
     if(id==='review') return stepReview();
     if(id==='add') return stepAdd();
     if(id==='saved') return stepSaved();
-    if(id==='numbers-s5') return stepShowCard('s5','Show me the numbers.','Here’s Cedar Court’s Solar + Batteries. Financed, you’re net-positive from day one — the payment stays below what you save.');
-    if(id==='numbers-s1') return stepShowCard('s1','Show me Marina Bay’s numbers.','Here’s Marina Bay Inn’s Solar + Batteries — your largest opportunity. Same Aug 31 rebate applies.');
+    if(id==='numbers-s5') return stepShowCard('s5','Take me back to Cedar Court.','Sure — here’s Cedar Court’s Solar + Batteries again. Financed, you’re ahead from day one: the payment stays below what you save.');
+    if(id==='numbers-s1') return stepShowCard('s1','Show me Marina Bay’s numbers.','Here you go — Marina Bay Inn’s Solar + Batteries, your largest opportunity. The same Aug 31 rebate applies here too.');
     if(id==='urgent') return stepUrgent();
     if(id==='biggest') return stepBiggest();
     if(id==='riverside') return stepRiverside();
@@ -562,15 +566,15 @@
     if(el.dataset.approve){var s=solById(el.dataset.approve);var m=curMode(s);unlockRow(s.id,fiveCash(s),function(){S.approved[s.id]=1;S.approvedMode[s.id]=m;S.screen='home';
       // advisor acknowledges the approval and nudges the next best move
       var rem=sols();
-      C.turns.push(advTurn('Done — <b>'+esc(s.type)+'</b> at <b>'+esc(s.prop)+'</b> is approved. I’ll handle scheduling with '+esc(s.vendor)+' and keep you posted.'
-        +(rem.length?' That leaves <b>'+rem.length+'</b> more projects worth <b>+'+fmtK(sumSav(rem))+' a year</b> — want the next one?':' That’s every proposed project approved. Nicely done.')));
+      C.turns.push(advTurn('Done! <b>'+esc(s.type)+'</b> at <b>'+esc(s.prop)+'</b> is approved. I’ll get scheduling started with '+esc(s.vendor)+' and keep you posted.'
+        +(rem.length?' That leaves <b>'+rem.length+'</b> more worth <b>+'+fmtK(sumSav(rem))+' a year</b> — shall we do the next one?':' And that’s every proposed project approved. Really nicely done.')));
       C.chips=rem.length?[
-        {id:'review',label:'Next project',icon:'ti-arrow-right'},
-        {id:'add',label:'Add properties',icon:'ti-building-community'},
-        {id:'saved',label:'What have I saved?',icon:'ti-trophy'}
+        {id:'review',label:'Yes, show me the next one',icon:'ti-arrow-right'},
+        {id:'add',label:'What about my other properties?',icon:'ti-building-community'},
+        {id:'saved',label:'How much have I saved so far?',icon:'ti-trophy'}
       ]:[
-        {id:'add',label:'Add properties',icon:'ti-building-community'},
-        {id:'saved',label:'What have I saved?',icon:'ti-trophy'}
+        {id:'add',label:'Let’s bring more properties online',icon:'ti-building-community'},
+        {id:'saved',label:'How much have I saved so far?',icon:'ti-trophy'}
       ];
       renderCopilot();
     });return;}
@@ -580,12 +584,12 @@
     else if(a==='savview'){S.savView=v;render();}
     else if(a==='savleaf'){S.savLeaf=v;S.screen='savleaf';render();}
     // approve from inside the savings drill → drop back into the chat with that leaf as a card
-    else if(a==='approvehere'){var mh=sols().filter(function(s){return s.prop===v;}).sort(recSort)[0];S.screen='home';if(mh){C.turns.push(youTurn('Approve the work at '+v+'.'));C.turns.push(cardTurn(mh.id,'Here’s '+esc(v)+'’s next project. Approve right here, or ask me anything first.'));C.chips=[{id:'review',label:'What else is time-sensitive?',icon:'ti-clock'},{id:'add',label:'Add properties',icon:'ti-building-community'},{id:'saved',label:'What have I saved?',icon:'ti-trophy'}];}render();}
-    else if(a==='approvetype'){var mt=sols().filter(function(s){return s.type===v;}).sort(recSort)[0];S.screen='home';if(mt){C.turns.push(youTurn('Approve a '+v+' project.'));C.turns.push(cardTurn(mt.id,'Here’s a '+esc(v)+' project ready to approve. Go ahead, or ask me anything first.'));C.chips=[{id:'review',label:'What else is time-sensitive?',icon:'ti-clock'},{id:'add',label:'Add properties',icon:'ti-building-community'},{id:'saved',label:'What have I saved?',icon:'ti-trophy'}];}render();}
+    else if(a==='approvehere'){var mh=sols().filter(function(s){return s.prop===v;}).sort(recSort)[0];S.screen='home';if(mh){C.turns.push(youTurn('Let’s approve the work at '+v+'.'));C.turns.push(cardTurn(mh.id,'Perfect. Here’s '+esc(v)+'’s next project — approve it right here, or ask me anything first.'));C.chips=[{id:'urgent',label:'Is anything else on a deadline?',icon:'ti-clock'},{id:'add',label:'What about my other properties?',icon:'ti-building-community'},{id:'saved',label:'How much have I saved so far?',icon:'ti-trophy'}];}render();}
+    else if(a==='approvetype'){var mt=sols().filter(function(s){return s.type===v;}).sort(recSort)[0];S.screen='home';if(mt){C.turns.push(youTurn('Let’s approve a '+v+' project.'));C.turns.push(cardTurn(mt.id,'Great — here’s a '+esc(v)+' project ready to go. Approve it whenever you’re happy, or ask me anything first.'));C.chips=[{id:'urgent',label:'Is anything else on a deadline?',icon:'ti-clock'},{id:'add',label:'What about my other properties?',icon:'ti-building-community'},{id:'saved',label:'How much have I saved so far?',icon:'ti-trophy'}];}render();}
     else if(a==='step'){el.textContent='We’ll guide you →';el.disabled=true;el.style.opacity=.6;}
     else if(a==='sign'){var p=DATA.prospects.find(function(x){return x.id===v;});unlockRow(v,p.cf,function(){S.signed[v]=1;S.screen='home';
-      C.turns.push(advTurn('<b>'+esc(p.name)+'</b> is on board — I’ll get its audit moving and bring its projects to you as they’re ready.'));
-      C.chips=[{id:'add',label:'Add another',icon:'ti-building-community'},{id:'review',label:'Back to approving',icon:'ti-checks'},{id:'saved',label:'What have I saved?',icon:'ti-trophy'}];
+      C.turns.push(advTurn('Wonderful — <b>'+esc(p.name)+'</b> is on board! I’ll get its audit moving and bring you its projects as soon as they’re ready.'));
+      C.chips=[{id:'add',label:'Let’s add another',icon:'ti-building-community'},{id:'review',label:'Back to approving projects',icon:'ti-checks'},{id:'saved',label:'How much have I saved so far?',icon:'ti-trophy'}];
       renderCopilot();
     });}
     // "Back" is screen-aware: inside the drill it steps back through it; on the chat it restarts the chat.
