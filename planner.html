@@ -82,6 +82,10 @@
   .pl-row:hover{border-color:var(--border-strong)}
   .pl-row.off{opacity:.5}
   .pl-row.dash{border-style:dashed;border-color:var(--border-strong)}
+  .pl-row.noselect{background:hsl(240 20% 98.5%)}
+  .pl-lock{flex-shrink:0;width:44px;height:26px;display:inline-flex;align-items:center;justify-content:center;color:var(--text-muted);font-size:15px}
+  .pl-fig.est-fig .big{color:var(--text-secondary)}
+  .pl-fig.est-fig .cf-btn.sm{white-space:nowrap}
   .pl-tog{flex-shrink:0;width:44px;height:26px;border-radius:99px;border:1px solid var(--border-strong);background:hsl(240 14% 92%);position:relative;cursor:pointer;padding:0;transition:background .14s,border-color .14s}
   .pl-tog::after{content:"";position:absolute;top:2px;left:2px;width:20px;height:20px;border-radius:50%;background:#fff;box-shadow:0 1px 2px rgba(16,18,40,.25);transition:left .14s}
   .pl-tog[aria-pressed="true"]{background:var(--primary);border-color:var(--primary)}
@@ -362,55 +366,65 @@
   }
 
   /* ===== Planner shell logic ===== */
-  // Sandbox default: every proposed solution starts SELECTED (the recommended
-  // approve set). S.excl tracks any project the owner has toggled OFF. The
-  // outcome number sums annual savings across the selected set (full set about $208K).
+  // Sandbox default: every MEASURED (firm) solution starts SELECTED — this is the
+  // recommended approve set. S.excl tracks any firm project the owner has toggled
+  // OFF. Estimated solutions are NOT firm quotes: they can never be selected,
+  // counted in the outcome, or approved — they're shown only for awareness.
   S.excl={};
   function measured(){return DATA.solutions.filter(function(s){return !est(s);});}
   function estimated(){return DATA.solutions.filter(function(s){return est(s);});}
-  function included(){return DATA.solutions.filter(function(s){return !S.excl[s.id];});}
-  function on(s){return !S.excl[s.id];}
+  // Selectable = firm only. Estimated is structurally excluded from the plan.
+  function included(){return measured().filter(function(s){return !S.excl[s.id];});}
+  function on(s){return !est(s)&&!S.excl[s.id];}
 
-  // Guiding-hand outcome readout — leads with benefit NUMBER + a VERB.
+  // Guiding-hand outcome readout — the #1 thing on the screen. Leads with the
+  // benefit NUMBER tied to a VERB ("+$173K a year with these selected"), a big
+  // primary "Review & approve" CTA, and reassurance below. Only firm (measured)
+  // solutions count. What-if toggles live quietly beneath.
   function summaryStrip(){
     var inc=included();
     var totalSav=inc.reduce(function(t,s){return t+s.savings;},0);
     var totalCash=inc.reduce(function(t,s){return t+tileVal(s);},0);
-    var n=inc.length, nTot=DATA.solutions.length;
+    var n=inc.length, nFirm=measured().length;
     var props=distinctProps(inc);
-    var lead=n?'With these selected, savings start once you approve.'
-              :'Select at least one project to see your gain.';
+    var lead=n?'<span style="color:var(--text-success);font-weight:700">'+per(totalSav)+'</span> more with these selected'
+              :'Select a project below to see your gain';
+    var reassure=n?'Firm, guaranteed quotes. Savings start once you approve.'
+                  :'Everything below is a firm, guaranteed quote.';
     var cta=n?'<button class="pl-cta" data-act="approve-selected"><i class="ti ti-check"></i> Review &amp; approve</button>'
              :'<button class="pl-cta" disabled><i class="ti ti-check"></i> Review &amp; approve</button>';
     return '<div class="pl-sticky"><div class="pl-sumcard">'
       +'<div class="pl-hero-row">'
-        +'<div><div class="pl-sumlead">Your gain with this plan</div>'
+        +'<div><div class="pl-sumlead">Recommended plan · ready to approve</div>'
           +'<div class="pl-hero mono">'+(n?'+':'')+fmtK(totalSav)+' <span style="font-size:.44em;font-weight:600;color:var(--text-muted);letter-spacing:0">a year</span></div>'
           +'<div class="pl-count">'+lead+'</div></div>'
         +cta+'</div>'
+      +'<div class="pl-count" style="margin-top:8px"><i class="ti ti-shield-check" style="color:var(--text-success)"></i> '+reassure+'</div>'
       +'<div class="pl-metrics" style="margin-top:14px">'
-        +'<div class="pl-metric"><div class="k">Projects selected</div><div class="v mono">'+n+' of '+nTot+'</div></div>'
+        +'<div class="pl-metric"><div class="k">Projects selected</div><div class="v mono">'+n+' of '+nFirm+'</div></div>'
         +'<div class="pl-metric"><div class="k">Hotels</div><div class="v mono">'+props+'</div></div>'
         +'<div class="pl-metric"><div class="k">5-year cash flow</div><div class="v mono" style="color:var(--text-success)">'+fmtK(totalCash)+'</div></div></div>'
-      +'<div class="pl-quickrow"><button class="cf-pill" data-act="all"><i class="ti ti-checks"></i> Select all</button>'
+      +'<div class="pl-quickrow"><span style="font-size:12px;color:var(--text-muted);align-self:center;margin-right:2px">What if I…</span><button class="cf-pill" data-act="all"><i class="ti ti-checks"></i> Select all</button>'
         +'<button class="cf-pill" data-act="none"><i class="ti ti-square-off"></i> Clear all</button></div>'
       +'</div></div>';
   }
 
   function plRow(s){
-    var isEst=est(s);
-    var included=on(s);
     var sub=esc(s.prop)+' · '+esc(s.type);
     var name='<button class="pl-nm-btn" data-act="leaf" data-val="'+s.id+'">'+esc(s.type)+' <i class="ti ti-chevron-right"></i></button>';
-    if(isEst){
+    // Estimated: NOT selectable and NOT approvable — no toggle, not counted in the
+    // outcome. Shown for awareness with a "Connect data" affordance to firm it up.
+    if(est(s)){
       var lo=savLo(s),hi=savHi(s);
-      return '<div class="pl-row dash'+(included?'':' off')+'" data-row="'+s.id+'">'
-        +'<button class="pl-tog" data-act="toggle" data-val="'+s.id+'" aria-pressed="'+included+'" title="'+(included?'Selected — click to remove':'Not selected — click to add')+'"></button>'
+      return '<div class="pl-row dash noselect" data-row="'+s.id+'">'
+        +'<span class="pl-lock" title="Not a firm quote yet — connect data to firm up"><i class="ti ti-lock"></i></span>'
         +'<div class="pl-name">'+name+'<div class="pl-sub">'+sub+'</div>'
-          +'<div class="pl-need" style="margin-top:4px"><i class="ti ti-plug-connected"></i> Estimate — connect data to firm up</div></div>'
-        +'<div class="pl-fig'+(included?'':' off-fig')+'"><div class="big mono">'+perRange(lo,hi)+'</div><div class="small">estimate</div></div>'
+          +'<div class="pl-need" style="margin-top:4px"><i class="ti ti-plug-connected"></i> Early estimate — connect data to firm up</div></div>'
+        +'<div class="pl-fig est-fig"><div class="big mono">'+perRange(lo,hi)+'</div>'
+          +'<button class="cf-btn sm" data-act="connect" data-val="'+s.id+'" style="margin-top:6px"><i class="ti ti-plug-connected"></i> Connect data</button></div>'
         +'</div>';
     }
+    var included=on(s);
     return '<div class="pl-row'+(included?'':' off')+'" data-row="'+s.id+'">'
       +'<button class="pl-tog" data-act="toggle" data-val="'+s.id+'" aria-pressed="'+included+'" title="'+(included?'Selected — click to remove':'Not selected — click to add')+'"></button>'
       +'<div class="pl-name">'+name+'<div class="pl-sub">'+sub+'</div></div>'
@@ -440,9 +454,11 @@
         +'<div><p style="color:var(--text-secondary);margin:0;font-size:14px">'+esc(DATA.portfolio)+'</p>'
         +'<h1 style="margin:.2rem 0 0;font-size:26px">Plan your savings</h1></div>'
         +'<span style="display:flex;align-items:center;gap:8px"><span style="font-size:13px;color:var(--text-muted)">Amounts:</span>'+perToggle()+'</span></div>'
-      +'<p style="color:var(--text-muted);margin:.3rem 0 0;font-size:13px">Your recommended set is selected. Toggle any project off to see the number move, then approve the set you want.</p>';
-    var measRows='<div class="pl-sectlabel">Ready to approve · measured from your data</div><div style="display:flex;flex-direction:column;gap:10px">'+meas.map(plRow).join('')+'</div>';
-    var estRows=ests.length?'<div class="pl-sectlabel">Early estimates · connect data to firm up</div><div style="display:flex;flex-direction:column;gap:10px">'+ests.map(plRow).join('')+'</div>':'';
+      +'<p style="color:var(--text-muted);margin:.3rem 0 0;font-size:13px">We’ve pre-selected your recommended set. Approve it as-is, or toggle any project to see the number move first.</p>';
+    var measRows='<div class="pl-sectlabel">Selected · firm quotes ready to approve</div><div style="display:flex;flex-direction:column;gap:10px">'+meas.map(plRow).join('')+'</div>';
+    var estRows=ests.length?'<div class="pl-sectlabel" style="margin-top:26px">Early estimates — connect data to firm up</div>'
+        +'<p style="color:var(--text-muted);margin:0 2px 9px;font-size:12.5px">Not firm quotes yet, so they aren’t selectable or part of the total above. Connect the data and each becomes a guaranteed quote you can approve.</p>'
+        +'<div style="display:flex;flex-direction:column;gap:10px">'+ests.map(plRow).join('')+'</div>':'';
     app.innerHTML=head+summaryStrip()+measRows+estRows+signupLine()+savedLine();
   }
 
@@ -472,14 +488,14 @@
     if(el.dataset.approve){var s=DATA.solutions.find(function(x){return x.id===el.dataset.approve;});var m=curMode(s);S.approved[s.id]=1;S.approvedMode[s.id]=m;S.excl[s.id]=0;S.screen='home';render();return;}
     var a=el.dataset.act, v=el.dataset.val;
     if(a==='connect'){el.textContent='Request sent →';el.disabled=true;el.style.opacity=.7;}
-    else if(a==='toggle'){S.excl[v]=!S.excl[v];render();}
+    else if(a==='toggle'){var ts=DATA.solutions.find(function(x){return x.id===v;});if(ts&&!est(ts)){S.excl[v]=!S.excl[v];render();}}
     else if(a==='all'){S.excl={};render();}
-    else if(a==='none'){DATA.solutions.forEach(function(s){S.excl[s.id]=1;});render();}
+    else if(a==='none'){measured().forEach(function(s){S.excl[s.id]=1;});render();}
     else if(a==='leaf'){S.leafId=v;S.screen='leaf';render();}
     else if(a==='go'){S.screen=v;render();}
     else if(a==='savview'){S.savView=v;render();}
     else if(a==='savleaf'){S.savLeaf=v;S.screen='savleaf';render();}
-    else if(a==='approve-selected'){var sel=included().filter(function(s){return !est(s);}).sort(recSort)[0]||included().sort(recSort)[0];if(sel){S.leafId=sel.id;S.screen='leaf';}render();}
+    else if(a==='approve-selected'){var sel=included().slice().sort(recSort)[0];if(sel){S.leafId=sel.id;S.screen='leaf';}render();}
     else if(a==='approvehere'){var mh=sols().filter(function(s){return s.prop===v;}).sort(recSort)[0];if(mh){S.leafId=mh.id;S.screen='leaf';}else S.screen='home';render();}
     else if(a==='approvetype'){var mt=sols().filter(function(s){return s.type===v;}).sort(recSort)[0];if(mt){S.leafId=mt.id;S.screen='leaf';}else S.screen='home';render();}
     else if(a==='step'){el.textContent='We’ll guide you →';el.disabled=true;el.style.opacity=.6;}
