@@ -61,6 +61,11 @@
   .act-amt .u{font-size:.42em;font-weight:600;color:var(--text-muted);letter-spacing:0}
   .act-sub{font-size:14px;color:var(--text-secondary);margin-top:6px}
   .act-cta{display:inline-flex;align-items:center;gap:6px;margin-top:15px;background:var(--primary);color:var(--primary-fg);border-radius:10px;padding:10px 17px;font-size:14px;font-weight:600}
+  .demobar{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;justify-content:space-between;background:hsl(240 20% 96.5%);border:1px dashed var(--border-strong);border-radius:8px;padding:7px 11px;margin-bottom:16px}
+  .demobar-label{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.04em;color:var(--text-muted);display:inline-flex;align-items:center;gap:5px}
+  .demobar-btns{display:flex;gap:4px}
+  .demobar-btn{border:1px solid var(--border-strong);background:var(--surface-2);border-radius:6px;padding:3px 9px;cursor:pointer;font:inherit;font-size:12px;font-weight:500;color:var(--text-secondary)}
+  .demobar-btn[aria-pressed="true"]{background:var(--text-primary);color:#fff;border-color:var(--text-primary)}
   .saved-line{display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;text-align:left;font:inherit;background:none;border:none;border-top:1px solid var(--border);margin-top:4px;padding:15px 3px 3px;cursor:pointer;color:var(--text-secondary);font-size:14px}
   .saved-line b{color:var(--text-success);font-weight:700}
   .saved-line:hover{color:var(--text-primary)}
@@ -256,10 +261,12 @@
   function doneCard(label){
     return '<div class="act"><div class="act-top"><span class="act-rank" style="background:var(--text-success)"><i class="ti ti-check"></i></span><span class="act-label">'+label+'</span></div><div style="font-size:18px;font-weight:600;color:var(--text-success);margin-top:4px"><i class="ti ti-circle-check"></i> All done</div></div>';
   }
+  function demoBar(){
+    var opts=[[1,'None signed'],[2,'Some signed'],[3,'All signed']];
+    return '<div class="demobar"><span class="demobar-label"><i class="ti ti-eye"></i> Demo — preview portfolio as</span><div class="demobar-btns">'+opts.map(function(o){return '<button class="demobar-btn" data-act="bucket" data-val="'+o[0]+'" aria-pressed="'+(S.bucket===o[0])+'">'+o[1]+'</button>';}).join('')+'</div></div>';
+  }
   function renderHome(){
     var showSign=S.bucket!==3, showApprove=S.bucket!==1;
-    var opts=[[1,'None signed'],[2,'Some signed'],[3,'All signed']];
-    var pills='<div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:1.1rem;align-items:center"><span style="font-size:13px;color:var(--text-muted);margin-right:2px">Preview portfolio:</span>'+opts.map(function(o){return '<button class="cf-pill" data-act="bucket" data-val="'+o[0]+'" aria-pressed="'+(S.bucket===o[0])+'">'+o[1]+'</button>';}).join('')+'</div>';
     var prospectN=prospects().length;
     var ctx=[];
     if(showApprove)ctx.push(DATA.contracted.length+' hotels saving with Atrium');
@@ -277,9 +284,12 @@
     }
     if(showSign){
       if(prospectN){
-        cards+=actionCard(rank++,'Bring your other properties online',fmtK(Math.round(sumCf(prospects())/5)),'a year, idle',
-          prospectN+' hotels aren’t connected yet — that saving is sitting on the table',
-          'Add properties','signup',{size:32,color:'var(--text-warning)'});
+        var otherW=showApprove?'other ':'';
+        var subSign=showApprove
+          ? 'Your '+prospectN+' '+(prospectN>1?'properties':'property')+' waiting could add this — bring them online whenever you’re ready'
+          : prospectN+' properties ready to start saving with Atrium whenever you are';
+        cards+=actionCard(rank++,'Bring your '+otherW+'properties online',fmtK(Math.round(sumCf(prospects())/5)),'a year',
+          subSign,'Add properties','signup',{size:32,color:'var(--text-success)'});
       } else cards+=doneCard('Your properties');
     }
     var saved='';
@@ -287,7 +297,7 @@
       var tot=DATA.contracted.reduce(function(t,c){return t+c.saved;},0);
       saved='<button class="saved-line" data-act="go" data-val="savings"><span><i class="ti ti-trophy" style="color:var(--text-success)"></i> You’ve saved <b>'+fmtK(tot)+'</b> with Atrium so far — see where it’s going</span><i class="ti ti-arrow-right"></i></button>';
     }
-    app.innerHTML=pills+header+unlockedBanner()+cards+saved;
+    app.innerHTML=demoBar()+header+unlockedBanner()+cards+saved;
   }
   function renderSignup(){
     var list=prospects();

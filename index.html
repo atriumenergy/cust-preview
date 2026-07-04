@@ -75,7 +75,7 @@
       var c=CONCEPTS[idx], label=blind?('Concept '+String.fromCharCode(65+pos)):c.name, ts=blind?'A direction for the same product — open and explore.':c.teaser;
       var foot=c.live?'<span>Open</span><i class="ti ti-arrow-right"></i>':'<span>In progress</span><i class="ti ti-dots"></i>';
       var inner='<div style="display:flex;align-items:center;gap:9px"><span class="idx">'+String.fromCharCode(65+pos)+'</span><span class="nm">'+label+'</span></div><span class="ts">'+ts+'</span><span class="foot">'+foot+'</span>';
-      return c.live?'<a class="card" href="'+c.key+'.html">'+inner+'</a>':'<div class="card soon">'+inner+'</div>';
+      return c.live?'<a class="card" href="'+c.key+'.html" target="_blank" rel="noopener">'+inner+'</a>':'<div class="card soon">'+inner+'</div>';
     }).join('');
     note.textContent=blind?'Blind mode: names hidden and order reshuffled per interviewee — decode later from the tab’s URL. All 9 concepts are wired up.':'All 9 concepts are wired up. Toggle blind labels + reshuffle before each interview.';
   }
