@@ -69,43 +69,88 @@
   .sav-legend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:12px;color:var(--text-secondary);margin-top:8px}
   .sav-legend span{display:inline-flex;align-items:center;gap:5px}
   .sav-legend i.k{width:16px;height:0;border-top-width:2px;border-top-style:solid;display:inline-block}
-  /* --- Impact shell (dollars lead; carbon rides along) --- */
+  /* ===================================================================
+     IMPACT SHELL — organizing visual is a STEPPED CLIMB TO NET-ZERO.
+     Nothing here reuses cashflow's stacked .act cards; the home is one
+     connected path (SVG spine + stepped rungs) read bottom→top.
+     Dollars lead every rung; carbon is a small muted tag.
+     =================================================================== */
   :root{
     --eco:hsl(158 64% 30%);--bg-eco:hsl(158 45% 95%);--eco-border:hsl(158 40% 80%);
+    --rung-fill:hsl(158 40% 97%);--spine:hsl(158 30% 84%);
   }
-  body.impact{background:hsl(150 25% 98%)}
+  body.impact{background:linear-gradient(180deg,hsl(158 32% 96%),hsl(150 25% 98.5%) 340px,var(--surface-0))}
   .impact .banner{background:var(--bg-eco);border-color:var(--eco-border)}
   .impact .cf-pill[aria-pressed="true"]{background:var(--eco);color:var(--primary-fg);border-color:var(--eco)}
   .eco-word{color:var(--eco);font-weight:600}
-  /* Action cards — the guiding hand: benefit NUMBER + VERB */
-  .act{display:block;width:100%;text-align:left;font:inherit;color:inherit;cursor:pointer;background:var(--surface-2);border:1px solid var(--border);border-radius:16px;padding:20px;box-shadow:var(--shadow);transition:transform .12s,box-shadow .12s,border-color .12s;margin-bottom:12px}
-  .act:hover{transform:translateY(-2px);box-shadow:var(--shadow-hover);border-color:var(--border-strong)}
-  .act.hero{border-color:hsl(86 45% 76%);background:linear-gradient(180deg,hsl(86 45% 97.5%),var(--surface-2) 62%)}
-  .act-top{display:flex;align-items:center;gap:9px;margin-bottom:8px}
-  .act-rank{width:22px;height:22px;border-radius:99px;background:var(--primary);color:var(--primary-fg);font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-  .act-label{font-size:14px;font-weight:600;color:var(--text-secondary)}
-  .act-amt{font-weight:700;letter-spacing:-.02em;line-height:1.02}
-  .act-amt .u{font-size:.42em;font-weight:600;color:var(--text-muted);letter-spacing:0}
-  .act-co2{font-size:13px;color:var(--text-muted);margin-top:5px}
-  .act-co2 .leaf{color:var(--eco)}
-  .act-sub{font-size:14px;color:var(--text-secondary);margin-top:8px}
-  .act-cta{display:inline-flex;align-items:center;gap:6px;margin-top:15px;background:var(--primary);color:var(--primary-fg);border-radius:10px;padding:10px 17px;font-size:14px;font-weight:600}
-  .saved-line{display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;text-align:left;font:inherit;background:none;border:none;border-top:1px solid var(--border);margin-top:4px;padding:15px 3px 3px;cursor:pointer;color:var(--text-secondary);font-size:14px}
+  /* demo switcher (matches cashflow's demoBar treatment) */
+  .demobar{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;justify-content:space-between;background:hsl(158 20% 95%);border:1px dashed var(--eco-border);border-radius:8px;padding:7px 11px;margin-bottom:16px}
+  .demobar-label{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.04em;color:var(--text-muted);display:inline-flex;align-items:center;gap:5px}
+  .demobar-btns{display:flex;gap:4px}
+  .demobar-btn{border:1px solid var(--eco-border);background:var(--surface-2);border-radius:6px;padding:3px 9px;cursor:pointer;font:inherit;font-size:12px;font-weight:500;color:var(--text-secondary)}
+  .demobar-btn[aria-pressed="true"]{background:var(--eco);color:#fff;border-color:var(--eco)}
+  .co2tag{display:inline-flex;align-items:center;gap:5px;font-size:12.5px;color:var(--text-muted);font-weight:500}
+  .co2tag .ti{color:var(--eco);font-size:14px}
+  /* --- Journey header: summit at top, "you are here" at bottom --- */
+  .journey-head{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;margin-bottom:2px}
+  .summit{display:flex;align-items:center;gap:9px;background:var(--bg-eco);border:1px solid var(--eco-border);border-radius:99px;padding:7px 14px 7px 11px}
+  .summit .flag{width:26px;height:26px;border-radius:99px;background:var(--eco);color:#fff;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
+  .summit .lbl{font-size:12px;color:var(--eco);font-weight:600;text-transform:uppercase;letter-spacing:.05em;line-height:1.15}
+  .summit .lbl b{display:block;font-size:15px;letter-spacing:-.01em;text-transform:none;color:var(--text-primary)}
+  /* --- The climb: a continuous spine (::before) with a node per rung --- */
+  .climb{position:relative;margin:12px 0 6px;padding-left:54px}
+  /* the spine: one vertical line running the height of the climb */
+  .climb::before{content:"";position:absolute;left:16px;top:14px;bottom:14px;width:3px;border-radius:99px;
+    background:linear-gradient(180deg,var(--eco) 0%,var(--spine) 55%,var(--border-strong) 100%)}
+  .rung{position:relative;display:block;width:100%;text-align:left;font:inherit;color:inherit;cursor:pointer;background:var(--surface-2);border:1px solid var(--border);border-radius:15px;padding:16px 18px;box-shadow:var(--shadow);transition:transform .12s,box-shadow .12s,border-color .12s;margin-bottom:16px}
+  .rung:last-child{margin-bottom:0}
+  .rung:hover{transform:translateX(3px);box-shadow:var(--shadow-hover);border-color:var(--border-strong)}
+  .rung.done{cursor:default;background:var(--rung-fill);border-style:dashed;box-shadow:none}
+  .rung.done:hover{transform:none}
+  /* the NEXT step — the biggest/soonest approve: prominent, raised */
+  .rung.next{border-color:var(--eco-border);background:linear-gradient(180deg,var(--bg-eco),var(--surface-2) 70%);box-shadow:0 6px 20px hsl(158 40% 30% / .12)}
+  .rung.next .dollars{font-size:38px}
+  /* extend-the-climb (sign up) — an invitation, dashed & green, near the summit */
+  .rung.extend{border-style:dashed;border-color:var(--eco-border);background:var(--rung-fill)}
+  /* the node sits on the spine, centred to the top band of each rung */
+  .node{position:absolute;left:-46px;top:16px;width:34px;height:34px;border-radius:99px;background:var(--surface-2);
+    border:3px solid var(--spine);color:var(--eco);display:flex;align-items:center;justify-content:center;
+    font-size:13px;font-weight:700;box-shadow:0 1px 2px rgba(16,18,40,.06)}
+  .rung.next .node{border-color:var(--eco);background:var(--eco);color:#fff;box-shadow:0 2px 8px hsl(158 40% 30% / .3)}
+  .rung.done .node{border-color:var(--eco);background:var(--bg-eco)}
+  .rung.extend .node{border-style:dashed;border-color:var(--eco);color:var(--eco)}
+  .node .ti{font-size:16px}
+  .rung-kick{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--eco);margin-bottom:5px;display:inline-flex;align-items:center;gap:5px}
+  .rung-verb{font-size:14.5px;font-weight:600;color:var(--text-primary)}
+  .dollars{font-weight:700;letter-spacing:-.02em;line-height:1.02;color:var(--text-success);font-size:30px;margin:2px 0 1px}
+  .dollars .u{font-size:.4em;font-weight:600;color:var(--text-muted);letter-spacing:0}
+  .rung-sub{font-size:13px;color:var(--text-secondary);margin-top:6px}
+  .rung-foot{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:11px}
+  .rung-go{display:inline-flex;align-items:center;gap:6px;font-size:13.5px;font-weight:600;color:var(--eco)}
+  /* the "you are here" ground marker anchoring the base of the climb */
+  .ground{position:relative;padding-left:54px;margin-top:4px;min-height:34px;display:flex;align-items:center}
+  .ground .gnode{position:absolute;left:2px;top:0;width:28px;height:28px;border-radius:99px;background:var(--surface-2);border:3px solid var(--border-strong);display:flex;align-items:center;justify-content:center;color:var(--text-muted);font-size:14px}
+  .ground-in{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;color:var(--text-secondary);font-size:13px}
+  .ground-in .now{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-muted)}
+  /* saved-so-far: quiet ground line beneath the climb */
+  .saved-line{display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;text-align:left;font:inherit;background:none;border:none;border-top:1px solid var(--border);margin-top:18px;padding:15px 3px 3px;cursor:pointer;color:var(--text-secondary);font-size:14px}
   .saved-line b{color:var(--text-success);font-weight:700}
   .saved-line:hover{color:var(--text-primary)}
-  /* Net-zero, demoted: a quiet progress strip below the actions */
-  .prog{background:var(--surface-2);border:1px solid var(--border);border-radius:12px;padding:13px 15px;box-shadow:var(--shadow);margin-top:6px}
-  .prog .head{display:flex;justify-content:space-between;align-items:baseline;font-size:13px;gap:10px}
-  .prog .head .t{font-weight:600;color:var(--text-secondary);display:inline-flex;align-items:center;gap:6px}
-  .track{height:7px;background:hsl(158 20% 92%);border-radius:99px;overflow:hidden;margin:7px 0 5px}
-  .track>div{height:100%;background:var(--eco);border-radius:99px;transition:width .35s}
   .co2band{display:flex;flex-wrap:wrap;align-items:center;gap:10px;background:var(--bg-eco);border:1px solid var(--eco-border);border-radius:10px;padding:11px 13px;margin-bottom:14px}
+  /* drill-down squares (category + leaf) reused after a rung opens */
   .catsq{display:flex;flex-direction:column;gap:6px;min-height:132px}
   .catsq .big{font-size:23px;color:var(--text-success)}
   .catsq .unit{font-size:13px;color:var(--text-muted);font-weight:500}
   .leafsq{display:flex;flex-direction:column;gap:6px;min-height:132px}
   .leafsq .big{font-size:22px;color:var(--text-success)}
   .leafsq .unit{font-size:13px;color:var(--text-muted);font-weight:500}
+  @media(max-width:520px){
+    .climb{padding-left:40px}
+    .climb-spine{width:40px}
+    .rung.next .dollars{font-size:32px}
+    .dollars{font-size:26px}
+    .journey-head{flex-direction:column;gap:10px}
+  }
 </style>
 </head>
 <body class="impact">
@@ -273,79 +318,103 @@
   function backPill(){return '<button class="cf-pill" data-act="back" style="display:inline-flex;align-items:center;gap:4px"><i class="ti ti-arrow-left"></i> Back</button>';}
   function perToggle(){return '<div class="seg"><button data-period="annual" aria-pressed="'+(S.period==='annual')+'">Annual</button><button data-period="monthly" aria-pressed="'+(S.period==='monthly')+'">Monthly</button></div>';}
   function cars(co2){return Math.round(co2/4.6);}
-  /* --- Impact shell: dollars lead, carbon rides along --- */
+  /* --- Impact shell: the climb to net-zero. Each category is a step up. --- */
   var CATS=[
-    {key:'power',title:'Generate clean power',icon:'ti-sun',match:function(s){return s.type==='Solar + Batteries';}},
-    {key:'heat',title:'Electrify heating',icon:'ti-flame',match:function(s){return s.type==='Heat Pump Water Heaters';}},
-    {key:'usage',title:'Cut waste & usage',icon:'ti-bulb',match:function(s){return ['LED Lighting','Smart Thermostats','Ozone Laundry'].indexOf(s.type)>=0;}}
+    {key:'power',title:'Generate clean power',verb:'Switch on clean power',icon:'ti-sun',match:function(s){return s.type==='Solar + Batteries';}},
+    {key:'heat',title:'Electrify heating',verb:'Electrify your heating',icon:'ti-flame',match:function(s){return s.type==='Heat Pump Water Heaters';}},
+    {key:'usage',title:'Cut waste & usage',verb:'Cut everyday waste',icon:'ti-bulb',match:function(s){return ['LED Lighting','Smart Thermostats','Ozone Laundry'].indexOf(s.type)>=0;}}
   ];
-  function actionCard(rank,label,amt,unit,co2line,sub,cta,val,opts){
-    opts=opts||{};
-    return '<button class="act'+(opts.hero?' hero':'')+'" data-act="go" data-val="'+val+'">'
-      +'<div class="act-top"><span class="act-rank">'+rank+'</span><span class="act-label">'+label+'</span></div>'
-      +'<div class="act-amt" style="font-size:'+(opts.size||34)+'px;color:'+(opts.color||'var(--text-success)')+'">'+amt+'<span class="u"> '+unit+'</span></div>'
-      +(co2line?'<div class="act-co2">'+co2line+'</div>':'')
-      +'<div class="act-sub">'+sub+'</div>'
-      +'<div class="act-cta">'+cta+' <i class="ti ti-arrow-right"></i></div></button>';
+  // live categories, each with its solutions, soonest-first member, and totals
+  function liveCats(){
+    var live=sols();
+    return CATS.map(function(c){
+      var g=live.filter(c.match);
+      return {c:c,g:g,soonest:g.slice().sort(recSort)[0],ann:sumSav(g),co2:sumCo2(g),anyEst:g.some(est)};
+    }).filter(function(x){return x.g.length;});
   }
-  function doneCard(label){
-    return '<div class="act"><div class="act-top"><span class="act-rank" style="background:var(--text-success)"><i class="ti ti-check"></i></span><span class="act-label">'+label+'</span></div><div style="font-size:18px;font-weight:600;color:var(--text-success);margin-top:4px"><i class="ti ti-circle-check"></i> All done</div></div>';
+  // urgency+size order (same guiding-hand priority as cashflow's recSort)
+  function catRank(a,b){ if(!a.g.length||!b.g.length)return 0; var r=recSort(a.soonest,b.soonest); if(r)return r; return b.ann-a.ann; }
+  // one step on the climb; dollars + verb lead, carbon is a small muted tag
+  function rung(node,cls,kick,verb,dollars,unit,co2,sub,go,val,act){
+    var co2tag=co2!=null?'<span class="co2tag"><i class="ti ti-leaf"></i> avoids about '+co2+' t CO₂ a year</span>':'';
+    return '<button class="rung'+(cls?' '+cls:'')+'" data-act="'+(act||'cat')+'" data-val="'+val+'">'
+      +'<span class="node">'+node+'</span>'
+      +(kick?'<span class="rung-kick">'+kick+'</span>':'')
+      +'<div class="rung-verb">'+verb+'</div>'
+      +'<div class="dollars">'+dollars+'<span class="u"> '+unit+'</span></div>'
+      +(sub?'<div class="rung-sub">'+sub+'</div>':'')
+      +'<div class="rung-foot">'+co2tag+'<span class="rung-go">'+go+' <i class="ti ti-arrow-right"></i></span></div></button>';
   }
-  function netZeroStrip(){
-    var total=sumCo2(DATA.solutions), committed=sumCo2(DATA.solutions.filter(function(s){return S.approved[s.id];})), pct=total?Math.round(committed/total*100):0;
-    return '<div class="prog">'
-      +'<div class="head"><span class="t"><i class="ti ti-leaf" style="color:var(--eco)"></i> Path to net-zero</span><span style="color:var(--text-muted)">'+committed+' / '+total+' t CO₂/yr committed</span></div>'
-      +'<div class="track"><div style="width:'+pct+'%"></div></div>'
-      +'<div style="font-size:12px;color:var(--text-muted)">'+pct+'% of your avoidable footprint · approving above moves this along</div></div>';
+  function doneRung(node,verb){
+    return '<div class="rung done"><span class="node">'+node+'</span><div class="rung-verb">'+verb+'</div>'
+      +'<div style="font-size:14px;font-weight:600;color:var(--eco);margin-top:4px"><i class="ti ti-circle-check"></i> Done — on the board</div></div>';
   }
   function renderHome(){
+    var showSign=S.bucket!==3, showApprove=S.bucket!==1;
     var live=sols(), pros=prospects();
-    var apprAnn=sumSav(live), apprCo2=sumCo2(live), np=distinctProps(live);
-    var cards='', rank=1;
-    // #1 — APPROVE (dollars lead; CO₂ rides along, muted)
-    if(live.length){
-      cards+=actionCard(rank++,'Approve proposed solutions','+'+fmtK(apprAnn),'a year',
-        '<i class="ti ti-leaf leaf"></i> cuts about <span class="eco-word">'+apprCo2+' tons</span> a year',
-        live.length+' projects across '+np+' hotels — savings start once you approve',
-        'Review &amp; approve','solutions',{size:40,hero:true});
-    } else cards+=doneCard('Proposed solutions');
-    // #2 — SIGN UP the rest
-    if(pros.length){
-      cards+=actionCard(rank++,'Bring your other properties online',fmtK(Math.round(sumCf(pros)/5)),'a year, idle',
-        '<i class="ti ti-leaf leaf"></i> more of your footprint, still on the table',
-        pros.length+' hotels aren’t connected yet — that saving is sitting idle',
-        'Add properties','signup',{size:32,color:'var(--text-warning)'});
-    } else cards+=doneCard('Your properties');
-    // #3 — quiet secondary: savings so far (opens the shared drill)
-    var tot=DATA.contracted.reduce(function(t,c){return t+c.saved;},0);
-    var saved='<button class="saved-line" data-act="go" data-val="savings"><span><i class="ti ti-trophy" style="color:var(--text-success)"></i> You’ve saved <b>'+fmtK(tot)+'</b> — and avoided about '+DATA.tonsToDate.toLocaleString()+' tons — so far</span><i class="ti ti-arrow-right"></i></button>';
-    var header='<div style="margin-bottom:1.1rem"><p style="color:var(--text-secondary);margin:0;font-size:14px">'+esc(DATA.portfolio)+'</p>'
-      +'<h1 style="margin:.15rem 0 0;font-size:21px">Your portfolio</h1>'
-      +'<p style="color:var(--text-muted);margin:.3rem 0 0;font-size:13px">'+DATA.contracted.length+' hotels saving with Atrium · every project pays for itself and lowers your footprint</p></div>';
-    app.innerHTML=header+unlockedBanner()+cards+saved+netZeroStrip();
+    var cats=showApprove?liveCats().sort(catRank):[];
+    var apprCo2=sumCo2(live), apprAnn=sumSav(live);
+    // summit progress: how much of the avoidable footprint is already committed
+    var total=sumCo2(DATA.solutions), committed=sumCo2(DATA.solutions.filter(function(s){return S.approved[s.id];}));
+    var pct=total?Math.round(committed/total*100):0;
+
+    // ---- header: the summit sits up top, the portfolio line below it ----
+    var header='<div style="margin-bottom:6px"><p style="color:var(--text-secondary);margin:0;font-size:14px">'+esc(DATA.portfolio)+'</p>'
+      +'<h1 style="margin:.15rem 0 .1rem;font-size:21px">Your climb to net-zero</h1></div>';
+    var summit='<div class="journey-head"><div style="max-width:60%">'
+      +'<p style="color:var(--text-secondary);margin:0;font-size:13px">Each step below pays for itself and lifts you closer to the top. '
+      +(showApprove&&cats.length?'Start with the step nearest you.':'You’re nearly there.')+'</p></div>'
+      +'<div class="summit"><span class="flag"><i class="ti ti-flag-3"></i></span><span class="lbl">The summit<b>Net-zero</b></span></div></div>';
+
+    // ---- build the climb, DOM top(summit)→bottom(today) ----
+    var steps=[];
+    // near the summit: the invitation to extend the climb (sign up) — green, never chiding
+    if(showSign){
+      if(pros.length){
+        var otherW=showApprove?'other ':'';
+        var subSign=showApprove
+          ? 'Your '+pros.length+' '+(pros.length>1?'properties':'property')+' waiting would add more path ahead — bring them online whenever you’re ready'
+          : pros.length+' properties ready to start climbing with you whenever you are';
+        steps.push(rung('<i class="ti ti-plus"></i>','extend','Go further','Bring your '+otherW+'properties online',
+          '+'+fmtK(Math.round(sumCf(pros)/5)),'a year',null,subSign,'Add properties','signup','go'));
+      } else steps.push(doneRung('<i class="ti ti-check"></i>','Every property is climbing'));
+    }
+    // the approve steps, smallest→largest downward so the biggest sits nearest today
+    if(showApprove){
+      if(cats.length){
+        var ordered=cats.slice().reverse(); // catRank sorts most-urgent first; render least-urgent up top
+        ordered.forEach(function(x,i){
+          var isNext=(i===ordered.length-1); // last = most urgent/biggest = nearest today
+          var kick=isNext?'Your next step':'';
+          var sub=x.g.length+' project'+(x.g.length>1?'s':'')+(x.anyEst?' · some estimated':'')+(x.soonest&&x.soonest.note?' · '+esc(x.soonest.note):'');
+          steps.push(rung('<i class="ti '+x.c.icon+'"></i>',isNext?'next':'',kick,x.c.verb,
+            '+'+fmtK(x.ann),'a year',x.co2,sub,isNext?'Review &amp; approve':'Open this step',x.c.key,'cat'));
+        });
+      } else steps.push(doneRung('<i class="ti ti-check"></i>','Every proposed step approved'));
+    }
+    // ---- the ground: "you are here" today marker ----
+    var ground='<div class="ground"><span class="gnode"><i class="ti ti-map-pin"></i></span>'
+      +'<div class="ground-in"><span class="now">Today</span>'
+      +(showApprove?'<span>'+DATA.contracted.length+' hotels already saving with Atrium'+(pct?' · '+pct+'% of the way up':'')+'</span>':'<span>ready to take your first step</span>')+'</div></div>';
+
+    // ---- quiet secondary: savings + carbon to date (opens the shared drill) ----
+    var saved='';
+    if(showApprove){
+      var tot=DATA.contracted.reduce(function(t,c){return t+c.saved;},0);
+      saved='<button class="saved-line" data-act="go" data-val="savings"><span><i class="ti ti-trophy" style="color:var(--text-success)"></i> Already banked <b>'+fmtK(tot)+'</b> — and '+DATA.tonsToDate.toLocaleString()+' tons avoided — on the way here</span><i class="ti ti-arrow-right"></i></button>';
+    }
+    app.innerHTML=demoBar()+header+unlockedBanner()+summit
+      +'<div class="climb">'+steps.join('')+'</div>'+ground+saved;
   }
-  function renderSolutions(){
-    var live=sols();
-    var sq=CATS.map(function(c){
-      var g=live.filter(c.match);
-      if(!g.length)return '<div class="cf-sq" style="min-height:132px;opacity:.7"><span style="color:var(--text-secondary);font-size:14px;font-weight:500">'+c.title+'</span><br><span style="color:var(--text-success);font-size:18px"><i class="ti ti-circle-check"></i> All approved</span></div>';
-      var anyEst=g.some(est);
-      return '<button class="cf-sq catsq" data-act="cat" data-val="'+c.key+'">'
-        +'<span style="display:flex;align-items:center;gap:8px;color:var(--text-secondary);font-size:14px;font-weight:500"><i class="ti '+c.icon+'" style="font-size:18px;color:var(--eco)"></i>'+c.title+'</span>'
-        +'<span class="cf-amt big">+'+fmtK(sumSav(g))+'<span class="unit"> a year</span></span>'
-        +'<span style="font-size:13px;color:var(--text-muted)"><i class="ti ti-leaf" style="color:var(--eco)"></i> '+sumCo2(g)+' t CO₂/yr · '+g.length+' project'+(g.length>1?'s':'')+(anyEst?' · some estimated':'')+'</span>'
-        +'<span style="margin-top:auto;display:flex;justify-content:flex-end;color:var(--text-muted)"><i class="ti ti-arrow-right"></i></span></button>';
-    }).join('');
-    var appAnn=sumSav(live);
-    app.innerHTML='<div style="margin-bottom:1.25rem">'+backPill()+'<h1 style="margin:14px 0 0">Approve proposed solutions</h1>'
-      +'<p style="color:var(--text-secondary);margin:.3rem 0 0">Grouped by what each does. Approving the full set adds <b style="color:var(--text-success)">+'+fmtK(appAnn)+' a year</b> and cuts about <span class="eco-word">'+sumCo2(live)+' tons</span>.</p></div>'
-      +unlockedBanner()+(live.length?'<div class="grid">'+sq+'</div>':'<div class="cf-sq" style="text-align:center;padding:2rem"><i class="ti ti-circle-check" style="font-size:26px;color:var(--text-success)"></i><p style="margin:.5rem 0 0">Every proposed solution is approved.</p></div>');
+  function demoBar(){
+    var opts=[[1,'None signed'],[2,'Some signed'],[3,'All signed']];
+    return '<div class="demobar"><span class="demobar-label"><i class="ti ti-eye"></i> Demo — preview portfolio as</span><div class="demobar-btns">'+opts.map(function(o){return '<button class="demobar-btn" data-act="bucket" data-val="'+o[0]+'" aria-pressed="'+(S.bucket===o[0])+'">'+o[1]+'</button>';}).join('')+'</div></div>';
   }
   function renderCat(){
     var c=CATS.find(function(x){return x.key===S.cat;});
-    if(!c){S.screen='solutions';return renderSolutions();}
+    if(!c){S.screen='home';return renderHome();}
     var live=sols().filter(c.match).sort(recSort);
-    if(!live.length){S.screen='solutions';return renderSolutions();}
+    if(!live.length){S.screen='home';return renderHome();}
     var grid=live.map(function(s){
       var cashTxt=est(s)?perRange(savLo(s),savHi(s)):fmtK(fiveCash(s))+' over 5 yrs';
       var tag=est(s)?'<span class="esttag"><i class="ti ti-help-circle"></i> estimate · connect data</span>':(s.note?'<span style="display:inline-flex;align-items:center;gap:4px;color:var(--text-warning);font-size:13px;font-weight:500"><i class="ti ti-clock"></i>'+esc(s.note)+'</span>':'<span style="color:var(--text-muted);font-size:13px"><i class="ti ti-calendar"></i> '+UL[s.u]+'</span>');
@@ -356,8 +425,10 @@
         +'<span style="font-size:13px;color:var(--text-muted)"><i class="ti ti-leaf" style="color:var(--eco)"></i> '+s.co2+' t CO₂/yr · '+cashTxt+'</span>'
         +'<span style="margin-top:auto;display:flex;justify-content:space-between;align-items:center">'+tag+'<i class="ti ti-arrow-right" style="color:var(--text-muted)"></i></span></button>';
     }).join('');
-    app.innerHTML='<div style="margin-bottom:1.25rem">'+backPill()+'<h1 style="margin:14px 0 0">'+esc(c.title)+'</h1>'
-      +'<p style="color:var(--text-secondary);margin:.3rem 0 0">+'+fmtK(sumSav(live))+' a year across '+live.length+' project'+(live.length>1?'s':'')+' · '+sumCo2(live)+' t CO₂/yr avoided. Pick one to see the economics.</p></div>'
+    app.innerHTML='<div style="margin-bottom:1.25rem">'+backPill()
+      +'<div style="margin-top:14px;display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--eco)"><i class="ti '+c.icon+'"></i> A step on your climb</div>'
+      +'<h1 style="margin:6px 0 0">'+esc(c.title)+'</h1>'
+      +'<p style="color:var(--text-secondary);margin:.3rem 0 0">Approve all of this step: <b style="color:var(--text-success)">+'+fmtK(sumSav(live))+' a year</b> across '+live.length+' project'+(live.length>1?'s':'')+'. <span class="co2tag"><i class="ti ti-leaf"></i> about '+sumCo2(live)+' t CO₂ a year avoided</span></p></div>'
       +unlockedBanner()+'<div class="grid">'+grid+'</div>';
   }
   function renderSignup(){
@@ -454,12 +525,12 @@
   }
   function render(){
     if(S.screen==='home')renderHome();
-    else if(S.screen==='solutions')renderSolutions();
     else if(S.screen==='cat')renderCat();
     else if(S.screen==='signup')renderSignup();
     else if(S.screen==='leaf')renderLeaf();
     else if(S.screen==='savings')renderSavings();
     else if(S.screen==='savleaf')renderSavingsLeaf();
+    else renderHome();
   }
   function unlockRow(id,amt,then){var row=app.querySelector('[data-row="'+id+'"]');S.unlocked+=amt;if(row){row.classList.add('cf-fade');setTimeout(then,340);}else then();}
   app.addEventListener('click',function(e){
@@ -470,14 +541,15 @@
     if(el.dataset.approve){var s=DATA.solutions.find(function(x){return x.id===el.dataset.approve;});var m=curMode(s);unlockRow(s.id,fiveCash(s),function(){S.approved[s.id]=1;S.approvedMode[s.id]=m;S.screen='cat';render();});return;}
     var a=el.dataset.act, v=el.dataset.val;
     if(a==='connect'){el.textContent='Request sent →';el.disabled=true;el.style.opacity=.7;}
+    else if(a==='bucket'){S.bucket=+v;render();}
     else if(a==='go'){S.screen=v;render();}
     else if(a==='cat'){S.cat=v;S.screen='cat';render();}
     else if(a==='leaf'){S.leafId=v;S.screen='leaf';render();}
     else if(a==='savview'){S.savView=v;render();}
     else if(a==='savleaf'){S.savLeaf=v;S.screen='savleaf';render();}
-    else if(a==='approvehere'){var mh=sols().filter(function(s){return s.prop===v;}).sort(recSort)[0];if(mh){S.leafId=mh.id;S.screen='leaf';}else S.screen='solutions';render();}
-    else if(a==='approvetype'){var mt=sols().filter(function(s){return s.type===v;}).sort(recSort)[0];if(mt){S.leafId=mt.id;S.screen='leaf';}else S.screen='solutions';render();}
-    else if(a==='back'){var B={leaf:'cat',cat:'solutions',solutions:'home',signup:'home',savleaf:'savings',savings:'home'};S.screen=B[S.screen]||'home';render();}
+    else if(a==='approvehere'){var mh=sols().filter(function(s){return s.prop===v;}).sort(recSort)[0];if(mh){S.leafId=mh.id;S.screen='leaf';}else S.screen='home';render();}
+    else if(a==='approvetype'){var mt=sols().filter(function(s){return s.type===v;}).sort(recSort)[0];if(mt){S.leafId=mt.id;S.screen='leaf';}else S.screen='home';render();}
+    else if(a==='back'){var B={leaf:'cat',cat:'home',signup:'home',savleaf:'savings',savings:'home'};S.screen=B[S.screen]||'home';render();}
     else if(a==='step'){el.textContent='We’ll guide you →';el.disabled=true;el.style.opacity=.6;}
     else if(a==='sign'){var p=DATA.prospects.find(function(x){return x.id===v;});unlockRow(v,p.cf,function(){S.signed[v]=1;render();});}
   });
