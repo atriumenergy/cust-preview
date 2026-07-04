@@ -26,18 +26,35 @@
   .mono{font-variant-numeric:tabular-nums}
   .banner{display:flex;align-items:center;gap:8px;background:hsl(240 40% 97%);border:1px solid var(--border);border-radius:var(--radius);padding:9px 13px;color:var(--text-secondary);font-size:13px;margin-bottom:20px}
   .pills{display:flex;gap:6px;flex-wrap:wrap;margin:12px 0 18px}
-  .roof{width:100%;display:block}
-  .bld{display:flex;flex-direction:column;gap:3px}
-  .band{display:flex;align-items:center;gap:12px;width:100%;text-align:left;background:var(--surface-2);border:1px solid var(--border);border-left:4px solid var(--primary);border-radius:6px;padding:13px 14px;cursor:pointer;box-shadow:var(--shadow);font:inherit;color:inherit;transition:transform .1s,box-shadow .1s}
-  .band:hover{transform:translateX(2px);box-shadow:var(--shadow-hover)}
-  .band.est{border-left-color:var(--text-warning);border-style:dashed}
-  .band-zone{flex-shrink:0;width:120px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--text-muted)}
-  .band-t{font-weight:600;font-size:14px}
-  .band-live{font-size:12px;color:var(--text-secondary);margin-top:1px}
-  .band-live .dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--text-success);margin-right:4px;vertical-align:middle}
-  .band-live.warn{color:var(--text-warning)}
-  .band-opp{flex-shrink:0;text-align:right;font-weight:700;color:var(--text-success)}
-  .ground{height:8px;background:var(--surface-1);border:1px solid var(--border);border-radius:0 0 8px 8px;margin-top:1px}
+  /* ── Building diagram: a labeled cutaway stack, each zone a tappable region ── */
+  .bldg{position:relative;background:linear-gradient(180deg,hsl(240 40% 98%),hsl(240 24% 96%));border:1px solid var(--border);border-radius:16px;padding:16px 16px 14px;box-shadow:var(--shadow);margin-bottom:6px}
+  .bldg-cap{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}
+  .bldg-name{font-size:13px;font-weight:700;color:var(--text-primary);display:inline-flex;align-items:center;gap:7px}
+  .bldg-name i{color:var(--primary)}
+  .bldg-legend{display:flex;flex-wrap:wrap;gap:5px 12px;font-size:11px;color:var(--text-muted)}
+  .bldg-legend span{display:inline-flex;align-items:center;gap:4px}
+  .bldg-legend .sw{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+  .bldg-svg{width:100%;height:auto;display:block;overflow:visible}
+  /* interactive zone regions inside the SVG */
+  .zone{cursor:pointer}
+  .zone .zbg{transition:fill .12s}
+  .zone:hover .zbg{fill:hsl(240 60% 96%)}
+  .zone.est:hover .zbg{fill:var(--bg-warning)}
+  .zone.lead .zbg{fill:hsl(86 55% 95%)}
+  .zone.lead:hover .zbg{fill:hsl(86 55% 92%)}
+  .zone:focus-visible{outline:none}
+  .zone:focus-visible .zframe{stroke:var(--primary);stroke-width:2}
+  .zone .zframe{transition:stroke .12s}
+  .zone:hover .zframe{stroke:var(--border-strong)}
+  .z-kicker{font:700 9.5px var(--font);letter-spacing:.06em;text-transform:uppercase;fill:var(--text-muted)}
+  .z-title{font:600 13px var(--font);fill:var(--text-primary)}
+  .z-live{font:500 10.5px var(--font);fill:var(--text-secondary)}
+  .z-live.warn{fill:var(--text-warning)}
+  .z-amt{font:700 16px var(--font);fill:var(--text-success);text-anchor:end}
+  .z-amt.est{font-size:13px}
+  .z-unit{font:500 9.5px var(--font);fill:var(--text-muted);text-anchor:end}
+  .z-lead-tag{font:700 9px var(--font);letter-spacing:.05em;text-transform:uppercase;fill:hsl(86 58% 30%)}
+  .bldg-hint{font-size:12px;color:var(--text-muted);margin:10px 2px 0;display:flex;align-items:center;gap:6px}
   /* guiding hand — top CTA, sign-up line, quiet savings line */
   .hero-cta{display:flex;align-items:center;justify-content:space-between;gap:14px;width:100%;text-align:left;font:inherit;color:inherit;cursor:pointer;background:linear-gradient(180deg,hsl(86 45% 97.5%),var(--surface-2) 62%);border:1px solid hsl(86 45% 76%);border-radius:14px;padding:16px 18px;box-shadow:var(--shadow);margin-bottom:14px;transition:transform .12s,box-shadow .12s}
   .hero-cta:hover{transform:translateY(-1px);box-shadow:var(--shadow-hover)}
@@ -49,11 +66,11 @@
   .hero-amt{font-size:30px;font-weight:700;color:var(--text-success);letter-spacing:-.02em;line-height:1}
   .hero-amt .u{font-size:.42em;font-weight:600;color:var(--text-muted);letter-spacing:0}
   .hero-go{display:inline-flex;align-items:center;gap:4px;margin-top:9px;background:var(--primary);color:var(--primary-fg);border-radius:8px;padding:7px 14px;font-size:13px;font-weight:600}
-  .signup-line{display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;text-align:left;font:inherit;color:inherit;cursor:pointer;background:var(--bg-warning);border:1px solid var(--border-warning);border-radius:12px;padding:13px 16px;box-shadow:var(--shadow);margin:14px 0 4px;transition:transform .12s,box-shadow .12s}
+  .signup-line{display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;text-align:left;font:inherit;color:inherit;cursor:pointer;background:var(--bg-success);border:1px solid hsl(86 40% 82%);border-radius:12px;padding:13px 16px;box-shadow:var(--shadow);margin:16px 0 4px;transition:transform .12s,box-shadow .12s}
   .signup-line:hover{transform:translateY(-1px);box-shadow:var(--shadow-hover)}
   .signup-line .txt{font-size:14px;color:var(--text-primary)}
-  .signup-line .txt b{color:var(--text-warning)}
-  .signup-line .go{display:inline-flex;align-items:center;gap:5px;flex-shrink:0;color:var(--text-warning);font-size:13px;font-weight:600;white-space:nowrap}
+  .signup-line .txt b{color:var(--text-success)}
+  .signup-line .go{display:inline-flex;align-items:center;gap:5px;flex-shrink:0;color:var(--text-success);font-size:13px;font-weight:600;white-space:nowrap}
   .saved-line{display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;text-align:left;font:inherit;background:none;border:none;border-top:1px solid var(--border);margin-top:16px;padding:14px 3px 3px;cursor:pointer;color:var(--text-secondary);font-size:14px}
   .saved-line b{color:var(--text-success);font-weight:700}
   .saved-line:hover{color:var(--text-primary)}
@@ -71,9 +88,8 @@
   @media (max-width:560px){
     .hero-cta{flex-direction:column;align-items:stretch;gap:10px}
     .hero-side{align-items:flex-start}
-    .band{flex-wrap:wrap;gap:6px 12px}
-    .band-zone{width:100%;order:-1}
-    .band-opp{margin-left:auto}
+    .bldg{padding:12px 10px 12px}
+    .bldg-cap{flex-direction:column;align-items:flex-start;gap:6px}
     .signup-line{flex-direction:column;align-items:flex-start;gap:8px}
   }
   /* shared leaf */
@@ -209,6 +225,107 @@
     if(z==='Laundry')return s.type+' in the laundry';
     return s.type;
   }
+  // short zone caption for the building label (drops the "Guest floors — " prefix; that's implied by the floor)
+  function zoneCaption(z){
+    if(z==='Guest floors — lighting')return 'Guest floors · lighting';
+    if(z==='Guest floors — controls')return 'Guest floors · controls';
+    return z;
+  }
+  // ── Building illustration: per-zone motif art, drawn in the SVG's motif column (x..x+w, y..y+h) ──
+  function zoneArt(s,x,y,w,h){
+    var z=s.zone, e=est(s), lit=e?'var(--text-muted)':'var(--text-success)', cx=x+w/2, i, g='';
+    if(z==='Roof'){
+      // pitched roof cap already drawn above; here: solar array + a battery cabinet sitting on the deck
+      var py=y+h-20, pw=(w-18)/4;
+      for(i=0;i<4;i++){var px=x+4+i*(pw+2);g+='<rect x="'+px.toFixed(1)+'" y="'+py+'" width="'+pw.toFixed(1)+'" height="15" rx="1.5" fill="'+(e?'hsl(240 14% 90%)':'hsl(240 70% 34%)')+'" stroke="hsl(240 40% 24%)" stroke-width=".6"/><line x1="'+px.toFixed(1)+'" y1="'+(py+7.5)+'" x2="'+(px+pw).toFixed(1)+'" y2="'+(py+7.5)+'" stroke="hsl(240 30% 60%)" stroke-width=".5"/>';}
+      g+='<rect x="'+(x+w-20)+'" y="'+(y+4)+'" width="15" height="17" rx="2" fill="var(--surface-2)" stroke="var(--border-strong)"/><rect x="'+(x+w-17)+'" y="'+(y+7)+'" width="9" height="4" rx="1" fill="'+lit+'"/><rect x="'+(x+w-17)+'" y="'+(y+13)+'" width="9" height="4" rx="1" fill="'+lit+'" opacity=".55"/>';
+      if(!e)g+='<circle cx="'+(x+7)+'" cy="'+(y+8)+'" r="6" fill="none" stroke="hsl(48 90% 55%)" stroke-width="1.4"/>'+[0,60,120,180,240,300].map(function(a){var r=a*Math.PI/180;return '<line x1="'+(x+7+Math.cos(r)*7.5).toFixed(1)+'" y1="'+(y+8+Math.sin(r)*7.5).toFixed(1)+'" x2="'+(x+7+Math.cos(r)*10).toFixed(1)+'" y2="'+(y+8+Math.sin(r)*10).toFixed(1)+'" stroke="hsl(48 90% 55%)" stroke-width="1.2"/>';}).join('');
+      return g;
+    }
+    if(z==='Guest floors — lighting'||z==='Guest floors — controls'){
+      // a strip of guest-room windows; lighting = warm glow, controls = a thermostat dial in one room
+      var cols=4, gw=(w-6)/cols, ctrl=(z.indexOf('controls')>=0);
+      for(i=0;i<cols;i++){var wx=x+3+i*gw;g+='<rect x="'+wx.toFixed(1)+'" y="'+(y+8)+'" width="'+(gw-6).toFixed(1)+'" height="'+(h-16).toFixed(1)+'" rx="2" fill="'+(e?'var(--surface-1)':'hsl(48 88% 92%)')+'" stroke="var(--border-strong)" stroke-width=".7"/>';
+        if(!e&&!ctrl)g+='<rect x="'+(wx+2).toFixed(1)+'" y="'+(y+11)+'" width="'+(gw-10).toFixed(1)+'" height="4" rx="1" fill="hsl(48 90% 62%)"/>';
+        g+='<line x1="'+(wx+(gw-6)/2).toFixed(1)+'" y1="'+(y+8)+'" x2="'+(wx+(gw-6)/2).toFixed(1)+'" y2="'+(y+h-8)+'" stroke="var(--border)" stroke-width=".5"/>';}
+      if(ctrl){var dx=x+3+gw*1.5;g+='<circle cx="'+dx.toFixed(1)+'" cy="'+(y+h/2)+'" r="7" fill="var(--surface-2)" stroke="'+lit+'" stroke-width="1.6"/><line x1="'+dx.toFixed(1)+'" y1="'+(y+h/2)+'" x2="'+dx.toFixed(1)+'" y2="'+(y+h/2-5).toFixed(1)+'" stroke="'+lit+'" stroke-width="1.6"/>';}
+      return g;
+    }
+    if(z==='Mechanical room'){
+      // two heat-pump water-heater tanks with connecting pipe
+      for(i=0;i<2;i++){var tx=x+8+i*26;g+='<rect x="'+tx+'" y="'+(y+8)+'" width="18" height="'+(h-16).toFixed(1)+'" rx="8" fill="var(--surface-2)" stroke="var(--border-strong)" stroke-width="1"/><rect x="'+(tx+3)+'" y="'+(y+5)+'" width="12" height="7" rx="2" fill="'+(e?'hsl(240 14% 88%)':'hsl(240 60% 60%)')+'"/><line x1="'+(tx+4)+'" y1="'+(y+h*0.6).toFixed(1)+'" x2="'+(tx+14)+'" y2="'+(y+h*0.6).toFixed(1)+'" stroke="'+lit+'" stroke-width="1.4"/>';}
+      g+='<line x1="'+(x+26)+'" y1="'+(y+14)+'" x2="'+(x+34)+'" y2="'+(y+14)+'" stroke="var(--border-strong)" stroke-width="1.6"/>';
+      return g;
+    }
+    if(z==='Laundry'){
+      // washer/dryer drums; ozone = small bubbles
+      for(i=0;i<2;i++){var lx=x+8+i*24;g+='<rect x="'+lx+'" y="'+(y+8)+'" width="20" height="'+(h-16).toFixed(1)+'" rx="3" fill="var(--surface-2)" stroke="var(--border-strong)" stroke-width="1"/><circle cx="'+(lx+10)+'" cy="'+(y+h/2+1).toFixed(1)+'" r="6.5" fill="none" stroke="'+lit+'" stroke-width="1.3"/><circle cx="'+(lx+10)+'" cy="'+(y+h/2+1).toFixed(1)+'" r="2.5" fill="'+lit+'" opacity=".5"/>';}
+      return g;
+    }
+    return g;
+  }
+  // Build the whole cutaway as one SVG. `mine` = this building's zones (sorted top→bottom). heroId marks the lead zone.
+  function buildingSvg(mine,heroId){
+    var W=360, IX=14, IW=W-IX*2, MX=IX+12, MW=104, TX=MX+MW+16; // motif col + text col
+    var roofH=46, gap=6, y=roofH, rows=[];
+    mine.forEach(function(s){
+      var h=(s.zone==='Mechanical room')?84:(s.zone==='Roof'?70:(s.zone==='Laundry'?70:74));
+      rows.push({s:s,y:y,h:h}); y+=h+gap;
+    });
+    var lastFloorBottom=y-gap, groundY=lastFloorBottom+4, totalH=groundY+16;
+    var svg='<svg class="bldg-svg" viewBox="0 0 '+W+' '+totalH+'" role="group" aria-label="Building systems by location">';
+    // sky glow behind the roof
+    svg+='<defs><linearGradient id="skyG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="hsl(205 70% 92%)"/><stop offset="1" stop-color="hsl(205 60% 97%)"/></linearGradient></defs>';
+    // pitched roof cap over the top floor
+    var topY=rows.length?rows[0].y:roofH;
+    svg+='<polygon points="'+IX+','+topY+' '+(W/2)+','+(topY-roofH+8)+' '+(W-IX)+','+topY+'" fill="url(#skyG)" stroke="var(--border-strong)" stroke-width="1"/>';
+    svg+='<polygon points="'+IX+','+topY+' '+(W/2)+','+(topY-roofH+8)+' '+(W-IX)+','+topY+'" fill="hsl(240 20% 60% / .06)"/>';
+    // building outer wall
+    svg+='<rect x="'+IX+'" y="'+topY+'" width="'+IW+'" height="'+(lastFloorBottom-topY)+'" rx="4" fill="var(--surface-2)" stroke="var(--border-strong)" stroke-width="1"/>';
+    // ground
+    svg+='<rect x="'+(IX-4)+'" y="'+groundY+'" width="'+(IW+8)+'" height="9" rx="3" fill="hsl(240 14% 92%)" stroke="var(--border)"/>';
+    // each zone as a tappable region
+    rows.forEach(function(r){
+      var s=r.s, e=est(s), lead=(s.id===heroId), y=r.y, h=r.h;
+      var cls='zone'+(e?' est':'')+(lead?' lead':'');
+      var aria=zoneCaption(s.zone)+', '+s.type+', '+(e?'estimated '+perRange(savLo(s),savHi(s))+' a year':'saving '+fmtK(s.savings)+' a year')+(lead?', lead action':'');
+      var g='<g class="'+cls+'" data-act="leaf" data-val="'+s.id+'" tabindex="0" role="button" aria-label="'+esc(aria)+'">';
+      // zone background band + interior divider frame
+      g+='<rect class="zbg" x="'+(IX+1)+'" y="'+y+'" width="'+(IW-2)+'" height="'+h+'" fill="'+(lead?'hsl(86 55% 96%)':'transparent')+'"/>';
+      g+='<rect class="zframe" x="'+(IX+1)+'" y="'+y+'" width="'+(IW-2)+'" height="'+h+'" fill="none" stroke="var(--border)" stroke-width="1"'+(e?' stroke-dasharray="4 3"':'')+'/>';
+      // motif
+      g+=zoneArt(s,MX,y,MW,h);
+      // text column
+      var ty=y+18;
+      g+='<text class="z-kicker" x="'+TX+'" y="'+ty+'">'+esc(zoneCaption(s.zone))+'</text>';
+      g+='<text class="z-title" x="'+TX+'" y="'+(ty+18)+'">'+esc(s.type)+'</text>';
+      // live status
+      if(e){
+        g+='<circle cx="'+(TX+4)+'" cy="'+(ty+33)+'" r="4" fill="none" stroke="var(--text-warning)" stroke-width="1.3"/><line x1="'+(TX+1.5)+'" y1="'+(ty+30.5)+'" x2="'+(TX+6.5)+'" y2="'+(ty+35.5)+'" stroke="var(--text-warning)" stroke-width="1.3"/>';
+        g+='<text class="z-live warn" x="'+(TX+13)+'" y="'+(ty+37)+'">No meter yet</text>';
+      } else {
+        g+='<circle cx="'+(TX+4)+'" cy="'+(ty+33)+'" r="4" fill="var(--text-success)"/>';
+        var liveShort=(s.live||'').split(' · ')[0];
+        g+='<text class="z-live" x="'+(TX+13)+'" y="'+(ty+37)+'">'+esc(liveShort)+'</text>';
+      }
+      // right-aligned dollar opportunity
+      var rax=W-IX-10;
+      if(e){
+        g+='<text class="z-amt est" x="'+rax+'" y="'+(ty+4)+'">'+perRange(savLo(s),savHi(s))+'</text>';
+        g+='<text class="z-unit" x="'+rax+'" y="'+(ty+18)+'">a year · estimate</text>';
+      } else {
+        g+='<text class="z-amt" x="'+rax+'" y="'+(ty+5)+'">+'+fmtK(s.savings)+'</text>';
+        g+='<text class="z-unit" x="'+rax+'" y="'+(ty+19)+'">a year</text>';
+      }
+      if(lead)g+='<text class="z-lead-tag" x="'+TX+'" y="'+(y+h-9)+'">▲ Lead action — above</text>';
+      // affordance chevron
+      g+='<path d="M'+(W-IX-6)+' '+(y+h-13)+' l4 4 l-4 4" fill="none" stroke="var(--text-muted)" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>';
+      g+='</g>';
+      svg+=g;
+    });
+    svg+='</svg>';
+    return svg;
+  }
   function renderHome(){
     var pills=PROPS.map(function(p){return '<button class="cf-pill" data-act="prop" data-val="'+esc(p)+'" aria-pressed="'+(S.prop===p)+'">'+esc(p)+'</button>';}).join('');
     var mine=SOLS.filter(function(s){return s.prop===S.prop&&!S.approved[s.id];}).sort(function(a,b){return ZONES.indexOf(a.zone)-ZONES.indexOf(b.zone);});
@@ -216,28 +333,26 @@
     var firm=mine.filter(function(s){return !est(s);});
     var hero=firm.slice().sort(function(a,b){return b.savings-a.savings;})[0]||null;
     var heroCard=hero?'<button class="hero-cta" data-act="leaf" data-val="'+hero.id+'">'
-      +'<span class="hero-main"><span class="hero-k">Approve · biggest here</span>'
+      +'<span class="hero-main"><span class="hero-k">Approve · biggest system here</span>'
       +'<span class="hero-t">'+esc(heroPhrase(hero))+'</span>'
       +'<span class="hero-s">at '+esc(hero.prop)+(hero.note?' · '+esc(hero.note):'')+'</span></span>'
       +'<span class="hero-side"><span class="hero-amt">+'+fmtK(hero.savings)+'<span class="u"> a year</span></span>'
       +'<span class="hero-go">Review <i class="ti ti-arrow-right"></i></span></span></button>':'';
-    // Remaining system bands (the building itself), each with its own opportunity $/yr + live status.
-    var rest=mine.filter(function(s){return !hero||s.id!==hero.id;});
-    var roof='<svg class="roof" viewBox="0 0 300 30" height="30" preserveAspectRatio="none"><polygon points="0,30 150,4 300,30" fill="hsl(240 14% 97%)" stroke="hsl(240 12% 82%)"/></svg>';
-    var bands=rest.map(function(s){
-      var live=est(s)?'<span class="band-live warn"><i class="ti ti-plug-connected-x"></i> No meter — connect '+esc(s.dataNeed)+'</span>':'<span class="band-live"><span class="dot"></span>'+esc(s.live)+'</span>';
-      var opp=est(s)?'<span style="font-size:14px">'+perRange(savLo(s),savHi(s))+'</span><div style="font-size:11px;color:var(--text-muted);font-weight:500">estimate</div>':'<span style="font-size:16px">+'+fmtK(s.savings)+'</span><div style="font-size:11px;color:var(--text-muted);font-weight:500">a year</div>';
-      return '<button class="band'+(est(s)?' est':'')+'" data-act="leaf" data-val="'+s.id+'"><span class="band-zone">'+esc(s.zone)+'</span><span style="flex:1;min-width:0"><span class="band-t">'+esc(s.type)+'</span>'+live+'</span><span class="band-opp">'+opp+'</span></button>';
-    }).join('');
-    // Guiding hand #2: sign up the rest of the portfolio.
-    var np=prospects().length;
-    var signup=np?'<button class="signup-line" data-act="setup"><span class="txt">Your other buildings aren’t connected — add them for <b>'+fmtK(Math.round(sumCf(prospects())/5))+' a year</b> more</span><span class="go">Add properties <i class="ti ti-arrow-right"></i></span></button>':'';
+    // The building itself: one cutaway SVG, every system drawn as a tappable zone in its real location.
+    var legend='<div class="bldg-legend"><span><i class="sw" style="background:var(--text-success)"></i> live</span><span><i class="sw" style="background:none;border:1.3px solid var(--text-warning)"></i> no meter yet</span></div>';
+    var svg=mine.length?buildingSvg(mine,hero?hero.id:null):'<div class="card" style="text-align:center">Every system in this building is optimized.</div>';
+    var building='<div class="bldg"><div class="bldg-cap"><span class="bldg-name"><i class="ti ti-building-skyscraper"></i> '+esc(S.prop)+'</span>'+legend+'</div>'+svg
+      +'<div class="bldg-hint"><i class="ti ti-hand-finger"></i> Tap any part of the building for that system’s numbers and how to pay.</div></div>';
+    // Guiding hand #2: bring the rest of the portfolio online (encouraging, green — an invitation).
+    var np=prospects().length, signedAny=Object.keys(S.signed).length>0||CONTRACTED.length>0;
+    var otherW=signedAny?'other ':'';
+    var signup=np?'<button class="signup-line" data-act="setup"><span class="txt">Bring your '+otherW+'buildings online for <b>'+fmtK(Math.round(sumCf(prospects())/5))+' a year</b> more — whenever you’re ready</span><span class="go">Add buildings <i class="ti ti-arrow-right"></i></span></button>':'';
     // Guiding hand #3 (quiet): savings-to-date entry into the shared savings drill.
     var saved='<button class="saved-line" data-act="go" data-val="savings"><span><i class="ti ti-trophy" style="color:var(--text-success)"></i> This portfolio has saved <b>'+fmtK(totSaved())+'</b> so far</span><i class="ti ti-arrow-right"></i></button>';
-    app.innerHTML='<div><h1 style="font-size:24px">Your building — live, by system</h1><p style="color:var(--text-muted);margin:.3rem 0 0;font-size:14px">Each floor is a system. Green = we see it live; dashed = no meter yet. Tap a system for the opportunity.</p></div>'
+    app.innerHTML='<div><h1 style="font-size:24px">Your building, system by system</h1><p style="color:var(--text-muted);margin:.3rem 0 0;font-size:14px">A live cutaway of '+esc(S.prop)+' — roof to mechanical room. Each part shows what it’s doing now and what it could save.</p></div>'
       +'<div class="pills">'+pills+'</div>'
       +heroCard
-      +roof+'<div class="bld">'+(rest.length?bands:'<div class="card" style="text-align:center">Every other system here is optimized.</div>')+'</div><div class="ground"></div>'
+      +building
       +signup+saved;
   }
   function renderSetup(){
