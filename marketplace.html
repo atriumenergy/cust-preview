@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Atrium — cash-flow (concept)</title>
+<title>Atrium — job marketplace (concept)</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
@@ -24,7 +24,6 @@
   .wrap{max-width:760px;margin:0 auto;padding:18px 18px 64px}
   h1{font-weight:700;margin:0;letter-spacing:-.01em}
   .mono{font-variant-numeric:tabular-nums}
-  .banner{display:flex;align-items:center;gap:8px;background:hsl(240 40% 97%);border:1px solid var(--border);border-radius:var(--radius);padding:9px 13px;color:var(--text-secondary);font-size:13px;margin-bottom:20px}
   .cf-sq{background:var(--surface-2);border:1px solid var(--border);border-radius:14px;padding:18px;cursor:pointer;transition:transform .12s,box-shadow .12s,border-color .12s;text-align:left;width:100%;font:inherit;color:inherit;box-shadow:var(--shadow)}
   .cf-sq:hover{transform:translateY(-2px);box-shadow:var(--shadow-hover);border-color:var(--border-strong)}
   .cf-sq:disabled{cursor:default;opacity:.75;box-shadow:none;transform:none}
@@ -69,18 +68,17 @@
   .sav-legend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:12px;color:var(--text-secondary);margin-top:8px}
   .sav-legend span{display:inline-flex;align-items:center;gap:5px}
   .sav-legend i.k{width:16px;height:0;border-top-width:2px;border-top-style:solid;display:inline-block}
+  .approved-strip{display:flex;align-items:center;gap:8px;background:var(--bg-success);border:1px solid hsl(86 40% 82%);border-radius:12px;padding:11px 14px;margin-top:2px;font-size:14px;color:var(--text-success)}
+  .approved-strip b{font-weight:700}
+  .mtoggle{display:inline-flex;background:hsl(240 20% 96%);border:1px solid var(--border);border-radius:99px;padding:2px}
+  .mtoggle button{border:none;background:none;border-radius:99px;padding:4px 12px;cursor:pointer;font:inherit;font-size:12px;font-weight:600;color:var(--text-secondary)}
+  .mtoggle button[aria-pressed="true"]{background:var(--surface-2);color:var(--text-primary);box-shadow:var(--shadow)}
 
-  /* ---- Marketplace shell (append-only) ---- */
-  .mk-head{margin-bottom:1.25rem}
-  .mk-eyebrow{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--primary)}
-  .mk-shelf-label{display:flex;align-items:baseline;gap:8px;margin:1.5rem 0 .75rem}
-  .mk-shelf-label h2{font-size:15px;font-weight:700;margin:0;letter-spacing:-.01em}
-  .mk-shelf-label span{font-size:13px;color:var(--text-muted)}
+  /* ---- Marketplace shell ---- */
   .mk-prod{position:relative;display:flex;flex-direction:column;background:var(--surface-2);border:1px solid var(--border);border-radius:14px;box-shadow:var(--shadow);overflow:hidden;transition:transform .12s,box-shadow .12s,border-color .12s}
   .mk-prod:hover{transform:translateY(-2px);box-shadow:var(--shadow-hover);border-color:var(--border-strong)}
   .mk-prod.est{border-style:dashed;border-color:var(--border-strong)}
   .mk-prod.est:hover{transform:none;box-shadow:var(--shadow)}
-  .mk-prod.inplan{border-color:var(--text-success);box-shadow:0 0 0 1px var(--text-success),var(--shadow)}
   .mk-open{appearance:none;-webkit-appearance:none;background:none;border:none;text-align:left;font:inherit;color:inherit;cursor:pointer;padding:16px 16px 12px;display:flex;flex-direction:column;gap:9px;flex:1}
   .mk-open:focus-visible{outline:2px solid var(--primary);outline-offset:-2px}
   .mk-title{min-width:0}
@@ -88,49 +86,32 @@
   .mk-prop{display:flex;align-items:center;gap:5px;font-size:13px;color:var(--text-muted);margin-top:3px}
   .mk-fig{margin-top:2px}
   .mk-fig-k{font-size:11px;color:var(--text-muted)}
-  .mk-fig-v{font-size:26px;font-weight:700;letter-spacing:-.02em;color:var(--text-success);line-height:1.1}
+  .mk-fig-v{font-size:23px;font-weight:700;letter-spacing:-.02em;color:var(--text-success);line-height:1.1}
   .mk-sav{font-size:13px;color:var(--text-secondary);margin-top:1px}
   .mk-meta{margin-top:auto;display:flex;flex-wrap:wrap;gap:6px 10px;font-size:12px;color:var(--text-muted);padding-top:4px}
-  .mk-meta i{color:var(--text-muted)}
-  .mk-detailhint{display:inline-flex;align-items:center;gap:3px;font-size:12px;font-weight:500;color:var(--text-secondary)}
   .mk-foot{border-top:1px solid var(--border);padding:11px 16px;display:flex;align-items:center;gap:10px}
   .mk-prod.est .mk-foot{border-top-style:dashed}
-  .mk-add{flex:1;display:inline-flex;align-items:center;justify-content:center;gap:6px;background:var(--surface-2);color:var(--primary);border:1px solid var(--border-strong);border-radius:8px;padding:9px 14px;cursor:pointer;font:inherit;font-size:14px;font-weight:600;transition:background .12s,border-color .12s,color .12s}
-  .mk-add:hover{border-color:var(--primary)}
-  .mk-add.in{background:var(--bg-success);color:var(--text-success);border-color:hsl(86 40% 82%)}
-  .mk-add.in:hover{border-color:var(--text-success)}
+  .mk-add{flex:1;display:inline-flex;align-items:center;justify-content:center;gap:6px;background:var(--primary);color:var(--primary-fg);border:1px solid var(--primary);border-radius:8px;padding:9px 14px;cursor:pointer;font:inherit;font-size:14px;font-weight:600}
+  .mk-add:hover{filter:brightness(1.18)}
   .mk-connect{flex:1;display:inline-flex;align-items:center;justify-content:center;gap:6px;background:none;color:var(--text-warning);border:1px dashed var(--border-warning);border-radius:8px;padding:9px 14px;cursor:pointer;font:inherit;font-size:14px;font-weight:600}
   .mk-connect:hover{background:var(--bg-warning)}
   .mk-connect:disabled{cursor:default;opacity:.75}
   .mk-tags{display:flex;flex-wrap:wrap;gap:6px}
   .mk-tags:empty{display:none}
   .mk-badge{display:inline-flex;align-items:center;gap:4px;max-width:100%;font-size:11px;font-weight:600;border-radius:99px;padding:3px 9px;line-height:1.35;white-space:normal}
-  .mk-badge.deal{color:var(--text-success);background:var(--bg-success);border:1px solid hsl(86 40% 82%)}
   .mk-badge.time{color:var(--text-warning);background:var(--bg-warning);border:1px solid var(--border-warning)}
   .mk-badge.win{color:var(--primary);background:hsl(240 60% 96%);border:1px solid hsl(240 40% 90%)}
-  .mk-cart{position:sticky;bottom:14px;z-index:5;margin-top:1.5rem;display:flex;align-items:center;gap:14px;background:var(--surface-2);border:1px solid var(--border-strong);border-radius:14px;padding:13px 16px;box-shadow:0 8px 24px rgba(16,18,40,.14)}
-  .mk-cart.empty{position:static;border-style:dashed;box-shadow:var(--shadow);color:var(--text-muted)}
-  .mk-cart-ico{width:38px;height:38px;flex-shrink:0;border-radius:10px;display:flex;align-items:center;justify-content:center;background:hsl(240 60% 96%);color:var(--primary);font-size:20px}
-  .mk-cart.empty .mk-cart-ico{background:hsl(240 20% 96%);color:var(--text-muted)}
-  .mk-cart-body{min-width:0;flex:1}
-  .mk-cart-k{font-size:12px;color:var(--text-muted)}
-  .mk-cart-v{font-size:15px;font-weight:600;letter-spacing:-.01em}
-  .mk-cart-v b{color:var(--text-success);font-weight:700}
-  .mk-cart-cta{flex-shrink:0}
 
-  /* ---- Storefront hero + guiding-hand entries ---- */
-  .mk-topbar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:1.15rem}
-  .mk-brand{display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--primary)}
-  /* Orders-style savings link — the quiet #3 entry */
-  .mk-orders{display:inline-flex;align-items:center;gap:7px;background:none;border:none;cursor:pointer;font:inherit;font-size:13px;font-weight:500;color:var(--text-secondary);padding:6px 2px;border-radius:8px}
-  .mk-orders:hover{color:var(--text-primary)}
-  .mk-orders b{color:var(--text-success);font-weight:700}
-  .mk-orders .ic{width:24px;height:24px;border-radius:7px;display:flex;align-items:center;justify-content:center;background:var(--bg-success);color:var(--text-success);font-size:15px}
-  /* Featured hero — the matched/recommended APPROVE bundle (#1) */
-  .mk-hero{position:relative;display:block;width:100%;text-align:left;font:inherit;color:inherit;cursor:pointer;background:linear-gradient(180deg,hsl(86 45% 97.5%),var(--surface-2) 64%);border:1px solid hsl(86 45% 76%);border-radius:18px;box-shadow:var(--shadow);padding:22px;transition:transform .12s,box-shadow .12s,border-color .12s;overflow:hidden}
-  .mk-hero:hover{transform:translateY(-2px);box-shadow:var(--shadow-hover)}
-  .mk-hero-tag{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--primary);background:hsl(240 60% 96%);border:1px solid hsl(240 40% 90%);border-radius:99px;padding:4px 11px}
-  .mk-hero-label{font-size:15px;font-weight:600;color:var(--text-secondary);margin-top:13px}
+  /* ---- Storefront top: switch + hero + entries ---- */
+  .mk-topbar{display:flex;align-items:center;justify-content:space-between;gap:10px 12px;flex-wrap:wrap;margin-bottom:.9rem}
+  .mk-brand{display:inline-flex;align-items:center;gap:8px;font-size:15px;font-weight:700;letter-spacing:-.01em}
+  /* pay-mode switch — the marketplace-global Cash / Financed default */
+  .mk-payswitch{display:flex;align-items:center;gap:10px;flex-wrap:wrap;background:var(--surface-2);border:1px solid var(--border);border-radius:12px;box-shadow:var(--shadow);padding:11px 14px;margin-bottom:1.15rem}
+  .mk-payswitch-k{font-size:13px;color:var(--text-secondary);min-width:0;flex:1}
+  .mk-payswitch-k b{color:var(--text-primary);font-weight:600}
+  .mk-featured{position:relative;display:block;width:100%;text-align:left;font:inherit;color:inherit;cursor:pointer;background:linear-gradient(180deg,hsl(86 45% 97.5%),var(--surface-2) 64%);border:1px solid hsl(86 45% 76%);border-radius:18px;box-shadow:var(--shadow);padding:22px;transition:transform .12s,box-shadow .12s,border-color .12s;overflow:hidden}
+  .mk-featured:hover{transform:translateY(-2px);box-shadow:var(--shadow-hover)}
+  .mk-hero-label{font-size:15px;font-weight:600;color:var(--text-secondary)}
   .mk-hero-amt{font-weight:700;letter-spacing:-.02em;line-height:1;color:var(--text-success);font-size:52px;margin-top:3px}
   .mk-hero-amt .u{font-size:.32em;font-weight:600;color:var(--text-muted);letter-spacing:0}
   .mk-hero-sub{font-size:14px;color:var(--text-secondary);margin-top:9px;max-width:46ch}
@@ -138,7 +119,7 @@
   .mk-hero-bundle{display:flex;flex-wrap:wrap;gap:6px;margin-top:15px}
   .mk-hero-chip{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:500;color:var(--text-secondary);background:var(--surface-2);border:1px solid var(--border);border-radius:99px;padding:5px 11px}
   .mk-hero-chip b{color:var(--text-success);font-weight:700}
-  /* Sign-up strip — #2 */
+  /* sign-up strip — green, encouraging */
   .mk-signup{display:flex;align-items:center;gap:14px;width:100%;text-align:left;font:inherit;color:inherit;cursor:pointer;background:var(--surface-2);border:1px solid var(--border);border-radius:14px;box-shadow:var(--shadow);padding:16px 18px;margin-top:14px;transition:transform .12s,box-shadow .12s,border-color .12s}
   .mk-signup:hover{transform:translateY(-2px);box-shadow:var(--shadow-hover);border-color:var(--border-strong)}
   .mk-signup-ico{width:42px;height:42px;flex-shrink:0;border-radius:11px;display:flex;align-items:center;justify-content:center;background:var(--bg-success);color:var(--text-success);font-size:21px}
@@ -147,10 +128,20 @@
   .mk-signup-k b{color:var(--text-success);font-weight:700}
   .mk-signup-v{font-size:15px;font-weight:600;letter-spacing:-.01em;margin-top:1px}
   .mk-signup-cta{flex-shrink:0;display:inline-flex;align-items:center;gap:6px;color:var(--primary);font-size:14px;font-weight:600}
-  /* ---- Bids: the "competitively bid on jobs" marketplace core ---- */
+  /* savings-to-date hero — seasonal past & future, taps the drill */
+  .mk-savhero{display:block;width:100%;text-align:left;font:inherit;color:inherit;cursor:pointer;background:var(--surface-2);border:1px solid var(--border);border-radius:14px;padding:13px 16px 10px;box-shadow:var(--shadow);margin-top:14px;transition:box-shadow .12s,border-color .12s}
+  .mk-savhero:hover{box-shadow:var(--shadow-hover);border-color:var(--border-strong)}
+  .mk-savhero-top{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin-bottom:8px}
+  .mk-savhero-v{font-weight:700;color:var(--text-success);letter-spacing:-.01em;font-size:19px}
+  .mk-savhero-k{font-size:13px;color:var(--text-secondary);display:inline-flex;align-items:center;gap:4px}
+  /* shelves */
+  .mk-shelf-label{display:flex;align-items:baseline;gap:8px;margin:1.5rem 0 .75rem;flex-wrap:wrap}
+  .mk-shelf-label h2{font-size:15px;font-weight:700;margin:0;letter-spacing:-.01em;display:inline-flex;align-items:center;gap:6px}
+  .mk-shelf-label span{font-size:13px;color:var(--text-muted)}
+
+  /* ---- Bids: the "competitively bid on jobs" core ---- */
   .mk-bidcue{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:600;color:var(--primary);background:hsl(240 60% 96%);border:1px solid hsl(240 40% 90%);border-radius:99px;padding:3px 9px}
   .mk-bidcue i{font-size:13px}
-  /* the recommended-bid strip that leads every job card */
   .mk-rec{border:1px solid hsl(86 40% 82%);background:linear-gradient(180deg,hsl(86 45% 97%),var(--surface-2));border-radius:11px;padding:11px 13px}
   .mk-rec-tag{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;letter-spacing:.03em;text-transform:uppercase;color:var(--text-success)}
   .mk-rec-row{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin-top:5px}
@@ -159,7 +150,6 @@
   .mk-rec-term{font-size:12px;color:var(--text-muted);margin-top:2px}
   .mk-rec-save{font-size:13px;color:var(--text-secondary);margin-top:5px}
   .mk-rec-save b{color:var(--text-success);font-weight:700}
-  /* expand-to-compare control + the competing-bid list */
   .mk-cmp-btn{display:inline-flex;align-items:center;gap:5px;background:none;border:none;cursor:pointer;font:inherit;font-size:13px;font-weight:600;color:var(--primary);padding:8px 2px 2px}
   .mk-cmp-btn:hover{text-decoration:underline}
   .mk-bidlist{display:flex;flex-direction:column;gap:8px;margin-top:9px}
@@ -171,8 +161,6 @@
   .mk-bid-term{font-size:12px;color:var(--text-muted);margin-top:1px}
   .mk-bid-price{font-size:15px;font-weight:700;white-space:nowrap;font-variant-numeric:tabular-nums}
   .mk-bid-price .df{display:block;font-size:11px;font-weight:600;color:var(--text-muted);text-align:right;margin-top:1px}
-  /* job-detail econ summary */
-  .mk-econ{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;margin:2px 0 4px}
   .mk-pay{margin-top:6px}
   .mk-pay-k{font-size:12px;color:var(--text-muted);font-weight:600;text-transform:uppercase;letter-spacing:.04em;margin-bottom:7px}
   @media (max-width:540px){
@@ -182,15 +170,11 @@
     .mk-hero-cta{width:100%;justify-content:center}
     .mk-signup{flex-wrap:wrap}
     .mk-signup-cta{width:100%;justify-content:center;background:var(--primary);color:var(--primary-fg);border-radius:10px;padding:10px}
-    .mk-cart{flex-wrap:wrap}
-    .mk-cart-cta,.mk-cart-cta .cf-btn{width:100%}
-    .mk-cart-cta .cf-btn{justify-content:center}
   }
 </style>
 </head>
 <body>
 <div class="wrap">
-<div class="banner"><i class="ti ti-info-circle"></i> Concept preview · sample data — for feedback, not final visual design</div>
 <div id="app">Loading…</div>
 </div>
 <script>
@@ -199,23 +183,27 @@
   var DATA={
     portfolio:"Coastline Hospitality Group",
     prospects:[
-      {id:'p1',name:'Summit Ridge Suites',cf:180000,ready:true,step:'Proposal ready'},
-      {id:'p2',name:'Harbor Point Hotel',cf:140000,ready:true,step:'Proposal ready'},
-      {id:'p3',name:'Grandview Hotel',cf:110000,ready:false,step:'Complete your audit',est:true},
-      {id:'p4',name:'Old Town Motel',cf:90000,ready:false,step:'Complete your audit',est:true},
-      {id:'p5',name:'Pinewood Inn',cf:70000,ready:false,step:'Add your utility bills',est:true},
-      {id:'p6',name:'Bayside Motor Lodge',cf:60000,ready:false,step:'Add your utility bills',est:true}
+      {id:'p1',name:'Summit Ridge Suites',cf:225000,ready:true,step:'Proposal ready'},
+      {id:'p2',name:'Harbor Point Hotel',cf:195000,ready:true,step:'Proposal ready'},
+      {id:'p3',name:'Grandview Hotel',cf:175000,ready:false,step:'Complete your audit',est:true},
+      {id:'p4',name:'Old Town Motel',cf:150000,ready:false,step:'Complete your audit',est:true},
+      {id:'p5',name:'Pinewood Inn',cf:130000,ready:false,step:'Add your utility bills',est:true},
+      {id:'p6',name:'Bayside Motor Lodge',cf:95000,ready:false,step:'Add your utility bills',est:true}
     ],
     solutions:[
-      {id:'s1',prop:'Marina Bay Inn',type:'Solar + Batteries',u:0,note:'Rebate ends Aug 31',vendor:'GreenVolt Partners',install:'about 6 weeks · starts Sep',fidelity:'measured',market:430000,discountPct:12,incentive:130000,savings:75000,loan:{termYears:10,aprPct:6.5},lease:{annualAtrium:44000,annualMarket:52000,termYears:20}},
-      {id:'s5',prop:'Cedar Court Hotel',type:'Solar + Batteries',u:0,note:'Rebate ends Aug 31',vendor:'GreenVolt Partners',install:'about 5 weeks',fidelity:'measured',market:300000,discountPct:12,incentive:90000,savings:53000,loan:{termYears:10,aprPct:6.5},lease:{annualAtrium:31000,annualMarket:37000,termYears:20}},
-      {id:'s2',prop:'Marina Bay Inn',type:'Heat Pump Water Heaters',u:1,vendor:'Thermal Systems',install:'about 2 weeks',fidelity:'measured',market:72000,discountPct:12,incentive:15000,savings:17000,loan:{termYears:7,aprPct:6.9},lease:null},
-      {id:'s6',prop:'Cedar Court Hotel',type:'LED Lighting',u:1,vendor:'BrightSwap',install:'about 2 weeks',fidelity:'measured',market:46000,discountPct:13,incentive:6000,savings:13500,loan:{termYears:3,aprPct:7.9},lease:null},
-      {id:'s3',prop:'Marina Bay Inn',type:'LED Lighting',u:2,vendor:'BrightSwap',install:'about 2 weeks',fidelity:'measured',market:34000,discountPct:13,incentive:4000,savings:10000,loan:{termYears:3,aprPct:7.9},lease:null},
-      {id:'s4',prop:'Marina Bay Inn',type:'Smart Thermostats',u:2,vendor:'Cozy Controls',install:'about 1 week',fidelity:'measured',market:10000,discountPct:14,incentive:1500,savings:4500,loan:{termYears:3,aprPct:7.9},lease:null},
+      {id:'s1',prop:'Marina Bay Inn',type:'Solar + Batteries',u:0,note:'Start now — about a year to build for the 2027 rebate',vendor:'GreenVolt Partners',install:'about 6 weeks · starts Sep',fidelity:'measured',market:430000,discountPct:12,incentive:130000,savings:75000,loan:{termYears:25,aprPct:6.5},lease:{annualAtrium:44000,annualMarket:52000,termYears:20}},
+      {id:'s5',prop:'Cedar Court Hotel',type:'Solar + Batteries',u:0,note:'Start now — about a year to build for the 2027 rebate',vendor:'GreenVolt Partners',install:'about 5 weeks',fidelity:'measured',market:300000,discountPct:12,incentive:90000,savings:53000,loan:{termYears:25,aprPct:6.5},lease:{annualAtrium:31000,annualMarket:37000,termYears:20}},
+      {id:'s2',prop:'Marina Bay Inn',type:'Heat Pump Water Heaters',u:1,vendor:'Thermal Systems',install:'about 2 weeks',fidelity:'measured',market:72000,discountPct:12,incentive:15000,savings:17000,loan:{termYears:5,aprPct:6.9},lease:null},
+      {id:'s6',prop:'Cedar Court Hotel',type:'LED Lighting',u:0,vendor:'BrightSwap',install:'about 2 weeks',fidelity:'measured',market:46000,discountPct:13,incentive:6000,savings:13500,loan:{termYears:5,aprPct:7.9},lease:null},
+      {id:'s3',prop:'Marina Bay Inn',type:'LED Lighting',u:0,vendor:'BrightSwap',install:'about 2 weeks',fidelity:'measured',market:34000,discountPct:13,incentive:4000,savings:10000,loan:{termYears:5,aprPct:7.9},lease:null},
+      {id:'s4',prop:'Marina Bay Inn',type:'Smart Thermostats',u:2,vendor:'Cozy Controls',install:'about 1 week',fidelity:'measured',market:10000,discountPct:14,incentive:1500,savings:4500,loan:{termYears:5,aprPct:7.9},lease:null},
+      {id:'s10',prop:'Marina Bay Inn',type:'Building Controls (EMS)',u:1,vendor:'Nodal Systems',install:'about 3 weeks',fidelity:'measured',market:60000,discountPct:12,incentive:9000,savings:22000,loan:{termYears:5,aprPct:6.9},lease:null},
+      {id:'s11',prop:'Cedar Court Hotel',type:'Kitchen Hood Controls',u:1,vendor:'AirWise Controls',install:'about 1 week',fidelity:'measured',market:28000,discountPct:12,incentive:3000,savings:9000,loan:{termYears:5,aprPct:7.9},lease:null},
+      {id:'s12',prop:'Cedar Court Hotel',type:'Pool Heat Pump',u:2,vendor:'ThermaPool',install:'about 2 weeks',fidelity:'measured',market:38000,discountPct:12,incentive:5000,savings:11000,loan:{termYears:5,aprPct:6.9},lease:null},
+      {id:'s13',prop:'Riverside Lodge',type:'Low-Flow Water Fixtures',u:0,vendor:'AquaTrim',install:'about 1 week',fidelity:'measured',market:14000,discountPct:13,incentive:2000,savings:6500,loan:{termYears:5,aprPct:7.9},lease:null},
       {id:'s8',prop:'Riverside Lodge',type:'Heat Pump Water Heaters',u:0,vendor:'Thermal Systems',install:'about 2 weeks',fidelity:'estimated',dataNeed:'your water-heater metering',savings:12000},
       {id:'s9',prop:'Riverside Lodge',type:'Smart Thermostats',u:1,vendor:'Cozy Controls',install:'about 1 week',fidelity:'estimated',dataNeed:'occupancy data',savings:12500},
-      {id:'s7',prop:'Cedar Court Hotel',type:'Ozone Laundry',u:1,vendor:'PureWash',install:'about 1 week',fidelity:'estimated',dataNeed:'laundry-room metering',savings:10000}
+      {id:'s7',prop:'Cedar Court Hotel',type:'Ozone Laundry',u:0,vendor:'PureWash',install:'about 1 week',fidelity:'measured',market:24000,discountPct:12,incentive:2500,savings:10000,loan:{termYears:5,aprPct:7.9},lease:null}
     ],
     // properties Atrium already operates — these have savings history + a forecast
     contracted:[
@@ -240,9 +228,15 @@
     s2:[{vendor:'Northwind Mechanical',rel:1.14,term:'3 weeks · 6-yr warranty'},{vendor:'Apex Renewables',rel:1.07,term:'2 weeks · 8-yr warranty'}],
     s6:[{vendor:'Lumen Works',rel:1.12,term:'3 weeks · 5-yr warranty'},{vendor:'BrightSwap',rel:1.05,term:'2 weeks · 6-yr warranty'}],
     s3:[{vendor:'Lumen Works',rel:1.10,term:'2 weeks · 5-yr warranty'}],
-    s4:[{vendor:'Cozy Controls',rel:1.13,term:'1 week · 3-yr warranty'},{vendor:'Northwind Mechanical',rel:1.06,term:'1 week · 5-yr warranty'}]
+    s4:[{vendor:'Cozy Controls',rel:1.13,term:'1 week · 3-yr warranty'},{vendor:'Northwind Mechanical',rel:1.06,term:'1 week · 5-yr warranty'}],
+    s10:[{vendor:'GridLogic Controls',rel:1.12,term:'4 weeks · 5-yr warranty'},{vendor:'AirWise Controls',rel:1.06,term:'3 weeks · 5-yr warranty'}],
+    s11:[{vendor:'Nodal Systems',rel:1.10,term:'2 weeks · 5-yr warranty'},{vendor:'VentPro',rel:1.05,term:'1 week · 6-yr warranty'}],
+    s12:[{vendor:'AquaTherm',rel:1.13,term:'3 weeks · 5-yr warranty'},{vendor:'ThermaPool',rel:1.05,term:'2 weeks · 6-yr warranty'}],
+    s13:[{vendor:'FlowSave',rel:1.11,term:'1 week · 5-yr warranty'}],
+    s7:[{vendor:'CleanCycle',rel:1.12,term:'2 weeks · 5-yr warranty'},{vendor:'PureWash',rel:1.05,term:'1 week · 6-yr warranty'}]
   };
-  var S={screen:'home',bucket:2,solView:'type',group:null,leafId:null,savView:'property',savLeaf:null,period:'annual',signed:{},approved:{},approvedMode:{},mode:{},disc:{},bidsOpen:{},unlocked:0};
+  // payMode: the marketplace-global Cash / Financed default — Financed leads.
+  var S={screen:'home',solView:'type',group:null,leafId:null,savView:'property',savLeaf:null,period:'annual',payMode:'financed',signed:{},approved:{},approvedMode:{},mode:{},disc:{},bidsOpen:{},unlocked:0};
   var UL=['Now','Soon','Later'];
   function fmtK(n){n=Math.round(n);var s=n<0?'-':'';n=Math.abs(n);if(n>=1e6)return s+'$'+(n/1e6).toFixed(2).replace(/\.?0+$/,'')+'M';if(n>=1e3)return s+'$'+Math.round(n/1e3)+'K';return s+'$'+n;}
   function fmt(n){return '$'+Math.round(n).toLocaleString();}
@@ -259,8 +253,17 @@
   function savHi(s){return Math.round(s.savings*1.25/1000)*1000;}
   function tileVal(s){return est(s)?5*s.savings:fiveCash(s);}
   function solModes(s){var m=['cash'];if(s.loan)m.push('loan');if(s.lease)m.push('lease');return m;}
-  function curMode(s){var ms=solModes(s);var d=s.loan?'loan':(s.lease?'lease':'cash');var m=S.mode[s.id]||d;return ms.indexOf(m)>=0?m:d;}
+  // Global switch sets the leaf's default: Financed favors Loan (then Lease), Cash favors Cash.
+  // A leaf-level pick (S.mode[s.id]) overrides and does NOT persist back to the global switch.
+  function defaultMode(s){
+    var ms=solModes(s);
+    if(S.payMode==='financed'){ if(ms.indexOf('loan')>=0)return 'loan'; if(ms.indexOf('lease')>=0)return 'lease'; return 'cash'; }
+    return 'cash';
+  }
+  function curMode(s){var ms=solModes(s);var d=defaultMode(s);var m=S.mode[s.id]||d;return ms.indexOf(m)>=0?m:d;}
   function per(x){return S.period==='monthly'?fmt(x/12)+'/mo':fmt(x)+'/yr';}
+  function amtUnit(annual){ return S.period==='monthly' ? {a:fmtK(annual/12),u:'a month'} : {a:fmtK(annual),u:'a year'}; }
+  function perTile(annual){var v=S.period==='monthly'?annual/12:annual;return fmtK(v)+'<span style="font-size:.6em;color:var(--text-muted);font-weight:600"> '+(S.period==='monthly'?'/mo':'/yr')+'</span>';}
   function perRange(lo,hi){return S.period==='monthly'?fmt(Math.round(lo/12))+'–'+fmt(Math.round(hi/12))+'/mo':fmtK(lo)+'–'+fmtK(hi)+'/yr';}
   function prospects(){return DATA.prospects.filter(function(p){return !S.signed[p.id];});}
   function sols(){return DATA.solutions.filter(function(s){return !S.approved[s.id];});}
@@ -270,7 +273,15 @@
   function distinctProps(a){var o={};a.forEach(function(s){o[s.prop]=1;});return Object.keys(o).length;}
   function approveAnnualFor(name){return sols().filter(function(s){return s.prop===name;}).reduce(function(t,s){return t+s.savings;},0);}
   function approveCountFor(name){return sols().filter(function(s){return s.prop===name;}).length;}
-  function recSort(a,b){ if(a.u!==b.u)return a.u-b.u; if((!!b.note)!==(!!a.note))return (b.note?1:0)-(a.note?1:0); return tileVal(b)-tileVal(a); }
+  // Atrium-recommended priority: incentive deadlines first, then quick wins (fast payback / low friction), then value.
+  // Rationale: land early wins so customers feel good about Atrium while larger cash flow keeps unlocking over the contract.
+  function atriumScore(s){
+    // Quick wins lead (fast payback = earliest banked win). Deadline projects (e.g. solar's 2027 clock)
+    // get a modest bump so the clock starts, but a true quick win still goes first.
+    var pay=est(s)?8:payback(s);
+    return pay - (s.note?1.3:0);
+  }
+  function recSort(a,b){ return atriumScore(a)-atriumScore(b); }
   function econ(s,mode){
     var sav=s.savings,nt=net(s),pay=payback(s);
     if(mode==='cash'){
@@ -281,22 +292,22 @@
     }
     if(mode==='loan'){
       var m=pmtMo(nt,s.loan.aprPct,s.loan.termYears),ann=m*12,t=s.loan.termYears;
-      return {hero:'+'+per(sav-ann), sub:'$0 down · '+t+'-yr loan @ '+s.loan.aprPct+'%',
-        chips:[['Savings','+'+per(sav),'var(--text-success)'],['Loan payment',per(ann)]],
+      return {hero:'+'+per(sav), sub:'$0 down · '+t+'-yr loan @ '+s.loan.aprPct+'% · '+per(ann)+', then it’s yours',
+        chips:[['Loan payment',per(ann)],['Term',t+' yrs']],
         series:(function(){var a=[0],cum=0;for(var y=1;y<=10;y++){cum+=sav-(y<=t?ann:0);a.push(cum);}return a;})(), be:0.05, beLabel:'cash-flow positive from day one',
-        takeaway:'$0 down; you net '+per(sav-ann)+' from day one — best near-term cash flow.'};
+        takeaway:''};
     }
     var la=s.lease.annualAtrium,t2=s.lease.termYears;
-    return {hero:'+'+per(sav-la), sub:'$0 down · '+t2+'-yr lease',
-      chips:[['Savings','+'+per(sav),'var(--text-success)'],['Lease cost',per(la)],['Term',t2+' yrs']],
+    return {hero:'+'+per(sav), sub:'$0 down · '+t2+'-yr lease · '+per(la)+' · no ownership or upkeep',
+      chips:[['Lease cost',per(la)],['Term',t2+' yrs']],
       series:(function(){var a=[0],cum=0;for(var y=1;y<=10;y++){cum+=sav-la;a.push(cum);}return a;})(), be:0.05, beLabel:'cash-flow positive from year one',
-      takeaway:'$0 down; net '+per(sav-la)+' a year, no ownership or upkeep.'};
+      takeaway:''};
   }
   function spark(series,be){
     var w=300,h=72,padX=8,padT=8,padB=8,N=120;
     function stepAt(yr){var i=Math.max(0,Math.min(series.length-2,Math.floor(yr)));return series[i+1]-series[i];}
     var cum=series[0],pts=[[0,cum]];
-    for(var m=1;m<=N;m++){var yr=m/12;var mult=1+0.5*Math.sin((m-1)/12*2*Math.PI-Math.PI/2);cum+=stepAt(yr-1e-9)/12*mult;pts.push([yr,cum]);}
+    for(var m=1;m<=N;m++){var yr=m/12;var mult=1+0.1*Math.sin((m-1)/12*2*Math.PI-Math.PI/2);cum+=stepAt(yr-1e-9)/12*mult;pts.push([yr,cum]);}
     var vals=pts.map(function(p){return p[1];}).concat([0]);
     var mn=Math.min.apply(null,vals),mx=Math.max.apply(null,vals),sp=(mx-mn)||1;
     function X(yr){return padX+(yr/10)*(w-2*padX);}
@@ -342,31 +353,25 @@
     var chips=e.chips.map(function(k){return '<div class="chip"><div class="k">'+k[0]+'</div><div class="v mono"'+(k[2]?' style="color:'+k[2]+'"':'')+'>'+k[1]+'</div></div>';}).join('');
     var savePct=Math.round((s.market-price(s))/s.market*100);
     return '<div class="card" data-row="'+s.id+'">'+cardHead(s)
-      +'<div style="margin-bottom:12px"><span class="measured"><i class="ti ti-circle-check"></i> Measured from your data</span></div>'
       +'<div style="display:flex;flex-wrap:wrap;align-items:center;gap:8px;font-size:13px;color:var(--text-secondary);background:hsl(240 20% 98%);border:1px solid var(--border);border-radius:10px;padding:9px 12px;margin-bottom:16px">'
-        +'<span style="text-decoration:line-through;color:var(--text-muted)">'+fmt(s.market)+' market</span><i class="ti ti-arrow-right" style="color:var(--text-muted)"></i>'
+        +'<span style="color:var(--text-muted)">'+fmt(s.market)+' market</span><i class="ti ti-arrow-right" style="color:var(--text-muted)"></i>'
         +'<span>'+fmt(price(s))+' Atrium price <span style="color:var(--text-success);font-weight:600">(−'+savePct+'%)</span></span><i class="ti ti-arrow-right" style="color:var(--text-muted)"></i>'
         +'<span style="color:var(--text-success);font-weight:600">−'+fmt(s.incentive)+' incentive</span><i class="ti ti-arrow-right" style="color:var(--text-muted)"></i>'
-        +'<span style="font-weight:700;color:var(--text-primary)">'+fmt(net(s))+' your net</span></div>'
-      +'<div style="font-size:12px;color:var(--text-muted);font-weight:600;text-transform:uppercase;letter-spacing:.04em;margin-bottom:7px">How you’ll pay</div>'
+        +'<span style="font-weight:700;color:var(--text-primary)">'+fmt(net(s))+' your net price</span></div>'
       +'<div class="payseg" style="margin-bottom:16px">'+payseg+'</div>'
-      +'<div style="margin-bottom:14px"><div style="font-size:12px;color:var(--text-muted)">Net cash flow</div>'
+      +'<div style="margin-bottom:14px"><div style="font-size:12px;color:var(--text-muted)">Savings</div>'
         +'<div class="mono" style="font-size:30px;font-weight:700;color:var(--text-success);letter-spacing:-.02em">'+e.hero+'</div>'
         +'<div style="font-size:13px;color:var(--text-secondary);margin-top:2px">'+e.sub+'</div></div>'
       +'<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(128px,1fr));gap:8px;margin-bottom:12px">'+chips+'</div>'
-      +'<div style="background:hsl(240 20% 98.5%);border:1px solid var(--border);border-radius:10px;padding:10px 12px;margin-bottom:12px">'+spark(e.series,e.be)
-        +'<div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text-muted);margin-top:2px"><span>Now</span><span>'+e.beLabel+'</span><span>10 yrs</span></div></div>'
-      +'<div style="font-size:13px;color:var(--text-secondary);margin-bottom:14px"><i class="ti ti-bulb" style="color:var(--text-warning)"></i> '+e.takeaway+'</div>'
-      +'<div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">'
-        +'<button class="cf-btn" data-approve="'+s.id+'"><i class="ti ti-check"></i> Approve with '+cap(mode)+'</button>'
-        +'<button class="ghost"><i class="ti ti-file-text"></i> View full quote</button></div>'
+      +'<div style="background:hsl(240 20% 98.5%);border:1px solid var(--border);border-radius:10px;padding:10px 12px;margin-bottom:14px">'+spark(e.series,e.be)
+        +'<div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text-muted);margin-top:2px"><span>Now</span><span>'+e.beLabel+'</span><span style="color:var(--text-secondary);font-weight:600">'+fmtK(e.series[e.series.length-1])+' over 10 yrs</span></div></div>'
+      +'<button class="cf-btn" data-approve="'+s.id+'"><i class="ti ti-check"></i> Approve with '+cap(mode)+'</button>'
       +discussion(s)+'</div>';
   }
-  function unlockedBanner(){ if(!S.unlocked)return ''; return '<div style="display:flex;align-items:center;gap:8px;background:var(--bg-success);border:1px solid hsl(86 40% 82%);border-radius:var(--radius);padding:9px 13px;margin-bottom:1rem;font-size:14px;color:var(--text-success)"><i class="ti ti-sparkles"></i>Unlocked this session: <span style="font-weight:700">'+fmt(S.unlocked)+'</span> over 5 years</div>'; }
   function backPill(){var toShop=S.screen==='job'||S.screen==='signup'||S.screen==='savings';return '<button class="cf-pill" data-act="back" style="display:inline-flex;align-items:center;gap:4px"><i class="ti ti-arrow-left"></i> '+(toShop?'Back to marketplace':'Back')+'</button>';}
   function perToggle(){return '<div class="seg"><button data-period="annual" aria-pressed="'+(S.period==='annual')+'">Annual</button><button data-period="monthly" aria-pressed="'+(S.period==='monthly')+'">Monthly</button></div>';}
 
-  /* ---- Bids marketplace shell (append-only) ---- */
+  /* ---- Bids marketplace shell ---- */
   // Build the ranked bid table for a job: recommended first (its own vendor at the Atrium price),
   // then the competing vendors at their higher prices. All derived — DATA.solutions is untouched.
   function jobBids(s){
@@ -397,7 +402,7 @@
         +'<button class="mk-open" data-act="job" data-val="'+s.id+'">'
           +'<div class="mk-tags"><span class="mk-badge win"><i class="ti ti-flask"></i> Not yet out for bid</span></div>'
           +'<div class="mk-title"><div class="mk-type">'+esc(s.type)+'</div><div class="mk-prop"><i class="ti ti-building"></i> '+esc(s.prop)+'</div></div>'
-          +'<div class="mk-fig"><div class="mk-fig-k">Estimated saving</div><div class="mk-fig-v">'+perRange(savLo(s),savHi(s))+'/yr</div></div>'
+          +'<div class="mk-fig"><div class="mk-fig-k">Estimated saving</div><div class="mk-fig-v">'+perRange(savLo(s),savHi(s))+'</div></div>'
           +'<div class="mk-sav">Connect '+esc(s.dataNeed)+' and we’ll put this job out to competing vendors.</div>'
         +'</button>'
         +'<div class="mk-foot"><button class="mk-connect" data-act="connect" data-val="'+s.id+'"><i class="ti ti-plug-connected"></i> Connect data to open for bids</button></div>'
@@ -413,7 +418,7 @@
         +'<div class="mk-rec"><div style="display:flex;justify-content:space-between;align-items:center;gap:8px"><span class="mk-rec-tag"><i class="ti ti-award"></i> Atrium’s pick</span><span class="mk-bidcue"><i class="ti ti-gavel"></i> '+n+' vendors bid</span></div>'
           +'<div class="mk-rec-row"><span class="mk-rec-vendor">'+esc(rec.vendor)+'</span><span class="mk-rec-price">'+fmt(rec.price)+'</span></div>'
           +'<div class="mk-rec-term">'+esc(rec.term)+'</div>'
-          +'<div class="mk-rec-save">Saves <b>+'+fmt(s.savings)+'</b> a year</div></div>'
+          +'<div class="mk-rec-save">Saves <b>+'+perTile(s.savings)+'</b></div></div>'
       +'</button>'
       +'<div style="padding:0 16px 4px"><button class="mk-cmp-btn" data-act="bids" data-val="'+s.id+'"><i class="ti ti-chevron-'+(open?'up':'down')+'"></i> '+(open?'Hide the competing bids':'Compare all '+n+' bids')+'</button>'
         +(open?bidTable(s):'')+'</div>'
@@ -421,50 +426,79 @@
     +'</div>';
   }
 
+  // savings-to-date seasonal chart (past solid → future dashed), taps the savings drill
+  function savHeroSvg(){
+    var saved=DATA.contracted.reduce(function(t,c){return t+c.saved;},0);
+    var pace=DATA.savedByType.reduce(function(t,x){return t+x.pace;},0);
+    var w=300,h=46,padX=1,padT=5,padB=3,past=18,n=past+10,mPast=saved/past,mFut=pace/12,cum=0,s=[];
+    for(var i=0;i<=n;i++){s.push(cum);var seas=1+0.4*Math.sin(i/12*2*Math.PI-Math.PI/2);cum+=(i<past?mPast:mFut)*seas;}
+    var mx=s[n]||1;
+    function X(i){return padX+i/n*(w-2*padX);}
+    function Y(v){return padT+(1-v/mx)*(h-padT-padB);}
+    function poly(from,to){var p=[];for(var i=from;i<=to;i++)p.push(X(i).toFixed(1)+','+Y(s[i]).toFixed(1));return p.join(' ');}
+    var area=poly(0,n)+' '+X(n).toFixed(1)+','+Y(0).toFixed(1)+' '+X(0).toFixed(1)+','+Y(0).toFixed(1);
+    return '<svg viewBox="0 0 '+w+' '+h+'" width="100%" height="'+h+'" preserveAspectRatio="none" style="display:block">'
+      +'<polygon points="'+area+'" fill="hsl(86 45% 94%)"/>'
+      +'<line x1="'+X(past).toFixed(1)+'" x2="'+X(past).toFixed(1)+'" y1="'+padT+'" y2="'+(h-padB)+'" stroke="var(--border-strong)" stroke-dasharray="3 3"/>'
+      +'<polyline points="'+poly(0,past)+'" fill="none" stroke="var(--text-success)" stroke-width="2.5"/>'
+      +'<polyline points="'+poly(past,n)+'" fill="none" stroke="var(--text-success)" stroke-width="2.5" stroke-dasharray="5 3"/></svg>';
+  }
+
   // #1 — featured hero: the whole matched BASKET of jobs, reconciled to GROSS annual savings.
   function heroBundle(){
     var all=sols();                                   // every matched job → the headline number
     if(!all.length) return '';
-    var ann=sumSav(all);                              // sum of each job's gross yearly saving = basket total
+    var appA=amtUnit(sumSav(all));                    // sum of each job's gross yearly saving = basket total
     var priced=all.filter(function(s){return !est(s);});
     var pick=priced.slice().sort(recSort).slice(0,3);
-    var chips=pick.map(function(s){return '<span class="mk-hero-chip"><i class="ti ti-bolt"></i> '+esc(s.type)+' <b>+'+fmtK(s.savings)+'/yr</b></span>';}).join('')
+    var chips=pick.map(function(s){return '<span class="mk-hero-chip"><i class="ti ti-bolt"></i> '+esc(s.type)+' <b>+'+fmtK(s.savings)+'</b></span>';}).join('')
       +(all.length>pick.length?'<span class="mk-hero-chip">+'+(all.length-pick.length)+' more</span>':'');
     var sub=priced.length===all.length
       ? all.length+' jobs matched to your buildings, each competitively bid'
       : priced.length+' jobs out for bid and ready to approve · '+(all.length-priced.length)+' more await your data';
-    return '<button class="mk-hero" data-act="review">'
+    return '<button class="mk-featured" data-act="review">'
       +'<div class="mk-hero-label">Your matched basket of jobs</div>'
-      +'<div class="mk-hero-amt mono">+'+fmtK(ann)+'<span class="u"> a year saved</span></div>'
+      +'<div class="mk-hero-amt mono">+'+appA.a+'<span class="u"> '+appA.u+' saved</span></div>'
       +'<div class="mk-hero-sub">'+sub+'</div>'
       +'<div class="mk-hero-bundle">'+chips+'</div>'
       +'<span class="mk-hero-cta"><i class="ti ti-checks"></i> Review &amp; approve <i class="ti ti-arrow-right"></i></span>'
     +'</button>';
   }
-  // #2 — sign-up strip (green, encouraging — leave as-is)
+  // #2 — sign-up strip (green, encouraging, context-aware "other properties")
   function signupStrip(){
     var list=prospects(); if(!list.length) return '';
-    var idle=Math.round(sumCf(list)/5);
+    var idleA=amtUnit(sumCf(list)/5);
     return '<button class="mk-signup" data-act="go" data-val="signup">'
       +'<span class="mk-signup-ico"><i class="ti ti-building-plus"></i></span>'
-      +'<span class="mk-signup-body"><span class="mk-signup-v">Add your other '+list.length+' properties</span>'
-      +'<span class="mk-signup-k"><b>+'+fmtK(idle)+' a year</b> more, ready when you are</span></span>'
+      +'<span class="mk-signup-body"><span class="mk-signup-v">Bring your other '+list.length+' properties online</span>'
+      +'<span class="mk-signup-k"><b>+'+idleA.a+' '+idleA.u+'</b> more, ready when you are</span></span>'
       +'<span class="mk-signup-cta">Add properties <i class="ti ti-arrow-right"></i></span>'
     +'</button>';
   }
-  // #3 — quiet "orders" style savings link
-  function ordersLink(){
+  // #3 — savings-to-date hero (seasonal past & future), taps the drill
+  function savingsHero(){
     var tot=DATA.contracted.reduce(function(t,c){return t+c.saved;},0);
-    return '<button class="mk-orders" data-act="go" data-val="savings"><span class="ic"><i class="ti ti-receipt"></i></span> Your savings so far: <b>'+fmtK(tot)+'</b> <i class="ti ti-chevron-right"></i></button>';
+    return '<button class="mk-savhero" data-act="go" data-val="savings">'
+      +'<div class="mk-savhero-top"><span class="mk-savhero-v">'+fmtK(tot)+' saved with Atrium</span><span class="mk-savhero-k">past &amp; ahead <i class="ti ti-arrow-right"></i></span></div>'
+      +savHeroSvg()+'</button>';
+  }
+  // marketplace-global pay-mode switch — Financed default, remembered into the job leaf
+  function paySwitch(){
+    var fin=S.payMode==='financed';
+    return '<div class="mk-payswitch"><span class="mk-payswitch-k">How you’d like to pay across the shop — <b>'+(fin?'financed ($0 down)':'cash upfront')+'</b>. You can still change it on any job.</span>'
+      +'<div class="seg"><button data-pay="financed" aria-pressed="'+fin+'">Financed</button><button data-pay="cash" aria-pressed="'+(!fin)+'">Cash</button></div></div>';
   }
 
   function renderShop(){
     var live=sols();
     var open=live.filter(function(s){return !est(s);}).sort(recSort);   // jobs out for bid
     var pending=live.filter(est);                                        // jobs not yet out for bid
-    var head='<div class="mk-topbar"><span class="mk-brand"><i class="ti ti-gavel"></i> '+esc(DATA.portfolio)+' · Job marketplace</span>'+ordersLink()+'</div>';
+    var head='<div class="mk-topbar"><span class="mk-brand"><i class="ti ti-gavel" style="color:var(--primary)"></i> '+esc(DATA.portfolio)+' · Job marketplace</span>'
+      +'<div class="mtoggle"><button data-period="annual" aria-pressed="'+(S.period==='annual')+'">Annual</button><button data-period="monthly" aria-pressed="'+(S.period==='monthly')+'">Monthly</button></div></div>';
+    var pay=paySwitch();
     var hero=heroBundle();
     var sign=signupStrip();
+    var savh=savingsHero();
     var body='';
     if(open.length){
       body+='<div class="mk-shelf-label"><h2><i class="ti ti-briefcase" style="color:var(--primary)"></i> Jobs out for bid</h2><span>'+open.length+' job'+(open.length>1?'s':'')+' matched to your buildings — vendors competed, Atrium picked the best</span></div>'
@@ -477,50 +511,53 @@
     if(!open.length&&!pending.length){
       body='<div class="cf-sq" style="text-align:center;padding:2rem"><i class="ti ti-circle-check" style="font-size:26px;color:var(--text-success)"></i><p style="margin:.5rem 0 0">Every matched job is approved.</p></div>';
     }
-    app.innerHTML=head+unlockedBanner()+hero+sign+body;
+    var appd=DATA.solutions.filter(function(s){return S.approved[s.id];});
+    var approvedEl=appd.length?'<div class="approved-strip"><i class="ti ti-circle-check"></i> Approved this session — <b>'+amtUnit(sumSav(appd)).a+' '+amtUnit(sumSav(appd)).u+'</b> across '+appd.length+' job'+(appd.length>1?'s':'')+'</div>':'';
+    app.innerHTML=head+pay+hero+sign+savh+approvedEl+body;
   }
 
   // JOB DETAIL — its own marketplace view (NOT the shared solutionCard leaf).
   function renderJob(){
     var s=DATA.solutions.find(function(x){return x.id===S.leafId;});
     if(!s||S.approved[s.id]){S.screen='home';return renderShop();}
-    var head='<div style="margin-bottom:1rem">'+backPill()+'</div>';
+    var head='<div style="display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:1rem">'+backPill()+(est(s)?'':'<span style="display:flex;align-items:center;gap:8px"><span style="font-size:13px;color:var(--text-muted)">Amounts:</span>'+perToggle()+'</span>')+'</div>';
     if(est(s)){
-      app.innerHTML=head+unlockedBanner()
+      app.innerHTML=head
         +'<div class="card est" data-row="'+s.id+'">'
           +'<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:12px"><div><div style="font-size:19px;font-weight:700">'+esc(s.type)+'</div><div style="font-size:13px;color:var(--text-muted);margin-top:2px"><i class="ti ti-building"></i> '+esc(s.prop)+'</div></div>'
             +'<span class="mk-badge win" style="white-space:nowrap"><i class="ti ti-flask"></i> Not yet out for bid</span></div>'
           +'<div class="fid-banner"><i class="ti ti-gavel"></i> No bids yet — connect '+esc(s.dataNeed)+' and Atrium will put this job out to competing vendors.<button class="cf-btn sm" data-act="connect" data-val="'+s.id+'">Connect data</button></div>'
           +'<div style="margin-bottom:6px"><div style="font-size:12px;color:var(--text-muted)">Estimated saving <span class="esttag"><i class="ti ti-help-circle"></i> rough range</span></div>'
-            +'<div class="mono" style="font-size:28px;font-weight:700;color:var(--text-success);letter-spacing:-.02em">'+perRange(savLo(s),savHi(s))+'/yr</div></div>'
+            +'<div class="mono" style="font-size:28px;font-weight:700;color:var(--text-success);letter-spacing:-.02em">'+perRange(savLo(s),savHi(s))+'</div></div>'
           +'<p style="font-size:13px;color:var(--text-secondary);margin:.2rem 0 0">Firm vendor bids, price, and incentives appear once we have your data.</p>'
+          +discussion(s)
         +'</div>';
       return;
     }
     var rec=recBid(s), n=bidCount(s), mode=curMode(s), e=econ(s,mode), ms=solModes(s);
     var hint={cash:'Buy outright',loan:'Finance',lease:'Rent'};
     var payseg=ms.map(function(m){return '<button data-sol="'+s.id+'" data-segmode="'+m+'" aria-pressed="'+(mode===m)+'"><span style="display:block">'+cap(m)+'</span><span style="display:block;font-size:11px;font-weight:500;opacity:.85">'+hint[m]+'</span></button>';}).join('');
-    var econChips='<div class="mk-econ">'
-      +'<div class="chip"><div class="k">Winning bid</div><div class="v mono">'+fmt(rec.price)+'</div></div>'
-      +'<div class="chip"><div class="k">Incentive</div><div class="v mono" style="color:var(--text-success)">−'+fmt(s.incentive)+'</div></div>'
-      +'<div class="chip"><div class="k">You save / yr</div><div class="v mono" style="color:var(--text-success)">+'+fmt(s.savings)+'</div></div></div>';
-    app.innerHTML=head+unlockedBanner()
+    var chips=e.chips.map(function(k){return '<div class="chip"><div class="k">'+k[0]+'</div><div class="v mono"'+(k[2]?' style="color:'+k[2]+'"':'')+'>'+k[1]+'</div></div>';}).join('');
+    app.innerHTML=head
       +'<div class="card" data-row="'+s.id+'">'
-        +'<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:10px"><div><div style="font-size:19px;font-weight:700">'+esc(s.type)+'</div><div style="font-size:13px;color:var(--text-muted);margin-top:2px"><i class="ti ti-building"></i> '+esc(s.prop)+'</div></div>'
-          +'<span class="mk-bidcue" style="white-space:nowrap"><i class="ti ti-gavel"></i> Competitively bid by '+n+' vendors</span></div>'
+        +'<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:10px"><div><div style="font-size:19px;font-weight:700">'+esc(s.type)+'</div><div style="font-size:13px;color:var(--text-muted);margin-top:2px"><i class="ti ti-building"></i> '+esc(s.prop)+' · '+esc(s.install)+'</div></div>'
+          +'<span class="mk-bidcue" style="white-space:nowrap"><i class="ti ti-gavel"></i> '+n+' vendors bid</span></div>'
         +(s.note?'<div style="display:inline-flex;align-items:center;gap:5px;font-size:13px;font-weight:500;color:var(--text-warning);margin-bottom:12px"><i class="ti ti-clock"></i> '+esc(s.note)+'</div>':'')
         +'<div style="font-size:12px;color:var(--text-muted);font-weight:600;text-transform:uppercase;letter-spacing:.04em;margin-bottom:8px">The bids</div>'
         +bidTable(s)
         +'<div style="font-size:12px;color:var(--text-secondary);margin:8px 0 16px"><i class="ti ti-info-circle"></i> Atrium ran the tender and recommends '+esc(rec.vendor)+' — best price against the same scope and warranty.</div>'
-        +'<div style="font-size:12px;color:var(--text-muted);font-weight:600;text-transform:uppercase;letter-spacing:.04em;margin-bottom:8px">Your economics</div>'
-        +econChips
-        +'<div class="mk-pay"><div class="mk-pay-k">How you’ll pay</div><div class="payseg" style="margin-bottom:14px">'+payseg+'</div></div>'
-        +'<div style="margin-bottom:14px"><div style="font-size:12px;color:var(--text-muted)">'+(mode==='cash'?'Yearly saving':'Net cash flow')+'</div>'
+        +'<div style="display:flex;flex-wrap:wrap;align-items:center;gap:8px;font-size:13px;color:var(--text-secondary);background:hsl(240 20% 98%);border:1px solid var(--border);border-radius:10px;padding:9px 12px;margin-bottom:16px">'
+          +'<span style="color:var(--text-muted)">'+fmt(rec.price)+' winning bid</span><i class="ti ti-arrow-right" style="color:var(--text-muted)"></i>'
+          +'<span style="color:var(--text-success);font-weight:600">−'+fmt(s.incentive)+' incentive</span><i class="ti ti-arrow-right" style="color:var(--text-muted)"></i>'
+          +'<span style="font-weight:700;color:var(--text-primary)">'+fmt(net(s))+' your net price</span></div>'
+        +'<div class="mk-pay"><div class="mk-pay-k">How you’ll pay</div><div class="payseg" style="margin-bottom:16px">'+payseg+'</div></div>'
+        +'<div style="margin-bottom:14px"><div style="font-size:12px;color:var(--text-muted)">Savings</div>'
           +'<div class="mono" style="font-size:30px;font-weight:700;color:var(--text-success);letter-spacing:-.02em">'+e.hero+'</div>'
           +'<div style="font-size:13px;color:var(--text-secondary);margin-top:2px">'+e.sub+'</div></div>'
-        +'<div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">'
-          +'<button class="cf-btn" data-approve="'+s.id+'"><i class="ti ti-check"></i> Approve '+esc(rec.vendor)+' with '+cap(mode)+'</button>'
-          +'<button class="ghost"><i class="ti ti-file-text"></i> View full quote</button></div>'
+        +'<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(128px,1fr));gap:8px;margin-bottom:12px">'+chips+'</div>'
+        +'<div style="background:hsl(240 20% 98.5%);border:1px solid var(--border);border-radius:10px;padding:10px 12px;margin-bottom:14px">'+spark(e.series,e.be)
+          +'<div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text-muted);margin-top:2px"><span>Now</span><span>'+e.beLabel+'</span><span style="color:var(--text-secondary);font-weight:600">'+fmtK(e.series[e.series.length-1])+' over 10 yrs</span></div></div>'
+        +'<button class="cf-btn" data-approve="'+s.id+'"><i class="ti ti-check"></i> Approve '+esc(rec.vendor)+' with '+cap(mode)+'</button>'
         +discussion(s)
       +'</div>';
   }
@@ -529,25 +566,35 @@
     var list=prospects();
     var rows=list.map(function(p){
       var cta=p.ready?'<button class="cf-btn" data-act="sign" data-val="'+p.id+'">Approve &amp; sign</button>':'<button class="cf-pill" data-act="step" data-val="'+p.id+'">'+p.step+'</button>';
-      return '<div data-row="'+p.id+'" style="display:flex;align-items:center;justify-content:space-between;gap:12px;background:var(--surface-2);border:1px '+(p.est?'dashed':'solid')+' '+(p.est?'var(--border-strong)':'var(--border)')+';border-radius:12px;padding:15px 16px;box-shadow:var(--shadow)"><div style="min-width:0"><p style="margin:0;font-weight:600">'+esc(p.name)+'</p><p style="margin:.15rem 0 0;font-size:13px;color:var(--text-muted)">'+(p.est?'Estimated · '+p.step:p.step)+'</p></div><div style="text-align:right;flex-shrink:0"><div class="cf-amt" style="font-size:19px;color:var(--text-success)">'+fmtK(Math.round(p.cf/5))+'/yr</div><div style="margin-top:7px">'+cta+'</div></div></div>';
+      return '<div data-row="'+p.id+'" style="display:flex;align-items:center;justify-content:space-between;gap:12px;background:var(--surface-2);border:1px '+(p.est?'dashed':'solid')+' '+(p.est?'var(--border-strong)':'var(--border)')+';border-radius:12px;padding:15px 16px;box-shadow:var(--shadow)"><div style="min-width:0"><p style="margin:0;font-weight:600">'+esc(p.name)+'</p><p style="margin:.15rem 0 0;font-size:13px;color:var(--text-muted)">'+(p.est?'Estimated · '+p.step:p.step)+'</p></div><div style="text-align:right;flex-shrink:0"><div class="cf-amt" style="font-size:19px;color:var(--text-success)">'+perTile(p.cf/5)+'</div><div style="margin-top:7px">'+cta+'</div></div></div>';
     }).join('');
-    app.innerHTML='<div style="margin-bottom:1.25rem">'+backPill()+'<h1 style="margin:14px 0 0">Add your properties to the marketplace</h1><p style="color:var(--text-secondary);margin:.3rem 0 0">Once a property is connected, its upgrades appear on the shelf — priced from its own meter data. Figures show the yearly saving once it’s live with Atrium.</p></div>'+unlockedBanner()+(list.length?'<div style="display:flex;flex-direction:column;gap:10px">'+rows+'</div>':'<div class="cf-sq" style="text-align:center;padding:2rem"><i class="ti ti-circle-check" style="font-size:26px;color:var(--text-success)"></i><p style="margin:.5rem 0 0">Every property is on the marketplace.</p></div>');
+    app.innerHTML='<div style="margin-bottom:1.25rem">'+backPill()+'<h1 style="margin:14px 0 0">Add your properties to the marketplace</h1><p style="color:var(--text-secondary);margin:.3rem 0 0">Once a property is connected, its jobs appear on the shelf — priced from its own meter data. Figures show the yearly saving once it’s live with Atrium.</p></div>'+(list.length?'<div style="display:flex;flex-direction:column;gap:10px">'+rows+'</div>':'<div class="cf-sq" style="text-align:center;padding:2rem"><i class="ti ti-circle-check" style="font-size:26px;color:var(--text-success)"></i><p style="margin:.5rem 0 0">Every property is on the marketplace.</p></div>');
   }
 
   function trajChart(sc,apprAnn){
-    var wm=sc.next12/12, wom=sc.without12/12, am=(sc.next12-(apprAnn||0))/12;
-    var n=24,w=340,h=132,padX=8,padT=16,padB=8,today=11,s=[];
-    for(var i=0;i<n;i++){var seas=Math.sin(i/12*Math.PI*2);s.push({without:wom*(1+0.06*seas),wth:wm*(1+0.06*seas),appr:am*(1+0.06*seas)});}
+    var wom=sc.without12/12, savFrac=(sc.without12-sc.next12)/sc.without12, apprFrac=Math.min(0.42,savFrac+(apprAnn||0)/sc.without12);
+    var n=25,w=340,h=120,padX=6,padT=10,padB=8,today=12,s=[];
+    // deterministic, irregular month-to-month variation (sum of sines) — no mythical steady state
+    function noise(i){return 0.055*Math.sin(i*0.9+0.5)+0.03*Math.sin(i*2.15+1.7)+0.018*Math.sin(i*4.3+3.1);}
+    for(var i=0;i<n;i++){
+      var without=wom*(1+noise(i));
+      var g=Math.min(1,i/today); // realized savings ramp in over the trailing year — 0 savings twelve months ago
+      var wth=without*(1-savFrac*g*(1+0.18*Math.sin(i*1.3+0.9)));
+      var target=without*(1-apprFrac*(1+0.18*Math.sin(i*1.3+0.9)));
+      var appr=i<=today?wth:wth+(target-wth)*Math.min(1,(i-today)/8); // approved work ramps in over ~8 months (time-to-value)
+      s.push({without:without,wth:wth,appr:appr});
+    }
     var all=[];s.forEach(function(d){all.push(d.without,d.wth);if(apprAnn)all.push(d.appr);});
-    var mn=Math.min.apply(null,all),mx=Math.max.apply(null,all),sp=(mx-mn)||1;mn-=sp*0.14;mx+=sp*0.08;sp=mx-mn;
+    var mn=0,mx=Math.max.apply(null,all)*1.06,sp=mx-mn;
     function X(i){return padX+i/(n-1)*(w-2*padX);}
     function Y(v){return padT+(1-(v-mn)/sp)*(h-padT-padB);}
     function poly(key,from,to){var p=[];for(var i=from;i<=to;i++)p.push(X(i).toFixed(1)+','+Y(s[i][key]).toFixed(1));return p.join(' ');}
-    var gap=[];for(var i=0;i<=today;i++)gap.push(X(i).toFixed(1)+','+Y(s[i].without).toFixed(1));for(var j=today;j>=0;j--)gap.push(X(j).toFixed(1)+','+Y(s[j].wth).toFixed(1));
+    var gap=[];for(var i=0;i<n;i++)gap.push(X(i).toFixed(1)+','+Y(s[i].without).toFixed(1));for(var j=n-1;j>=0;j--)gap.push(X(j).toFixed(1)+','+Y(s[j].wth).toFixed(1));
     return '<svg viewBox="0 0 '+w+' '+h+'" width="100%" height="'+h+'" preserveAspectRatio="none" style="display:block">'
-      +'<polygon points="'+gap.join(' ')+'" fill="hsl(86 45% 92%)"/>'
+      +'<polygon points="'+gap.join(' ')+'" fill="hsl(86 45% 91%)"/>'
       +'<line x1="'+X(today).toFixed(1)+'" x2="'+X(today).toFixed(1)+'" y1="'+padT+'" y2="'+(h-padB)+'" stroke="var(--border-strong)" stroke-dasharray="3 3"/>'
-      +'<polyline points="'+poly('without',0,n-1)+'" fill="none" stroke="var(--text-warning)" stroke-width="2" stroke-dasharray="5 3"/>'
+      +'<polyline points="'+poly('without',0,today)+'" fill="none" stroke="var(--text-warning)" stroke-width="2"/>'
+      +'<polyline points="'+poly('without',today,n-1)+'" fill="none" stroke="var(--text-warning)" stroke-width="2" stroke-dasharray="5 3"/>'
       +'<polyline points="'+poly('wth',0,today)+'" fill="none" stroke="var(--text-success)" stroke-width="2.5"/>'
       +'<polyline points="'+poly('wth',today,n-1)+'" fill="none" stroke="var(--text-success)" stroke-width="2.5" stroke-dasharray="5 3"/>'
       +(apprAnn?'<polyline points="'+poly('appr',today,n-1)+'" fill="none" stroke="var(--primary)" stroke-width="2" stroke-dasharray="2 3"/>':'')
@@ -590,21 +637,17 @@
     if(S.savView==='property'){
       var c=DATA.contracted.find(function(x){return x.id===S.savLeaf;});
       if(!c){S.screen='savings';return renderSavings();}
-      var apprAnn=approveAnnualFor(c.name),apprN=approveCountFor(c.name),high=c.runPct>100;
-      var chips='<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;margin:14px 0">'
-        +'<div class="chip"><div class="k">Saved to date</div><div class="v mono" style="color:var(--text-success)">'+fmtK(c.saved)+'</div></div>'
-        +'<div class="chip"><div class="k">Now vs expected</div><div class="v mono" style="color:'+(high?'var(--text-warning)':'var(--text-success)')+'">'+c.runPct+'%</div></div>'
-        +'<div class="chip"><div class="k">Next 12 months</div><div class="v mono">'+fmtK(c.next12)+'</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">$'+c.perRoomNight.toFixed(2)+' per occupied room-night</div></div></div>';
-      var legend='<div class="sav-legend"><span><i class="k" style="border-color:var(--text-warning);border-top-style:dashed"></i> without Atrium</span><span><i class="k" style="border-color:var(--text-success)"></i> with Atrium</span>'+(apprAnn?'<span><i class="k" style="border-color:var(--primary);border-top-style:dashed"></i> if you approve the proposed work</span>':'')+'<span>vertical line = today</span></div>';
-      var cta=apprAnn?'<div style="margin-top:16px;background:var(--bg-success);border:1px solid hsl(86 40% 82%);border-radius:12px;padding:14px 16px"><div style="font-size:14px">Approve the '+apprN+' proposed project'+(apprN>1?'s':'')+' at '+esc(c.name)+' to save about <b>'+fmtK(apprAnn)+' a year</b> more.</div><button class="cf-btn" data-act="approvehere" data-val="'+esc(c.name)+'" style="margin-top:10px"><i class="ti ti-check"></i> Review &amp; approve here</button></div>':'';
-      app.innerHTML='<div style="margin-bottom:1.1rem">'+backPill()+'<h1 style="margin:14px 0 0;font-size:23px">'+esc(c.name)+'</h1><p style="color:var(--text-secondary);margin:.3rem 0 0">'+(high?'Running a little high for your occupancy and weather — worth a look.':'Running in line with your occupancy and weather.')+'</p></div>'
-        +'<div class="card"><div style="font-size:12px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:.04em;margin-bottom:8px">Energy &amp; water cost — last 12 months and next 12</div>'+trajChart(c,apprAnn)+savAxis()+legend+chips
-        +'<div style="font-size:13px;color:var(--text-secondary)">The shaded gap is what you’ve saved versus running these buildings without Atrium.</div>'+cta+'</div>';
+      var apprAnn=approveAnnualFor(c.name),apprN=approveCountFor(c.name);
+      var legend='<div class="sav-legend"><span><i class="k" style="border-color:var(--text-warning)"></i> without Atrium</span><span><i class="k" style="border-color:var(--text-success)"></i> with Atrium</span>'+(apprAnn?'<span><i class="k" style="border-color:var(--primary);border-top-style:dashed"></i> if you approve</span>':'')+'<span style="color:var(--text-muted)">dashed = forecast</span></div>';
+      var cta=apprAnn?'<div style="margin-top:16px;background:var(--bg-success);border:1px solid hsl(86 40% 82%);border-radius:12px;padding:14px 16px"><div style="font-size:14px">Approve the '+apprN+' proposed job'+(apprN>1?'s':'')+' at '+esc(c.name)+' to save about <b>'+fmtK(apprAnn)+' a year</b> more.</div><button class="cf-btn" data-act="approvehere" data-val="'+esc(c.name)+'" style="margin-top:10px"><i class="ti ti-check"></i> Review &amp; approve here</button></div>':'';
+      app.innerHTML='<div style="margin-bottom:1.1rem">'+backPill()+'<h1 style="margin:14px 0 0;font-size:23px">'+esc(c.name)+'</h1><p style="color:var(--text-secondary);margin:.35rem 0 0">You’ve saved <b style="color:var(--text-success)">'+fmtK(c.saved)+'</b> with Atrium — on track to keep saving.</p></div>'
+        +'<div class="card">'+trajChart(c,apprAnn)
+        +'<div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text-muted);margin-top:2px"><span>12 mo ago</span><span>today</span><span>12 mo ahead</span></div>'+legend+cta+'</div>';
     } else {
       var t=DATA.savedByType.find(function(x){return x.type===S.savLeaf;});
       if(!t){S.screen='savings';return renderSavings();}
       var live=sols().filter(function(s){return s.type===t.type;}),aa=sumSav(live),an=live.length;
-      var cta2=aa?'<div style="margin-top:16px;background:var(--bg-success);border:1px solid hsl(86 40% 82%);border-radius:12px;padding:14px 16px"><div style="font-size:14px">You have '+an+' more '+esc(t.type)+' project'+(an>1?'s':'')+' proposed — approve to add about <b>'+fmtK(aa)+' a year</b>.</div><button class="cf-btn" data-act="approvetype" data-val="'+esc(t.type)+'" style="margin-top:10px"><i class="ti ti-check"></i> Review &amp; approve</button></div>':'';
+      var cta2=aa?'<div style="margin-top:16px;background:var(--bg-success);border:1px solid hsl(86 40% 82%);border-radius:12px;padding:14px 16px"><div style="font-size:14px">You have '+an+' more '+esc(t.type)+' job'+(an>1?'s':'')+' proposed — approve to add about <b>'+fmtK(aa)+' a year</b>.</div><button class="cf-btn" data-act="approvetype" data-val="'+esc(t.type)+'" style="margin-top:10px"><i class="ti ti-check"></i> Review &amp; approve</button></div>':'';
       app.innerHTML='<div style="margin-bottom:1.1rem">'+backPill()+'<h1 style="margin:14px 0 0;font-size:23px">'+esc(t.type)+'</h1><p style="color:var(--text-secondary);margin:.3rem 0 0">Cumulative savings across your portfolio.</p></div>'
         +'<div class="card"><div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:10px"><div><div style="font-size:12px;color:var(--text-muted)">Saved to date</div><div class="mono" style="font-size:27px;font-weight:700;color:var(--text-success);letter-spacing:-.02em">'+fmtK(t.saved)+'</div></div><div style="text-align:right"><div style="font-size:12px;color:var(--text-muted)">On pace next year</div><div class="mono" style="font-size:18px;font-weight:700">+'+fmtK(t.pace)+'</div></div></div>'+cumChart(t.saved,t.pace)+savAxis()
         +'<div class="sav-legend"><span><i class="k" style="border-color:var(--text-success)"></i> saved so far</span><span><i class="k" style="border-color:var(--text-success);border-top-style:dashed"></i> forecast</span></div>'+cta2+'</div>';
@@ -616,9 +659,10 @@
   app.addEventListener('click',function(e){
     var d=e.target.closest('[data-disc]'); if(d){S.disc[d.dataset.disc]=!S.disc[d.dataset.disc];render();return;}
     var pertog=e.target.closest('[data-period]'); if(pertog){S.period=pertog.dataset.period;render();return;}
+    var paytog=e.target.closest('[data-pay]'); if(paytog){S.payMode=paytog.dataset.pay;render();return;}
     var seg=e.target.closest('[data-segmode]'); if(seg){S.mode[seg.dataset.sol]=seg.dataset.segmode;render();return;}
     var el=e.target.closest('[data-act],[data-approve]'); if(!el)return;
-    if(el.dataset.approve){var s=DATA.solutions.find(function(x){return x.id===el.dataset.approve;});var m=curMode(s);unlockRow(s.id,fiveCash(s),function(){S.approved[s.id]=1;S.approvedMode[s.id]=m;S.screen='home';render();});return;}
+    if(el.dataset.approve){var s=DATA.solutions.find(function(x){return x.id===el.dataset.approve;});var m=curMode(s);window.open('esign.html?doc='+encodeURIComponent(s.type+' — '+s.prop),'_blank');unlockRow(s.id,fiveCash(s),function(){S.approved[s.id]=1;S.approvedMode[s.id]=m;S.screen='home';render();});return;}
     var a=el.dataset.act, v=el.dataset.val;
     if(a==='connect'){el.textContent='Request sent →';el.disabled=true;el.style.opacity=.7;}
     else if(a==='bids'){S.bidsOpen[v]=!S.bidsOpen[v];render();}
@@ -630,7 +674,7 @@
     else if(a==='approvehere'){var mh=sols().filter(function(s){return s.prop===v;}).sort(recSort)[0];if(mh){S.leafId=mh.id;S.screen='job';}else S.screen='home';render();}
     else if(a==='approvetype'){var mt=sols().filter(function(s){return s.type===v;}).sort(recSort)[0];if(mt){S.leafId=mt.id;S.screen='job';}else S.screen='home';render();}
     else if(a==='step'){el.textContent='We’ll guide you →';el.disabled=true;el.style.opacity=.6;}
-    else if(a==='sign'){var p=DATA.prospects.find(function(x){return x.id===v;});unlockRow(v,p.cf,function(){S.signed[v]=1;render();});}
+    else if(a==='sign'){var p=DATA.prospects.find(function(x){return x.id===v;});window.open('esign.html?doc='+encodeURIComponent('New property — '+p.name),'_blank');unlockRow(v,p.cf,function(){S.signed[v]=1;render();});}
     else if(a==='back'){var B={job:'home',signup:'home',savleaf:'savings',savings:'home'};S.screen=B[S.screen]||'home';render();}
   });
   render();
