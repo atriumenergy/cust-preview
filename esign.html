@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Atrium — approval &amp; e-signature</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Caveat:wght@600&display=swap">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tabler-icons/2.47.0/tabler-icons.min.css">
+<style>
+  :root{
+    --surface-0:hsl(240 33% 98%);--surface-2:#fff;--text-primary:hsl(240 50% 10%);--text-secondary:hsl(240 10% 44%);--text-muted:hsl(240 8% 60%);
+    --border:hsl(240 12% 90%);--border-strong:hsl(240 12% 82%);--text-success:hsl(86 58% 33%);--bg-success:hsl(86 45% 95%);
+    --primary:hsl(240 91% 20%);--primary-fg:#fff;--shadow:0 1px 3px rgba(16,18,40,.08);--font:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--surface-0);color:var(--text-primary);font-family:var(--font);font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased}
+  .bar{background:var(--primary);color:var(--primary-fg);padding:12px 18px;display:flex;align-items:center;gap:8px;font-weight:700;font-size:15px}
+  .bar .lock{margin-left:auto;font-size:12px;font-weight:500;opacity:.85;display:inline-flex;align-items:center;gap:4px}
+  .wrap{max-width:600px;margin:0 auto;padding:18px}
+  .note{display:flex;align-items:center;gap:8px;background:hsl(38 90% 96%);border:1px solid hsl(38 80% 85%);color:hsl(24 82% 40%);border-radius:10px;padding:9px 13px;font-size:13px;margin-bottom:16px}
+  .card{background:var(--surface-2);border:1px solid var(--border);border-radius:14px;padding:22px;box-shadow:var(--shadow)}
+  .eyebrow{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-muted)}
+  .docname{font-size:22px;font-weight:700;letter-spacing:-.01em;margin:3px 0 14px}
+  .terms{font-size:14px;color:var(--text-secondary)}
+  .terms li{margin:5px 0}
+  .siglabel{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--text-muted);margin:20px 0 7px}
+  .sigpad{width:100%;height:88px;border:2px dashed var(--border-strong);border-radius:10px;background:hsl(240 20% 98%);cursor:pointer;font:inherit;color:var(--text-muted);display:flex;align-items:center;justify-content:center;gap:8px;font-size:15px}
+  .sigpad.signed{border-style:solid;border-color:var(--text-success);background:var(--bg-success);color:var(--primary);font-family:'Caveat',cursive;font-size:38px;line-height:1}
+  .meta{display:flex;flex-wrap:wrap;gap:6px 20px;font-size:13px;color:var(--text-secondary);margin-top:10px}
+  .meta b{color:var(--text-primary);font-weight:600}
+  .btn{width:100%;margin-top:18px;background:var(--primary);color:var(--primary-fg);border:none;border-radius:10px;padding:14px;font:inherit;font-size:15px;font-weight:700;cursor:pointer}
+  .btn:disabled{opacity:.45;cursor:default}
+  .btn.ghost{background:none;color:var(--text-secondary);border:1px solid var(--border-strong);font-weight:600}
+  .done{text-align:center;padding:34px 22px}
+  .done .big{font-size:46px;color:var(--text-success)}
+  .done h2{margin:10px 0 4px;font-size:20px}
+  .done p{color:var(--text-secondary);font-size:14px;margin:0 0 18px}
+</style>
+</head>
+<body>
+<div class="bar"><i class="ti ti-bolt"></i> Atrium <span class="lock"><i class="ti ti-lock"></i> Secure e-signature</span></div>
+<div class="wrap">
+  <div class="note"><i class="ti ti-info-circle"></i> Preview of the approval step — nothing is actually signed.</div>
+  <div class="card" id="doc">
+    <div class="eyebrow">Project approval</div>
+    <div class="docname" id="docname">Project approval</div>
+    <div class="terms">
+      <p>You authorize Atrium to proceed with this project at the agreed Atrium price, applying available incentives, on the payment option you selected.</p>
+      <ul>
+        <li>Firm, guaranteed quote — no change orders</li>
+        <li>Savings are metered and reported monthly</li>
+        <li>Nothing is charged until the work is installed</li>
+      </ul>
+    </div>
+    <div class="siglabel">Your signature</div>
+    <button class="sigpad" id="sigpad"><i class="ti ti-signature"></i> Tap to sign</button>
+    <div class="meta"><span>Name: <b>Coastline Hospitality Group</b></span><span>Date: <b id="today">—</b></span></div>
+    <button class="btn" id="signbtn" disabled>Adopt and sign</button>
+  </div>
+  <div class="card done" id="done" hidden>
+    <div class="big"><i class="ti ti-circle-check-filled"></i></div>
+    <h2>Approved &amp; signed</h2>
+    <p>A signed copy has been emailed to you. Atrium will schedule the work and keep you posted.</p>
+    <button class="btn ghost" onclick="window.close()">Close this window</button>
+  </div>
+</div>
+<script>
+  var q=new URLSearchParams(location.search).get('doc');
+  if(q)document.getElementById('docname').textContent=q;
+  try{document.getElementById('today').textContent=new Date().toLocaleDateString(undefined,{year:'numeric',month:'short',day:'numeric'});}catch(e){}
+  var pad=document.getElementById('sigpad'),btn=document.getElementById('signbtn');
+  pad.addEventListener('click',function(){pad.classList.add('signed');pad.textContent='Coastline Hospitality Group';btn.disabled=false;});
+  btn.addEventListener('click',function(){document.getElementById('doc').hidden=true;document.getElementById('done').hidden=false;});
+</script>
+</body>
+</html>

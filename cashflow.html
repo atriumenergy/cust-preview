@@ -70,6 +70,8 @@
   .mtoggle{display:inline-flex;background:hsl(240 20% 96%);border:1px solid var(--border);border-radius:99px;padding:2px}
   .mtoggle button{border:none;background:none;border-radius:99px;padding:4px 12px;cursor:pointer;font:inherit;font-size:12px;font-weight:600;color:var(--text-secondary)}
   .mtoggle button[aria-pressed="true"]{background:var(--surface-2);color:var(--text-primary);box-shadow:var(--shadow)}
+  .approved-strip{display:flex;align-items:center;gap:8px;background:var(--bg-success);border:1px solid hsl(86 40% 82%);border-radius:12px;padding:11px 14px;margin-top:2px;font-size:14px;color:var(--text-success)}
+  .approved-strip b{font-weight:700}
   .demobar{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;justify-content:space-between;background:hsl(240 20% 96.5%);border:1px dashed var(--border-strong);border-radius:8px;padding:7px 11px;margin-bottom:16px}
   .demobar-label{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.04em;color:var(--text-muted);display:inline-flex;align-items:center;gap:5px}
   .demobar-btns{display:flex;gap:4px}
@@ -179,7 +181,7 @@
     // Quick wins lead (fast payback = earliest banked win). Deadline projects (e.g. solar's 2027 clock)
     // get a modest bump so the clock starts, but a true quick win still goes first.
     var pay=est(s)?8:payback(s);
-    return pay - (s.note?0.5:0);
+    return pay - (s.note?1.3:0);
   }
   function recSort(a,b){ return atriumScore(a)-atriumScore(b); }
   function econ(s,mode){
@@ -319,7 +321,9 @@
     cards+= prospectN
       ? actionCard(2,'Bring your other properties online',idleA.a,idleA.u,prospectN+' more hotels','Add properties','signup',{size:32,color:'var(--text-success)'})
       : doneCard('Your properties');
-    app.innerHTML=header+savHero+cards;
+    var appd=DATA.solutions.filter(function(s){return S.approved[s.id];});
+    var approvedEl=appd.length?'<div class="approved-strip"><i class="ti ti-circle-check"></i> Approved this session — <b>'+amtUnit(sumSav(appd)).a+' '+amtUnit(sumSav(appd)).u+'</b> across '+appd.length+' project'+(appd.length>1?'s':'')+'</div>':'';
+    app.innerHTML=header+savHero+cards+approvedEl;
   }
   function renderSignup(){
     var list=prospects();
@@ -359,7 +363,7 @@
     app.innerHTML=head+unlockedBanner()+solutionCard(s);
   }
   function trajChart(sc,apprAnn){
-    var wom=sc.without12/12, savFrac=(sc.without12-sc.next12)/sc.without12, apprFrac=savFrac+(apprAnn||0)/sc.without12;
+    var wom=sc.without12/12, savFrac=(sc.without12-sc.next12)/sc.without12, apprFrac=Math.min(0.42,savFrac+(apprAnn||0)/sc.without12);
     var n=25,w=340,h=120,padX=6,padT=10,padB=8,today=12,s=[];
     // deterministic, irregular month-to-month variation (sum of sines) — no mythical steady state
     function noise(i){return 0.055*Math.sin(i*0.9+0.5)+0.03*Math.sin(i*2.15+1.7)+0.018*Math.sin(i*4.3+3.1);}
@@ -372,7 +376,7 @@
       s.push({without:without,wth:wth,appr:appr});
     }
     var all=[];s.forEach(function(d){all.push(d.without,d.wth);if(apprAnn)all.push(d.appr);});
-    var mn=Math.min.apply(null,all),mx=Math.max.apply(null,all),sp=(mx-mn)||1;mn-=sp*0.12;mx+=sp*0.08;sp=mx-mn;
+    var mn=0,mx=Math.max.apply(null,all)*1.06,sp=mx-mn;
     function X(i){return padX+i/(n-1)*(w-2*padX);}
     function Y(v){return padT+(1-(v-mn)/sp)*(h-padT-padB);}
     function poly(key,from,to){var p=[];for(var i=from;i<=to;i++)p.push(X(i).toFixed(1)+','+Y(s[i][key]).toFixed(1));return p.join(' ');}
@@ -447,7 +451,7 @@
     var pertog=e.target.closest('[data-period]'); if(pertog){S.period=pertog.dataset.period;render();return;}
     var seg=e.target.closest('[data-segmode]'); if(seg){S.mode[seg.dataset.sol]=seg.dataset.segmode;render();return;}
     var el=e.target.closest('[data-act],[data-approve]'); if(!el)return;
-    if(el.dataset.approve){var s=DATA.solutions.find(function(x){return x.id===el.dataset.approve;});var m=curMode(s);unlockRow(s.id,fiveCash(s),function(){S.approved[s.id]=1;S.approvedMode[s.id]=m;S.screen='group';render();});return;}
+    if(el.dataset.approve){var s=DATA.solutions.find(function(x){return x.id===el.dataset.approve;});var m=curMode(s);window.open('esign.html?doc='+encodeURIComponent(s.type+' — '+s.prop),'_blank');unlockRow(s.id,fiveCash(s),function(){S.approved[s.id]=1;S.approvedMode[s.id]=m;S.screen='group';render();});return;}
     var a=el.dataset.act, v=el.dataset.val;
     if(a==='connect'){el.textContent='Request sent →';el.disabled=true;el.style.opacity=.7;}
     else if(a==='bucket'){S.bucket=+v;render();}
@@ -461,7 +465,7 @@
     else if(a==='approvetype'){S.solView='type';S.group=v;S.screen='group';render();}
     else if(a==='back'){var B={leaf:'group',group:'solutions',solutions:'home',signup:'home',savleaf:'savings',savings:'home'};S.screen=B[S.screen]||'home';render();}
     else if(a==='step'){el.textContent='We’ll guide you →';el.disabled=true;el.style.opacity=.6;}
-    else if(a==='sign'){var p=DATA.prospects.find(function(x){return x.id===v;});unlockRow(v,p.cf,function(){S.signed[v]=1;render();});}
+    else if(a==='sign'){var p=DATA.prospects.find(function(x){return x.id===v;});window.open('esign.html?doc='+encodeURIComponent('New property — '+p.name),'_blank');unlockRow(v,p.cf,function(){S.signed[v]=1;render();});}
   });
   render();
 })();
