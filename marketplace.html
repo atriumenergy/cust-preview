@@ -147,7 +147,37 @@
   .mk-signup-k b{color:var(--text-success);font-weight:700}
   .mk-signup-v{font-size:15px;font-weight:600;letter-spacing:-.01em;margin-top:1px}
   .mk-signup-cta{flex-shrink:0;display:inline-flex;align-items:center;gap:6px;color:var(--primary);font-size:14px;font-weight:600}
+  /* ---- Bids: the "competitively bid on jobs" marketplace core ---- */
+  .mk-bidcue{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:600;color:var(--primary);background:hsl(240 60% 96%);border:1px solid hsl(240 40% 90%);border-radius:99px;padding:3px 9px}
+  .mk-bidcue i{font-size:13px}
+  /* the recommended-bid strip that leads every job card */
+  .mk-rec{border:1px solid hsl(86 40% 82%);background:linear-gradient(180deg,hsl(86 45% 97%),var(--surface-2));border-radius:11px;padding:11px 13px}
+  .mk-rec-tag{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;letter-spacing:.03em;text-transform:uppercase;color:var(--text-success)}
+  .mk-rec-row{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin-top:5px}
+  .mk-rec-vendor{font-size:15px;font-weight:700;letter-spacing:-.01em}
+  .mk-rec-price{font-size:17px;font-weight:700;letter-spacing:-.01em;color:var(--text-primary);white-space:nowrap}
+  .mk-rec-term{font-size:12px;color:var(--text-muted);margin-top:2px}
+  .mk-rec-save{font-size:13px;color:var(--text-secondary);margin-top:5px}
+  .mk-rec-save b{color:var(--text-success);font-weight:700}
+  /* expand-to-compare control + the competing-bid list */
+  .mk-cmp-btn{display:inline-flex;align-items:center;gap:5px;background:none;border:none;cursor:pointer;font:inherit;font-size:13px;font-weight:600;color:var(--primary);padding:8px 2px 2px}
+  .mk-cmp-btn:hover{text-decoration:underline}
+  .mk-bidlist{display:flex;flex-direction:column;gap:8px;margin-top:9px}
+  .mk-bid{display:flex;align-items:baseline;justify-content:space-between;gap:10px;background:var(--surface-2);border:1px solid var(--border);border-radius:10px;padding:9px 12px}
+  .mk-bid.rec{border-color:hsl(86 40% 82%);background:var(--bg-success)}
+  .mk-bid-main{min-width:0}
+  .mk-bid-vendor{font-size:14px;font-weight:600}
+  .mk-bid-vendor .rf{font-size:11px;font-weight:700;color:var(--text-success);margin-left:6px;text-transform:uppercase;letter-spacing:.03em}
+  .mk-bid-term{font-size:12px;color:var(--text-muted);margin-top:1px}
+  .mk-bid-price{font-size:15px;font-weight:700;white-space:nowrap;font-variant-numeric:tabular-nums}
+  .mk-bid-price .df{display:block;font-size:11px;font-weight:600;color:var(--text-muted);text-align:right;margin-top:1px}
+  /* job-detail econ summary */
+  .mk-econ{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;margin:2px 0 4px}
+  .mk-pay{margin-top:6px}
+  .mk-pay-k{font-size:12px;color:var(--text-muted);font-weight:600;text-transform:uppercase;letter-spacing:.04em;margin-bottom:7px}
   @media (max-width:540px){
+    .mk-rec-row{flex-wrap:wrap}
+    .mk-bid{flex-wrap:wrap}
     .mk-hero-amt{font-size:42px}
     .mk-hero-cta{width:100%;justify-content:center}
     .mk-signup{flex-wrap:wrap}
@@ -200,7 +230,19 @@
       {type:'Smart Thermostats',saved:47000,pace:44000}
     ]
   };
-  var S={screen:'home',bucket:2,solView:'type',group:null,leafId:null,savView:'property',savLeaf:null,period:'annual',signed:{},approved:{},approvedMode:{},mode:{},disc:{},unlocked:0};
+  // Competing vendor bids per measured job. The RECOMMENDED bid reuses the job's own
+  // vendor and its Atrium price (price(s)) so the economics stay consistent with DATA.solutions
+  // (which is left untouched). Other bids come in higher — Atrium negotiated the best one.
+  // Estimated jobs have no bids: they're not out for bid until the data is connected.
+  var BIDS={
+    s1:[{vendor:'SunPeak Energy',rel:1.11,term:'8 weeks · 10-yr warranty'},{vendor:'Helio Grid',rel:1.06,term:'7 weeks · 12-yr warranty'}],
+    s5:[{vendor:'SunPeak Energy',rel:1.09,term:'7 weeks · 10-yr warranty'},{vendor:'Apex Renewables',rel:1.05,term:'6 weeks · 12-yr warranty'}],
+    s2:[{vendor:'Northwind Mechanical',rel:1.14,term:'3 weeks · 6-yr warranty'},{vendor:'Apex Renewables',rel:1.07,term:'2 weeks · 8-yr warranty'}],
+    s6:[{vendor:'Lumen Works',rel:1.12,term:'3 weeks · 5-yr warranty'},{vendor:'BrightSwap',rel:1.05,term:'2 weeks · 6-yr warranty'}],
+    s3:[{vendor:'Lumen Works',rel:1.10,term:'2 weeks · 5-yr warranty'}],
+    s4:[{vendor:'Cozy Controls',rel:1.13,term:'1 week · 3-yr warranty'},{vendor:'Northwind Mechanical',rel:1.06,term:'1 week · 5-yr warranty'}]
+  };
+  var S={screen:'home',bucket:2,solView:'type',group:null,leafId:null,savView:'property',savLeaf:null,period:'annual',signed:{},approved:{},approvedMode:{},mode:{},disc:{},bidsOpen:{},unlocked:0};
   var UL=['Now','Soon','Later'];
   function fmtK(n){n=Math.round(n);var s=n<0?'-':'';n=Math.abs(n);if(n>=1e6)return s+'$'+(n/1e6).toFixed(2).replace(/\.?0+$/,'')+'M';if(n>=1e3)return s+'$'+Math.round(n/1e3)+'K';return s+'$'+n;}
   function fmt(n){return '$'+Math.round(n).toLocaleString();}
@@ -321,80 +363,85 @@
       +discussion(s)+'</div>';
   }
   function unlockedBanner(){ if(!S.unlocked)return ''; return '<div style="display:flex;align-items:center;gap:8px;background:var(--bg-success);border:1px solid hsl(86 40% 82%);border-radius:var(--radius);padding:9px 13px;margin-bottom:1rem;font-size:14px;color:var(--text-success)"><i class="ti ti-sparkles"></i>Unlocked this session: <span style="font-weight:700">'+fmt(S.unlocked)+'</span> over 5 years</div>'; }
-  function backPill(){var toShop=S.screen==='leaf'||S.screen==='signup'||S.screen==='savings';return '<button class="cf-pill" data-act="back" style="display:inline-flex;align-items:center;gap:4px"><i class="ti ti-arrow-left"></i> '+(toShop?'Back to shop':'Back')+'</button>';}
+  function backPill(){var toShop=S.screen==='job'||S.screen==='signup'||S.screen==='savings';return '<button class="cf-pill" data-act="back" style="display:inline-flex;align-items:center;gap:4px"><i class="ti ti-arrow-left"></i> '+(toShop?'Back to marketplace':'Back')+'</button>';}
   function perToggle(){return '<div class="seg"><button data-period="annual" aria-pressed="'+(S.period==='annual')+'">Annual</button><button data-period="monthly" aria-pressed="'+(S.period==='monthly')+'">Monthly</button></div>';}
 
-  /* ---- Marketplace shell (append-only) ---- */
-  S.cart={};
-  function cartItems(){return sols().filter(function(s){return !est(s)&&S.cart[s.id];});}
-  function cartCash(){return cartItems().reduce(function(t,s){return t+fiveCash(s);},0);}
+  /* ---- Bids marketplace shell (append-only) ---- */
+  // Build the ranked bid table for a job: recommended first (its own vendor at the Atrium price),
+  // then the competing vendors at their higher prices. All derived — DATA.solutions is untouched.
+  function jobBids(s){
+    if(est(s)) return [];
+    var base=price(s);
+    var out=[{vendor:s.vendor,price:base,term:s.install,rec:true}];
+    (BIDS[s.id]||[]).forEach(function(b){ out.push({vendor:b.vendor,price:Math.round(base*b.rel/100)*100,term:b.term,rec:false}); });
+    return out;
+  }
+  function bidCount(s){return jobBids(s).length;}
+  function recBid(s){return jobBids(s)[0];}
+  // One competing-bid row (used in the browse expander and the job detail)
+  function bidRow(b,base){
+    var diff=b.rec?'':'<span class="df">+'+fmtK(b.price-base)+'</span>';
+    return '<div class="mk-bid'+(b.rec?' rec':'')+'"><div class="mk-bid-main"><div class="mk-bid-vendor">'+esc(b.vendor)+(b.rec?'<span class="rf">Recommended</span>':'')+'</div><div class="mk-bid-term">'+esc(b.term)+'</div></div>'
+      +'<div class="mk-bid-price">'+fmt(b.price)+diff+'</div></div>';
+  }
+  // The list of ALL bids for a job, recommended flagged
+  function bidTable(s){
+    var bids=jobBids(s), base=bids[0].price;
+    return '<div class="mk-bidlist">'+bids.map(function(b){return bidRow(b,base);}).join('')+'</div>';
+  }
 
-  function productCard(s){
-    var inplan=!est(s)&&!!S.cart[s.id];
+  // A JOB listing on the home browse: recommended bid up front, competitively-bid cue, expand-to-compare.
+  function jobCard(s){
+    if(est(s)){
+      return '<div class="mk-prod est" data-row="'+s.id+'">'
+        +'<button class="mk-open" data-act="job" data-val="'+s.id+'">'
+          +'<div class="mk-tags"><span class="mk-badge win"><i class="ti ti-flask"></i> Not yet out for bid</span></div>'
+          +'<div class="mk-title"><div class="mk-type">'+esc(s.type)+'</div><div class="mk-prop"><i class="ti ti-building"></i> '+esc(s.prop)+'</div></div>'
+          +'<div class="mk-fig"><div class="mk-fig-k">Estimated saving</div><div class="mk-fig-v">'+perRange(savLo(s),savHi(s))+'/yr</div></div>'
+          +'<div class="mk-sav">Connect '+esc(s.dataNeed)+' and we’ll put this job out to competing vendors.</div>'
+        +'</button>'
+        +'<div class="mk-foot"><button class="mk-connect" data-act="connect" data-val="'+s.id+'"><i class="ti ti-plug-connected"></i> Connect data to open for bids</button></div>'
+      +'</div>';
+    }
+    var rec=recBid(s), n=bidCount(s), open=!!S.bidsOpen[s.id];
     var tags='';
-    if(est(s)){
-      tags='<span class="mk-badge win"><i class="ti ti-flask"></i> Pre-audit estimate</span>';
-    }else{
-      var savePct=Math.round((s.market-price(s))/s.market*100);
-      tags='<span class="mk-badge deal"><i class="ti ti-discount-2"></i> '+savePct+'% below market</span>';
-      if(s.note) tags+='<span class="mk-badge time"><i class="ti ti-clock"></i> '+esc(s.note)+'</span>';
-    }
-    var fig,sav,meta,foot;
-    if(est(s)){
-      fig='<div class="mk-fig"><div class="mk-fig-k">Estimated savings</div><div class="mk-fig-v">'+perRange(savLo(s),savHi(s))+'</div></div>';
-      sav='<div class="mk-sav">Firm 5-year cash flow appears once we have your data.</div>';
-      meta='<div class="mk-meta"><span><i class="ti ti-tool"></i> '+esc(s.vendor)+'</span><span><i class="ti ti-clock-hour-4"></i> connect '+esc(s.dataNeed)+'</span></div>';
-      foot='<button class="mk-connect" data-act="connect" data-val="'+s.id+'"><i class="ti ti-plug-connected"></i> Connect data to price</button>';
-    }else{
-      fig='<div class="mk-fig"><div class="mk-fig-k">5-year net cash flow</div><div class="mk-fig-v mono">'+fmtK(fiveCash(s))+'</div></div>';
-      sav='<div class="mk-sav">Saves about <b style="color:var(--text-success)">'+fmt(s.savings)+'</b> a year · '+esc(s.install)+'</div>';
-      meta='<div class="mk-meta"><span><i class="ti ti-tool"></i> '+esc(s.vendor)+'</span><span><i class="ti ti-calendar"></i> '+UL[s.u]+'</span><span class="mk-detailhint">Open details <i class="ti ti-chevron-right"></i></span></div>';
-      foot='<button class="mk-add'+(inplan?' in':'')+'" data-act="add" data-val="'+s.id+'">'+(inplan?'<i class="ti ti-circle-check-filled"></i> In your plan':'<i class="ti ti-plus"></i> Add to plan')+'</button>';
-    }
-    return '<div class="mk-prod'+(est(s)?' est':'')+(inplan?' inplan':'')+'" data-row="'+s.id+'">'
-      +'<button class="mk-open" data-act="leaf" data-val="'+s.id+'">'
-        +(tags?'<div class="mk-tags">'+tags+'</div>':'')
+    if(s.note) tags='<div class="mk-tags"><span class="mk-badge time"><i class="ti ti-clock"></i> '+esc(s.note)+'</span></div>';
+    return '<div class="mk-prod" data-row="'+s.id+'">'
+      +'<button class="mk-open" data-act="job" data-val="'+s.id+'">'
+        +tags
         +'<div class="mk-title"><div class="mk-type">'+esc(s.type)+'</div><div class="mk-prop"><i class="ti ti-building"></i> '+esc(s.prop)+'</div></div>'
-        +fig+sav+meta
+        +'<div class="mk-rec"><div style="display:flex;justify-content:space-between;align-items:center;gap:8px"><span class="mk-rec-tag"><i class="ti ti-award"></i> Atrium’s pick</span><span class="mk-bidcue"><i class="ti ti-gavel"></i> '+n+' vendors bid</span></div>'
+          +'<div class="mk-rec-row"><span class="mk-rec-vendor">'+esc(rec.vendor)+'</span><span class="mk-rec-price">'+fmt(rec.price)+'</span></div>'
+          +'<div class="mk-rec-term">'+esc(rec.term)+'</div>'
+          +'<div class="mk-rec-save">Saves <b>+'+fmt(s.savings)+'</b> a year</div></div>'
       +'</button>'
-      +'<div class="mk-foot">'+foot+'</div>'
+      +'<div style="padding:0 16px 4px"><button class="mk-cmp-btn" data-act="bids" data-val="'+s.id+'"><i class="ti ti-chevron-'+(open?'up':'down')+'"></i> '+(open?'Hide the competing bids':'Compare all '+n+' bids')+'</button>'
+        +(open?bidTable(s):'')+'</div>'
+      +'<div class="mk-foot"><button class="mk-add" data-act="job" data-val="'+s.id+'"><i class="ti ti-arrow-right"></i> Review this job</button></div>'
     +'</div>';
   }
 
-  function cartBar(){
-    var items=cartItems(), n=items.length;
-    if(!n){
-      return '<div class="mk-cart empty"><div class="mk-cart-ico"><i class="ti ti-shopping-cart"></i></div>'
-        +'<div class="mk-cart-body"><div class="mk-cart-v" style="color:var(--text-secondary)">Your plan is empty</div>'
-        +'<div class="mk-cart-k">Add upgrades from the shelf to build a plan.</div></div></div>';
-    }
-    return '<div class="mk-cart"><div class="mk-cart-ico"><i class="ti ti-shopping-cart"></i></div>'
-      +'<div class="mk-cart-body"><div class="mk-cart-v">'+n+' upgrade'+(n>1?'s':'')+' in your plan · <b>'+fmtK(cartCash())+'</b> over 5 years</div>'
-      +'<div class="mk-cart-k">Open any upgrade to review the economics and approve.</div></div>'
-      +'<div class="mk-cart-cta"><button class="cf-btn" data-act="review"><i class="ti ti-arrow-right"></i> Review plan</button></div></div>';
-  }
-
-  // #1 — featured hero: the matched/recommended APPROVE bundle, benefit number + verb
+  // #1 — featured hero: the whole matched BASKET of jobs, reconciled to GROSS annual savings.
   function heroBundle(){
-    var all=sols();                                   // every proposed upgrade → the headline number
+    var all=sols();                                   // every matched job → the headline number
     if(!all.length) return '';
-    var ann=sumSav(all), props=distinctProps(all);
-    var priced=all.filter(function(s){return !est(s);}); // the ones you can approve right now
+    var ann=sumSav(all);                              // sum of each job's gross yearly saving = basket total
+    var priced=all.filter(function(s){return !est(s);});
     var pick=priced.slice().sort(recSort).slice(0,3);
     var chips=pick.map(function(s){return '<span class="mk-hero-chip"><i class="ti ti-bolt"></i> '+esc(s.type)+' <b>+'+fmtK(s.savings)+'/yr</b></span>';}).join('')
       +(all.length>pick.length?'<span class="mk-hero-chip">+'+(all.length-pick.length)+' more</span>':'');
     var sub=priced.length===all.length
-      ? all.length+' matched, priced from your own meter data'
-      : priced.length+' ready to approve now · '+(all.length-priced.length)+' more await your data';
+      ? all.length+' jobs matched to your buildings, each competitively bid'
+      : priced.length+' jobs out for bid and ready to approve · '+(all.length-priced.length)+' more await your data';
     return '<button class="mk-hero" data-act="review">'
-      +'<div class="mk-hero-label">Your matched upgrades</div>'
-      +'<div class="mk-hero-amt mono">+'+fmtK(ann)+'<span class="u"> a year</span></div>'
+      +'<div class="mk-hero-label">Your matched basket of jobs</div>'
+      +'<div class="mk-hero-amt mono">+'+fmtK(ann)+'<span class="u"> a year saved</span></div>'
       +'<div class="mk-hero-sub">'+sub+'</div>'
       +'<div class="mk-hero-bundle">'+chips+'</div>'
       +'<span class="mk-hero-cta"><i class="ti ti-checks"></i> Review &amp; approve <i class="ti ti-arrow-right"></i></span>'
     +'</button>';
   }
-  // #2 — sign-up strip
+  // #2 — sign-up strip (green, encouraging — leave as-is)
   function signupStrip(){
     var list=prospects(); if(!list.length) return '';
     var idle=Math.round(sumCf(list)/5);
@@ -413,24 +460,69 @@
 
   function renderShop(){
     var live=sols();
-    var ready=live.filter(function(s){return !est(s);}).sort(recSort);
-    var pending=live.filter(est);
-    var head='<div class="mk-topbar"><span class="mk-brand"><i class="ti ti-building-store"></i> '+esc(DATA.portfolio)+' · Upgrade marketplace</span>'+ordersLink()+'</div>';
+    var open=live.filter(function(s){return !est(s);}).sort(recSort);   // jobs out for bid
+    var pending=live.filter(est);                                        // jobs not yet out for bid
+    var head='<div class="mk-topbar"><span class="mk-brand"><i class="ti ti-gavel"></i> '+esc(DATA.portfolio)+' · Job marketplace</span>'+ordersLink()+'</div>';
     var hero=heroBundle();
     var sign=signupStrip();
     var body='';
-    if(ready.length){
-      body+='<div class="mk-shelf-label"><h2><i class="ti ti-shopping-bag" style="color:var(--primary)"></i> Browse the shelf</h2><span>'+ready.length+' upgrade'+(ready.length>1?'s':'')+', priced from your data — open any for the economics</span></div>'
-        +'<div class="grid">'+ready.map(productCard).join('')+'</div>';
+    if(open.length){
+      body+='<div class="mk-shelf-label"><h2><i class="ti ti-briefcase" style="color:var(--primary)"></i> Jobs out for bid</h2><span>'+open.length+' job'+(open.length>1?'s':'')+' matched to your buildings — vendors competed, Atrium picked the best</span></div>'
+        +'<div class="grid">'+open.map(jobCard).join('')+'</div>';
     }
     if(pending.length){
-      body+='<div class="mk-shelf-label"><h2><i class="ti ti-flask" style="color:var(--text-warning)"></i> Connect data to price</h2><span>'+pending.length+' upgrade'+(pending.length>1?'s':'')+' waiting on your data</span></div>'
-        +'<div class="grid">'+pending.map(productCard).join('')+'</div>';
+      body+='<div class="mk-shelf-label"><h2><i class="ti ti-flask" style="color:var(--text-warning)"></i> Not yet out for bid</h2><span>'+pending.length+' job'+(pending.length>1?'s':'')+' — connect the data and we’ll open them to vendors</span></div>'
+        +'<div class="grid">'+pending.map(jobCard).join('')+'</div>';
     }
-    if(!ready.length&&!pending.length){
-      body='<div class="cf-sq" style="text-align:center;padding:2rem"><i class="ti ti-circle-check" style="font-size:26px;color:var(--text-success)"></i><p style="margin:.5rem 0 0">Every upgrade on the shelf is approved.</p></div>';
+    if(!open.length&&!pending.length){
+      body='<div class="cf-sq" style="text-align:center;padding:2rem"><i class="ti ti-circle-check" style="font-size:26px;color:var(--text-success)"></i><p style="margin:.5rem 0 0">Every matched job is approved.</p></div>';
     }
-    app.innerHTML=head+unlockedBanner()+hero+sign+body+cartBar();
+    app.innerHTML=head+unlockedBanner()+hero+sign+body;
+  }
+
+  // JOB DETAIL — its own marketplace view (NOT the shared solutionCard leaf).
+  function renderJob(){
+    var s=DATA.solutions.find(function(x){return x.id===S.leafId;});
+    if(!s||S.approved[s.id]){S.screen='home';return renderShop();}
+    var head='<div style="margin-bottom:1rem">'+backPill()+'</div>';
+    if(est(s)){
+      app.innerHTML=head+unlockedBanner()
+        +'<div class="card est" data-row="'+s.id+'">'
+          +'<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:12px"><div><div style="font-size:19px;font-weight:700">'+esc(s.type)+'</div><div style="font-size:13px;color:var(--text-muted);margin-top:2px"><i class="ti ti-building"></i> '+esc(s.prop)+'</div></div>'
+            +'<span class="mk-badge win" style="white-space:nowrap"><i class="ti ti-flask"></i> Not yet out for bid</span></div>'
+          +'<div class="fid-banner"><i class="ti ti-gavel"></i> No bids yet — connect '+esc(s.dataNeed)+' and Atrium will put this job out to competing vendors.<button class="cf-btn sm" data-act="connect" data-val="'+s.id+'">Connect data</button></div>'
+          +'<div style="margin-bottom:6px"><div style="font-size:12px;color:var(--text-muted)">Estimated saving <span class="esttag"><i class="ti ti-help-circle"></i> rough range</span></div>'
+            +'<div class="mono" style="font-size:28px;font-weight:700;color:var(--text-success);letter-spacing:-.02em">'+perRange(savLo(s),savHi(s))+'/yr</div></div>'
+          +'<p style="font-size:13px;color:var(--text-secondary);margin:.2rem 0 0">Firm vendor bids, price, and incentives appear once we have your data.</p>'
+        +'</div>';
+      return;
+    }
+    var rec=recBid(s), n=bidCount(s), mode=curMode(s), e=econ(s,mode), ms=solModes(s);
+    var hint={cash:'Buy outright',loan:'Finance',lease:'Rent'};
+    var payseg=ms.map(function(m){return '<button data-sol="'+s.id+'" data-segmode="'+m+'" aria-pressed="'+(mode===m)+'"><span style="display:block">'+cap(m)+'</span><span style="display:block;font-size:11px;font-weight:500;opacity:.85">'+hint[m]+'</span></button>';}).join('');
+    var econChips='<div class="mk-econ">'
+      +'<div class="chip"><div class="k">Winning bid</div><div class="v mono">'+fmt(rec.price)+'</div></div>'
+      +'<div class="chip"><div class="k">Incentive</div><div class="v mono" style="color:var(--text-success)">−'+fmt(s.incentive)+'</div></div>'
+      +'<div class="chip"><div class="k">You save / yr</div><div class="v mono" style="color:var(--text-success)">+'+fmt(s.savings)+'</div></div></div>';
+    app.innerHTML=head+unlockedBanner()
+      +'<div class="card" data-row="'+s.id+'">'
+        +'<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:10px"><div><div style="font-size:19px;font-weight:700">'+esc(s.type)+'</div><div style="font-size:13px;color:var(--text-muted);margin-top:2px"><i class="ti ti-building"></i> '+esc(s.prop)+'</div></div>'
+          +'<span class="mk-bidcue" style="white-space:nowrap"><i class="ti ti-gavel"></i> Competitively bid by '+n+' vendors</span></div>'
+        +(s.note?'<div style="display:inline-flex;align-items:center;gap:5px;font-size:13px;font-weight:500;color:var(--text-warning);margin-bottom:12px"><i class="ti ti-clock"></i> '+esc(s.note)+'</div>':'')
+        +'<div style="font-size:12px;color:var(--text-muted);font-weight:600;text-transform:uppercase;letter-spacing:.04em;margin-bottom:8px">The bids</div>'
+        +bidTable(s)
+        +'<div style="font-size:12px;color:var(--text-secondary);margin:8px 0 16px"><i class="ti ti-info-circle"></i> Atrium ran the tender and recommends '+esc(rec.vendor)+' — best price against the same scope and warranty.</div>'
+        +'<div style="font-size:12px;color:var(--text-muted);font-weight:600;text-transform:uppercase;letter-spacing:.04em;margin-bottom:8px">Your economics</div>'
+        +econChips
+        +'<div class="mk-pay"><div class="mk-pay-k">How you’ll pay</div><div class="payseg" style="margin-bottom:14px">'+payseg+'</div></div>'
+        +'<div style="margin-bottom:14px"><div style="font-size:12px;color:var(--text-muted)">'+(mode==='cash'?'Yearly saving':'Net cash flow')+'</div>'
+          +'<div class="mono" style="font-size:30px;font-weight:700;color:var(--text-success);letter-spacing:-.02em">'+e.hero+'</div>'
+          +'<div style="font-size:13px;color:var(--text-secondary);margin-top:2px">'+e.sub+'</div></div>'
+        +'<div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">'
+          +'<button class="cf-btn" data-approve="'+s.id+'"><i class="ti ti-check"></i> Approve '+esc(rec.vendor)+' with '+cap(mode)+'</button>'
+          +'<button class="ghost"><i class="ti ti-file-text"></i> View full quote</button></div>'
+        +discussion(s)
+      +'</div>';
   }
 
   function renderSignup(){
@@ -518,37 +610,28 @@
         +'<div class="sav-legend"><span><i class="k" style="border-color:var(--text-success)"></i> saved so far</span><span><i class="k" style="border-color:var(--text-success);border-top-style:dashed"></i> forecast</span></div>'+cta2+'</div>';
     }
   }
-  function renderLeaf(){
-    var s=DATA.solutions.find(function(x){return x.id===S.leafId;});
-    if(!s||S.approved[s.id]){S.screen='home';return renderShop();}
-    var inplan=!est(s)&&!!S.cart[s.id];
-    var addBtn=est(s)?'':'<button class="'+(inplan?'cf-pill':'cf-btn')+'" data-act="add" data-val="'+s.id+'" style="display:inline-flex;align-items:center;gap:6px">'+(inplan?'<i class="ti ti-circle-check"></i> In your plan':'<i class="ti ti-plus"></i> Add to plan')+'</button>';
-    var head='<div style="display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:16px">'+backPill()
-      +'<span style="display:flex;align-items:center;gap:8px">'+addBtn+(est(s)?'':'<span style="font-size:13px;color:var(--text-muted)">Amounts:</span>'+perToggle())+'</span></div>';
-    app.innerHTML=head+unlockedBanner()+solutionCard(s)+cartBar();
-  }
 
-  function render(){ if(S.screen==='leaf')renderLeaf();else if(S.screen==='signup')renderSignup();else if(S.screen==='savings')renderSavings();else if(S.screen==='savleaf')renderSavingsLeaf();else renderShop(); }
+  function render(){ if(S.screen==='job')renderJob();else if(S.screen==='signup')renderSignup();else if(S.screen==='savings')renderSavings();else if(S.screen==='savleaf')renderSavingsLeaf();else renderShop(); }
   function unlockRow(id,amt,then){var row=app.querySelector('[data-row="'+id+'"]');S.unlocked+=amt;if(row){row.classList.add('cf-fade');setTimeout(then,340);}else then();}
   app.addEventListener('click',function(e){
     var d=e.target.closest('[data-disc]'); if(d){S.disc[d.dataset.disc]=!S.disc[d.dataset.disc];render();return;}
     var pertog=e.target.closest('[data-period]'); if(pertog){S.period=pertog.dataset.period;render();return;}
     var seg=e.target.closest('[data-segmode]'); if(seg){S.mode[seg.dataset.sol]=seg.dataset.segmode;render();return;}
     var el=e.target.closest('[data-act],[data-approve]'); if(!el)return;
-    if(el.dataset.approve){var s=DATA.solutions.find(function(x){return x.id===el.dataset.approve;});var m=curMode(s);unlockRow(s.id,fiveCash(s),function(){S.approved[s.id]=1;S.approvedMode[s.id]=m;delete S.cart[s.id];S.screen='home';render();});return;}
+    if(el.dataset.approve){var s=DATA.solutions.find(function(x){return x.id===el.dataset.approve;});var m=curMode(s);unlockRow(s.id,fiveCash(s),function(){S.approved[s.id]=1;S.approvedMode[s.id]=m;S.screen='home';render();});return;}
     var a=el.dataset.act, v=el.dataset.val;
     if(a==='connect'){el.textContent='Request sent →';el.disabled=true;el.style.opacity=.7;}
-    else if(a==='add'){S.cart[v]=!S.cart[v];render();}
-    else if(a==='review'){var it=cartItems();if(!it.length)it=sols().filter(function(s){return !est(s);}).sort(recSort);if(it.length){S.leafId=it[0].id;S.screen='leaf';}render();}
+    else if(a==='bids'){S.bidsOpen[v]=!S.bidsOpen[v];render();}
+    else if(a==='review'){var it=sols().filter(function(s){return !est(s);}).sort(recSort);if(it.length){S.leafId=it[0].id;S.screen='job';}render();}
     else if(a==='go'){S.screen=v;render();}
-    else if(a==='leaf'){S.leafId=v;S.screen='leaf';render();}
+    else if(a==='job'){S.leafId=v;S.screen='job';render();}
     else if(a==='savview'){S.savView=v;render();}
     else if(a==='savleaf'){S.savLeaf=v;S.screen='savleaf';render();}
-    else if(a==='approvehere'){var mh=sols().filter(function(s){return s.prop===v;}).sort(recSort)[0];if(mh){S.leafId=mh.id;S.screen='leaf';}else S.screen='home';render();}
-    else if(a==='approvetype'){var mt=sols().filter(function(s){return s.type===v;}).sort(recSort)[0];if(mt){S.leafId=mt.id;S.screen='leaf';}else S.screen='home';render();}
+    else if(a==='approvehere'){var mh=sols().filter(function(s){return s.prop===v;}).sort(recSort)[0];if(mh){S.leafId=mh.id;S.screen='job';}else S.screen='home';render();}
+    else if(a==='approvetype'){var mt=sols().filter(function(s){return s.type===v;}).sort(recSort)[0];if(mt){S.leafId=mt.id;S.screen='job';}else S.screen='home';render();}
     else if(a==='step'){el.textContent='We’ll guide you →';el.disabled=true;el.style.opacity=.6;}
     else if(a==='sign'){var p=DATA.prospects.find(function(x){return x.id===v;});unlockRow(v,p.cf,function(){S.signed[v]=1;render();});}
-    else if(a==='back'){var B={leaf:'home',signup:'home',savleaf:'savings',savings:'home'};S.screen=B[S.screen]||'home';render();}
+    else if(a==='back'){var B={job:'home',signup:'home',savleaf:'savings',savings:'home'};S.screen=B[S.screen]||'home';render();}
   });
   render();
 })();
