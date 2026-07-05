@@ -324,7 +324,7 @@
       title:'Connect '+s.dataNeed,sum:'Turns the '+s.prop+' estimate into a firm, guaranteed quote.',
       sub:esc(s.prop)+' · '+esc(s.type),chip:'to unlock',chipc:'warn',pri:atriumScore(s)};
     return {id:'a-'+s.id,kind:'approve',solId:s.id,icon:'ti-bolt',iconc:'act',
-      title:'Approve: '+s.type,sum:(s.note?esc(s.note):'Firm quote ready — savings start once you approve.'),
+      title:'Approve: '+s.type,sum:(s.note?esc(s.note):'Firm quote — ready to approve.'),
       sub:esc(s.prop),chip:'money',pri:atriumScore(s)};
   }
   // ONE ordered inbox: every row carries a `pri`, and the whole list sorts by it.

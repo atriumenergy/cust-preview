@@ -569,7 +569,7 @@
       var cta=p.ready?'<button class="cf-btn sm" data-act="sign" data-val="'+p.id+'">Approve &amp; sign</button>':'<button class="cf-pill" style="font-size:13px;padding:5px 11px" data-act="step" data-val="'+p.id+'">'+esc(p.step)+'</button>';
       return '<div data-row="'+p.id+'" style="display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--surface-2);border:1px '+(p.est?'dashed':'solid')+' '+(p.est?'var(--border-strong)':'var(--border)')+';border-radius:10px;padding:11px 12px"><div style="min-width:0"><div style="font-weight:600;font-size:14px">'+esc(p.name)+'</div><div style="font-size:12px;color:var(--text-muted)">'+(p.est?'Estimated · '+esc(p.step):esc(p.step))+'</div></div><div style="text-align:right;flex-shrink:0"><div class="cf-amt" style="font-size:16px;color:var(--text-success)">'+perTile(p.cf)+'</div><div style="margin-top:5px">'+cta+'</div></div></div>';
     }).join('');
-    C.turns.push(advTurn('Love that you’re thinking about the rest. You’ve got <b>'+list.length+'</b> not on Atrium yet — together they could be worth around <b>'+W.a+' '+W.u+'</b> once they’re running. No rush at all, bring them online whenever you’re ready.'));
+    C.turns.push(advTurn('Love that you’re thinking about the rest. You’ve got <b>'+list.length+'</b> not on Atrium yet — together they could be worth around <b>'+W.a+' '+W.u+'</b> once they’re running.'));
     C.turns.push(advTurn('Here they are. '+(ready?'The '+(ready===1?'first one is':(ready+' at the top are'))+' ready to sign right now':'They each just need one quick step from you')+' — the rest I can walk you through:'
       +'<div style="display:flex;flex-direction:column;gap:8px;margin-top:10px">'+rows+'</div>'));
     C.chips=[

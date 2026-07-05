@@ -411,6 +411,7 @@
   S.excl={};
   // Default selection = the recommended "Now" set: pre-exclude firm projects not in the Now (u===0) bucket.
   DATA.solutions.forEach(function(s){if(!est(s)&&s.u!==0)S.excl[s.id]=1;});
+  S.plMode='rec';
   // The plan holds only solutions not yet approved (approved ones move to the
   // "Approved this session" strip). Firm = measured; estimated is awareness-only.
   function measured(){return sols().filter(function(s){return !est(s);});}
@@ -426,29 +427,17 @@
   function summaryStrip(){
     var inc=included();
     var totalSav=inc.reduce(function(t,s){return t+s.savings;},0);
-    var totalCash=inc.reduce(function(t,s){return t+tileVal(s);},0);
-    var n=inc.length, nFirm=measured().length;
-    var props=distinctProps(inc);
-    var lead=n?'<span style="color:var(--text-success);font-weight:700">'+per(totalSav)+'</span> more with these selected'
-              :'Select a project below to see your gain';
-    var reassure=n?'Firm, guaranteed quotes — your Atrium-recommended set to start now.'
-                  :'Everything below is a firm, guaranteed quote.';
+    var n=inc.length, nFirm=measured().length, props=distinctProps(inc);
+    var heroAmt=amtUnit(totalSav);
     var cta=n?'<button class="pl-cta" data-act="approve-selected"><i class="ti ti-check"></i> Review &amp; approve</button>'
              :'<button class="pl-cta" disabled><i class="ti ti-check"></i> Review &amp; approve</button>';
-    var heroAmt=amtUnit(totalSav);
+    function pill(m,label){return '<button class="cf-pill'+(S.plMode===m?' on':'')+'" data-act="'+m+'" aria-pressed="'+(S.plMode===m)+'">'+label+'</button>';}
     return '<div class="pl-sticky"><div class="pl-sumcard">'
       +'<div class="pl-hero-row">'
-        +'<div><div class="pl-sumlead">Recommended plan · ready to approve</div>'
-          +'<div class="pl-hero mono">'+(n?'+':'')+heroAmt.a+' <span style="font-size:.44em;font-weight:600;color:var(--text-muted);letter-spacing:0">'+heroAmt.u+'</span></div>'
-          +'<div class="pl-count">'+lead+'</div></div>'
+        +'<div><div class="pl-hero mono">'+(n?'+':'')+heroAmt.a+' <span style="font-size:.44em;font-weight:600;color:var(--text-muted);letter-spacing:0">'+heroAmt.u+'</span></div>'
+          +'<div class="pl-count">'+(n?n+' of '+nFirm+' projects · '+props+' hotel'+(props>1?'s':''):'Nothing selected — pick a project below')+'</div></div>'
         +cta+'</div>'
-      +'<div class="pl-count" style="margin-top:8px"><i class="ti ti-shield-check" style="color:var(--text-success)"></i> '+reassure+'</div>'
-      +'<div class="pl-metrics" style="margin-top:14px">'
-        +'<div class="pl-metric"><div class="k">Projects selected</div><div class="v mono">'+n+' of '+nFirm+'</div></div>'
-        +'<div class="pl-metric"><div class="k">Hotels</div><div class="v mono">'+props+'</div></div>'
-        +'<div class="pl-metric"><div class="k">5-year cash flow</div><div class="v mono" style="color:var(--text-success)">'+fmtK(totalCash)+'</div></div></div>'
-      +'<div class="pl-quickrow"><span style="font-size:12px;color:var(--text-muted);align-self:center;margin-right:2px">What if I…</span><button class="cf-pill" data-act="rec"><i class="ti ti-sparkles"></i> Recommended</button><button class="cf-pill" data-act="all"><i class="ti ti-checks"></i> Select all</button>'
-        +'<button class="cf-pill" data-act="none"><i class="ti ti-square-off"></i> Clear all</button></div>'
+      +'<div class="pl-quickrow">'+pill('rec','Recommended')+pill('all','Select all')+pill('none','Clear all')+'</div>'
       +'</div></div>';
   }
 
@@ -498,14 +487,13 @@
   }
 
   function renderPlanner(){
-    var meas=measured().slice().sort(recSort);
+    var meas=measured().slice().sort(function(a,b){var d=(on(a)?0:1)-(on(b)?0:1);return d||recSort(a,b);});
     var ests=estimated().slice().sort(recSort);
     var head='<div style="display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:2px">'
         +'<div><p style="color:var(--text-secondary);margin:0;font-size:14px">'+esc(DATA.portfolio)+'</p>'
         +'<h1 style="margin:.2rem 0 0;font-size:26px">Plan your savings</h1></div>'
-        +'<span style="display:flex;align-items:center;gap:8px"><span style="font-size:13px;color:var(--text-muted)">Amounts:</span>'+perToggle()+'</span></div>'
-      +'<p style="color:var(--text-muted);margin:.3rem 0 0;font-size:13px">We’ve pre-selected your recommended set. Approve it as-is, or toggle any project to see the number move first.</p>';
-    var measRows='<div class="pl-sectlabel">Selected · firm quotes ready to approve</div><div style="display:flex;flex-direction:column;gap:10px">'+meas.map(plRow).join('')+'</div>';
+        +'<span style="display:flex;align-items:center;gap:8px"><span style="font-size:13px;color:var(--text-muted)">Amounts:</span>'+perToggle()+'</span></div>';
+    var measRows='<div class="pl-sectlabel">Firm quotes ready to approve</div><div style="display:flex;flex-direction:column;gap:10px">'+meas.map(plRow).join('')+'</div>';
     var estRows=ests.length?'<div class="pl-sectlabel" style="margin-top:26px">Early estimates — connect data to firm up</div>'
         +'<p style="color:var(--text-muted);margin:0 2px 9px;font-size:12.5px">Not firm quotes yet, so they aren’t selectable or part of the total above. Connect the data and each becomes a guaranteed quote you can approve.</p>'
         +'<div style="display:flex;flex-direction:column;gap:10px">'+ests.map(plRow).join('')+'</div>':'';
@@ -542,10 +530,10 @@
     if(el.dataset.approve){var s=DATA.solutions.find(function(x){return x.id===el.dataset.approve;});var m=curMode(s);window.open('esign.html?doc='+encodeURIComponent(s.type+' — '+s.prop),'_blank');S.approved[s.id]=1;S.approvedMode[s.id]=m;S.excl[s.id]=0;S.screen='home';render();return;}
     var a=el.dataset.act, v=el.dataset.val;
     if(a==='connect'){el.textContent='Request sent →';el.disabled=true;el.style.opacity=.7;}
-    else if(a==='toggle'){var ts=DATA.solutions.find(function(x){return x.id===v;});if(ts&&!est(ts)){S.excl[v]=!S.excl[v];render();}}
-    else if(a==='all'){S.excl={};render();}
-    else if(a==='rec'){S.excl={};DATA.solutions.forEach(function(s){if(!est(s)&&s.u!==0)S.excl[s.id]=1;});render();}
-    else if(a==='none'){measured().forEach(function(s){S.excl[s.id]=1;});render();}
+    else if(a==='toggle'){var ts=DATA.solutions.find(function(x){return x.id===v;});if(ts&&!est(ts)){S.excl[v]=!S.excl[v];S.plMode='custom';render();}}
+    else if(a==='all'){S.excl={};S.plMode='all';render();}
+    else if(a==='rec'){S.excl={};DATA.solutions.forEach(function(s){if(!est(s)&&s.u!==0)S.excl[s.id]=1;});S.plMode='rec';render();}
+    else if(a==='none'){measured().forEach(function(s){S.excl[s.id]=1;});S.plMode='none';render();}
     else if(a==='leaf'){S.leafId=v;S.screen='leaf';render();}
     else if(a==='go'){S.screen=v;render();}
     else if(a==='savview'){S.savView=v;render();}
