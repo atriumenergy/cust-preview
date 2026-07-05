@@ -109,13 +109,17 @@
   .pl-hero-row{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap}
   .pl-signline{display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;text-align:left;font:inherit;background:var(--surface-2);border:1px solid var(--border-strong);border-radius:12px;padding:13px 15px;box-shadow:var(--shadow);cursor:pointer;color:var(--text-primary);margin-top:14px}
   .pl-signline:hover{border-color:var(--text-muted)}
-  .pl-signline .amt{color:var(--text-warning);font-weight:700}
-  .pl-savedline{display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;text-align:left;font:inherit;background:none;border:none;padding:12px 3px 2px;cursor:pointer;color:var(--text-secondary);font-size:14px;margin-top:6px}
-  .pl-savedline b{color:var(--text-success);font-weight:700}
-  .pl-savedline:hover{color:var(--text-primary)}
+  .pl-signline .amt{color:var(--text-success);font-weight:700}
+  .pl-savedcard{display:block;width:100%;text-align:left;font:inherit;color:inherit;cursor:pointer;background:var(--surface-2);border:1px solid var(--border);border-radius:12px;padding:12px 15px 9px;box-shadow:var(--shadow);margin-top:10px;transition:box-shadow .12s,border-color .12s}
+  .pl-savedcard:hover{box-shadow:var(--shadow-hover);border-color:var(--border-strong)}
+  .pl-savedtop{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin-bottom:7px}
+  .pl-savedtop .v{font-weight:700;color:var(--text-success);letter-spacing:-.01em;font-size:16px}
+  .pl-savedtop .k{font-size:12.5px;color:var(--text-secondary);display:inline-flex;align-items:center;gap:4px;white-space:nowrap}
   .sav-legend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:12px;color:var(--text-secondary);margin-top:8px}
   .sav-legend span{display:inline-flex;align-items:center;gap:5px}
   .sav-legend i.k{width:16px;height:0;border-top-width:2px;border-top-style:solid;display:inline-block}
+  .approved-strip{display:flex;align-items:center;gap:8px;background:var(--bg-success);border:1px solid hsl(86 40% 82%);border-radius:12px;padding:11px 14px;font-size:14px;color:var(--text-success)}
+  .approved-strip b{font-weight:700}
   @media (max-width:560px){
     .pl-metrics{grid-template-columns:1fr}
     .pl-hero-row{align-items:stretch}
@@ -127,7 +131,6 @@
 </head>
 <body>
 <div class="wrap">
-<div class="banner"><i class="ti ti-info-circle"></i> Concept preview · sample data — for feedback, not final visual design</div>
 <div id="app">Loading…</div>
 </div>
 <script>
@@ -136,23 +139,27 @@
   var DATA={
     portfolio:"Coastline Hospitality Group",
     prospects:[
-      {id:'p1',name:'Summit Ridge Suites',cf:180000,ready:true,step:'Proposal ready'},
-      {id:'p2',name:'Harbor Point Hotel',cf:140000,ready:true,step:'Proposal ready'},
-      {id:'p3',name:'Grandview Hotel',cf:110000,ready:false,step:'Complete your audit',est:true},
-      {id:'p4',name:'Old Town Motel',cf:90000,ready:false,step:'Complete your audit',est:true},
-      {id:'p5',name:'Pinewood Inn',cf:70000,ready:false,step:'Add your utility bills',est:true},
-      {id:'p6',name:'Bayside Motor Lodge',cf:60000,ready:false,step:'Add your utility bills',est:true}
+      {id:'p1',name:'Summit Ridge Suites',cf:225000,ready:true,step:'Proposal ready'},
+      {id:'p2',name:'Harbor Point Hotel',cf:195000,ready:true,step:'Proposal ready'},
+      {id:'p3',name:'Grandview Hotel',cf:175000,ready:false,step:'Complete your audit',est:true},
+      {id:'p4',name:'Old Town Motel',cf:150000,ready:false,step:'Complete your audit',est:true},
+      {id:'p5',name:'Pinewood Inn',cf:130000,ready:false,step:'Add your utility bills',est:true},
+      {id:'p6',name:'Bayside Motor Lodge',cf:95000,ready:false,step:'Add your utility bills',est:true}
     ],
     solutions:[
-      {id:'s1',prop:'Marina Bay Inn',type:'Solar + Batteries',u:0,note:'Rebate ends Aug 31',vendor:'GreenVolt Partners',install:'about 6 weeks · starts Sep',fidelity:'measured',market:430000,discountPct:12,incentive:130000,savings:75000,loan:{termYears:10,aprPct:6.5},lease:{annualAtrium:44000,annualMarket:52000,termYears:20}},
-      {id:'s5',prop:'Cedar Court Hotel',type:'Solar + Batteries',u:0,note:'Rebate ends Aug 31',vendor:'GreenVolt Partners',install:'about 5 weeks',fidelity:'measured',market:300000,discountPct:12,incentive:90000,savings:53000,loan:{termYears:10,aprPct:6.5},lease:{annualAtrium:31000,annualMarket:37000,termYears:20}},
-      {id:'s2',prop:'Marina Bay Inn',type:'Heat Pump Water Heaters',u:1,vendor:'Thermal Systems',install:'about 2 weeks',fidelity:'measured',market:72000,discountPct:12,incentive:15000,savings:17000,loan:{termYears:7,aprPct:6.9},lease:null},
-      {id:'s6',prop:'Cedar Court Hotel',type:'LED Lighting',u:1,vendor:'BrightSwap',install:'about 2 weeks',fidelity:'measured',market:46000,discountPct:13,incentive:6000,savings:13500,loan:{termYears:3,aprPct:7.9},lease:null},
-      {id:'s3',prop:'Marina Bay Inn',type:'LED Lighting',u:2,vendor:'BrightSwap',install:'about 2 weeks',fidelity:'measured',market:34000,discountPct:13,incentive:4000,savings:10000,loan:{termYears:3,aprPct:7.9},lease:null},
-      {id:'s4',prop:'Marina Bay Inn',type:'Smart Thermostats',u:2,vendor:'Cozy Controls',install:'about 1 week',fidelity:'measured',market:10000,discountPct:14,incentive:1500,savings:4500,loan:{termYears:3,aprPct:7.9},lease:null},
+      {id:'s1',prop:'Marina Bay Inn',type:'Solar + Batteries',u:0,note:'Start now — about a year to build for the 2027 rebate',vendor:'GreenVolt Partners',install:'about 6 weeks · starts Sep',fidelity:'measured',market:430000,discountPct:12,incentive:130000,savings:75000,loan:{termYears:25,aprPct:6.5},lease:{annualAtrium:44000,annualMarket:52000,termYears:20}},
+      {id:'s5',prop:'Cedar Court Hotel',type:'Solar + Batteries',u:0,note:'Start now — about a year to build for the 2027 rebate',vendor:'GreenVolt Partners',install:'about 5 weeks',fidelity:'measured',market:300000,discountPct:12,incentive:90000,savings:53000,loan:{termYears:25,aprPct:6.5},lease:{annualAtrium:31000,annualMarket:37000,termYears:20}},
+      {id:'s2',prop:'Marina Bay Inn',type:'Heat Pump Water Heaters',u:1,vendor:'Thermal Systems',install:'about 2 weeks',fidelity:'measured',market:72000,discountPct:12,incentive:15000,savings:17000,loan:{termYears:5,aprPct:6.9},lease:null},
+      {id:'s6',prop:'Cedar Court Hotel',type:'LED Lighting',u:0,vendor:'BrightSwap',install:'about 2 weeks',fidelity:'measured',market:46000,discountPct:13,incentive:6000,savings:13500,loan:{termYears:5,aprPct:7.9},lease:null},
+      {id:'s3',prop:'Marina Bay Inn',type:'LED Lighting',u:0,vendor:'BrightSwap',install:'about 2 weeks',fidelity:'measured',market:34000,discountPct:13,incentive:4000,savings:10000,loan:{termYears:5,aprPct:7.9},lease:null},
+      {id:'s4',prop:'Marina Bay Inn',type:'Smart Thermostats',u:2,vendor:'Cozy Controls',install:'about 1 week',fidelity:'measured',market:10000,discountPct:14,incentive:1500,savings:4500,loan:{termYears:5,aprPct:7.9},lease:null},
+      {id:'s10',prop:'Marina Bay Inn',type:'Building Controls (EMS)',u:1,vendor:'Nodal Systems',install:'about 3 weeks',fidelity:'measured',market:60000,discountPct:12,incentive:9000,savings:22000,loan:{termYears:5,aprPct:6.9},lease:null},
+      {id:'s11',prop:'Cedar Court Hotel',type:'Kitchen Hood Controls',u:1,vendor:'AirWise Controls',install:'about 1 week',fidelity:'measured',market:28000,discountPct:12,incentive:3000,savings:9000,loan:{termYears:5,aprPct:7.9},lease:null},
+      {id:'s12',prop:'Cedar Court Hotel',type:'Pool Heat Pump',u:2,vendor:'ThermaPool',install:'about 2 weeks',fidelity:'measured',market:38000,discountPct:12,incentive:5000,savings:11000,loan:{termYears:5,aprPct:6.9},lease:null},
+      {id:'s13',prop:'Riverside Lodge',type:'Low-Flow Water Fixtures',u:0,vendor:'AquaTrim',install:'about 1 week',fidelity:'measured',market:14000,discountPct:13,incentive:2000,savings:6500,loan:{termYears:5,aprPct:7.9},lease:null},
       {id:'s8',prop:'Riverside Lodge',type:'Heat Pump Water Heaters',u:0,vendor:'Thermal Systems',install:'about 2 weeks',fidelity:'estimated',dataNeed:'your water-heater metering',savings:12000},
       {id:'s9',prop:'Riverside Lodge',type:'Smart Thermostats',u:1,vendor:'Cozy Controls',install:'about 1 week',fidelity:'estimated',dataNeed:'occupancy data',savings:12500},
-      {id:'s7',prop:'Cedar Court Hotel',type:'Ozone Laundry',u:1,vendor:'PureWash',install:'about 1 week',fidelity:'estimated',dataNeed:'laundry-room metering',savings:10000}
+      {id:'s7',prop:'Cedar Court Hotel',type:'Ozone Laundry',u:0,vendor:'PureWash',install:'about 1 week',fidelity:'measured',market:24000,discountPct:12,incentive:2500,savings:10000,loan:{termYears:5,aprPct:7.9},lease:null}
     ],
     // properties Atrium already operates — these have savings history + a forecast
     contracted:[
@@ -186,6 +193,8 @@
   function solModes(s){var m=['cash'];if(s.loan)m.push('loan');if(s.lease)m.push('lease');return m;}
   function curMode(s){var ms=solModes(s);var d=s.loan?'loan':(s.lease?'lease':'cash');var m=S.mode[s.id]||d;return ms.indexOf(m)>=0?m:d;}
   function per(x){return S.period==='monthly'?fmt(x/12)+'/mo':fmt(x)+'/yr';}
+  function amtUnit(annual){ return S.period==='monthly' ? {a:fmtK(annual/12),u:'a month'} : {a:fmtK(annual),u:'a year'}; }
+  function perTile(annual){var v=S.period==='monthly'?annual/12:annual;return fmtK(v)+'<span style="font-size:.6em;color:var(--text-muted);font-weight:600"> '+(S.period==='monthly'?'/mo':'/yr')+'</span>';}
   function perRange(lo,hi){return S.period==='monthly'?fmt(Math.round(lo/12))+'–'+fmt(Math.round(hi/12))+'/mo':fmtK(lo)+'–'+fmtK(hi)+'/yr';}
   function prospects(){return DATA.prospects.filter(function(p){return !S.signed[p.id];});}
   function sols(){return DATA.solutions.filter(function(s){return !S.approved[s.id];});}
@@ -195,7 +204,15 @@
   function distinctProps(a){var o={};a.forEach(function(s){o[s.prop]=1;});return Object.keys(o).length;}
   function approveAnnualFor(name){return sols().filter(function(s){return s.prop===name;}).reduce(function(t,s){return t+s.savings;},0);}
   function approveCountFor(name){return sols().filter(function(s){return s.prop===name;}).length;}
-  function recSort(a,b){ if(a.u!==b.u)return a.u-b.u; if((!!b.note)!==(!!a.note))return (b.note?1:0)-(a.note?1:0); return tileVal(b)-tileVal(a); }
+  // Atrium-recommended priority: incentive deadlines first, then quick wins (fast payback / low friction), then value.
+  // Rationale: land early wins so customers feel good about Atrium while larger cash flow keeps unlocking over the contract.
+  function atriumScore(s){
+    // Quick wins lead (fast payback = earliest banked win). Deadline projects (e.g. solar's 2027 clock)
+    // get a modest bump so the clock starts, but a true quick win still goes first.
+    var pay=est(s)?8:payback(s);
+    return pay - (s.note?1.3:0);
+  }
+  function recSort(a,b){ return atriumScore(a)-atriumScore(b); }
   function econ(s,mode){
     var sav=s.savings,nt=net(s),pay=payback(s);
     if(mode==='cash'){
@@ -206,22 +223,22 @@
     }
     if(mode==='loan'){
       var m=pmtMo(nt,s.loan.aprPct,s.loan.termYears),ann=m*12,t=s.loan.termYears;
-      return {hero:'+'+per(sav-ann), sub:'$0 down · '+t+'-yr loan @ '+s.loan.aprPct+'%',
-        chips:[['Savings','+'+per(sav),'var(--text-success)'],['Loan payment',per(ann)]],
+      return {hero:'+'+per(sav), sub:'$0 down · '+t+'-yr loan @ '+s.loan.aprPct+'% · '+per(ann)+', then it’s yours',
+        chips:[['Loan payment',per(ann)],['Term',t+' yrs']],
         series:(function(){var a=[0],cum=0;for(var y=1;y<=10;y++){cum+=sav-(y<=t?ann:0);a.push(cum);}return a;})(), be:0.05, beLabel:'cash-flow positive from day one',
-        takeaway:'$0 down; you net '+per(sav-ann)+' from day one — best near-term cash flow.'};
+        takeaway:''};
     }
     var la=s.lease.annualAtrium,t2=s.lease.termYears;
-    return {hero:'+'+per(sav-la), sub:'$0 down · '+t2+'-yr lease',
-      chips:[['Savings','+'+per(sav),'var(--text-success)'],['Lease cost',per(la)],['Term',t2+' yrs']],
+    return {hero:'+'+per(sav), sub:'$0 down · '+t2+'-yr lease · '+per(la)+' · no ownership or upkeep',
+      chips:[['Lease cost',per(la)],['Term',t2+' yrs']],
       series:(function(){var a=[0],cum=0;for(var y=1;y<=10;y++){cum+=sav-la;a.push(cum);}return a;})(), be:0.05, beLabel:'cash-flow positive from year one',
-      takeaway:'$0 down; net '+per(sav-la)+' a year, no ownership or upkeep.'};
+      takeaway:''};
   }
   function spark(series,be){
     var w=300,h=72,padX=8,padT=8,padB=8,N=120;
     function stepAt(yr){var i=Math.max(0,Math.min(series.length-2,Math.floor(yr)));return series[i+1]-series[i];}
     var cum=series[0],pts=[[0,cum]];
-    for(var m=1;m<=N;m++){var yr=m/12;var mult=1+0.5*Math.sin((m-1)/12*2*Math.PI-Math.PI/2);cum+=stepAt(yr-1e-9)/12*mult;pts.push([yr,cum]);}
+    for(var m=1;m<=N;m++){var yr=m/12;var mult=1+0.1*Math.sin((m-1)/12*2*Math.PI-Math.PI/2);cum+=stepAt(yr-1e-9)/12*mult;pts.push([yr,cum]);}
     var vals=pts.map(function(p){return p[1];}).concat([0]);
     var mn=Math.min.apply(null,vals),mx=Math.max.apply(null,vals),sp=(mx-mn)||1;
     function X(yr){return padX+(yr/10)*(w-2*padX);}
@@ -267,45 +284,66 @@
     var chips=e.chips.map(function(k){return '<div class="chip"><div class="k">'+k[0]+'</div><div class="v mono"'+(k[2]?' style="color:'+k[2]+'"':'')+'>'+k[1]+'</div></div>';}).join('');
     var savePct=Math.round((s.market-price(s))/s.market*100);
     return '<div class="card" data-row="'+s.id+'">'+cardHead(s)
-      +'<div style="margin-bottom:12px"><span class="measured"><i class="ti ti-circle-check"></i> Measured from your data</span></div>'
       +'<div style="display:flex;flex-wrap:wrap;align-items:center;gap:8px;font-size:13px;color:var(--text-secondary);background:hsl(240 20% 98%);border:1px solid var(--border);border-radius:10px;padding:9px 12px;margin-bottom:16px">'
-        +'<span style="text-decoration:line-through;color:var(--text-muted)">'+fmt(s.market)+' market</span><i class="ti ti-arrow-right" style="color:var(--text-muted)"></i>'
+        +'<span style="color:var(--text-muted)">'+fmt(s.market)+' market</span><i class="ti ti-arrow-right" style="color:var(--text-muted)"></i>'
         +'<span>'+fmt(price(s))+' Atrium price <span style="color:var(--text-success);font-weight:600">(−'+savePct+'%)</span></span><i class="ti ti-arrow-right" style="color:var(--text-muted)"></i>'
         +'<span style="color:var(--text-success);font-weight:600">−'+fmt(s.incentive)+' incentive</span><i class="ti ti-arrow-right" style="color:var(--text-muted)"></i>'
-        +'<span style="font-weight:700;color:var(--text-primary)">'+fmt(net(s))+' your net</span></div>'
-      +'<div style="font-size:12px;color:var(--text-muted);font-weight:600;text-transform:uppercase;letter-spacing:.04em;margin-bottom:7px">How you’ll pay</div>'
+        +'<span style="font-weight:700;color:var(--text-primary)">'+fmt(net(s))+' your net price</span></div>'
       +'<div class="payseg" style="margin-bottom:16px">'+payseg+'</div>'
-      +'<div style="margin-bottom:14px"><div style="font-size:12px;color:var(--text-muted)">Net cash flow</div>'
+      +'<div style="margin-bottom:14px"><div style="font-size:12px;color:var(--text-muted)">Savings</div>'
         +'<div class="mono" style="font-size:30px;font-weight:700;color:var(--text-success);letter-spacing:-.02em">'+e.hero+'</div>'
         +'<div style="font-size:13px;color:var(--text-secondary);margin-top:2px">'+e.sub+'</div></div>'
       +'<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(128px,1fr));gap:8px;margin-bottom:12px">'+chips+'</div>'
-      +'<div style="background:hsl(240 20% 98.5%);border:1px solid var(--border);border-radius:10px;padding:10px 12px;margin-bottom:12px">'+spark(e.series,e.be)
-        +'<div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text-muted);margin-top:2px"><span>Now</span><span>'+e.beLabel+'</span><span>10 yrs</span></div></div>'
-      +'<div style="font-size:13px;color:var(--text-secondary);margin-bottom:14px"><i class="ti ti-bulb" style="color:var(--text-warning)"></i> '+e.takeaway+'</div>'
-      +'<div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">'
-        +'<button class="cf-btn" data-approve="'+s.id+'"><i class="ti ti-check"></i> Approve with '+cap(mode)+'</button>'
-        +'<button class="ghost"><i class="ti ti-file-text"></i> View full quote</button></div>'
+      +'<div style="background:hsl(240 20% 98.5%);border:1px solid var(--border);border-radius:10px;padding:10px 12px;margin-bottom:14px">'+spark(e.series,e.be)
+        +'<div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text-muted);margin-top:2px"><span>Now</span><span>'+e.beLabel+'</span><span style="color:var(--text-secondary);font-weight:600">'+fmtK(e.series[e.series.length-1])+' over 10 yrs</span></div></div>'
+      +'<button class="cf-btn" data-approve="'+s.id+'"><i class="ti ti-check"></i> Approve with '+cap(mode)+'</button>'
       +discussion(s)+'</div>';
   }
-  function unlockedBanner(){ if(!S.unlocked)return ''; return '<div style="display:flex;align-items:center;gap:8px;background:var(--bg-success);border:1px solid hsl(86 40% 82%);border-radius:var(--radius);padding:9px 13px;margin-bottom:1rem;font-size:14px;color:var(--text-success)"><i class="ti ti-sparkles"></i>Unlocked this session: <span style="font-weight:700">'+fmt(S.unlocked)+'</span> over 5 years</div>'; }
+  function unlockedBanner(){ return ''; }
   function backPill(){return '<button class="cf-pill" data-act="back" style="display:inline-flex;align-items:center;gap:4px"><i class="ti ti-arrow-left"></i> Back to plan</button>';}
   function perToggle(){return '<div class="seg"><button data-period="annual" aria-pressed="'+(S.period==='annual')+'">Annual</button><button data-period="monthly" aria-pressed="'+(S.period==='monthly')+'">Monthly</button></div>';}
 
   /* ===== Shared savings/forecast drill — verbatim from cashflow.html ===== */
+  function savHeroSvg(){
+    var saved=DATA.contracted.reduce(function(t,c){return t+c.saved;},0);
+    var pace=DATA.savedByType.reduce(function(t,x){return t+x.pace;},0);
+    var w=300,h=46,padX=1,padT=5,padB=3,past=18,n=past+10,mPast=saved/past,mFut=pace/12,cum=0,s=[];
+    for(var i=0;i<=n;i++){s.push(cum);var seas=1+0.4*Math.sin(i/12*2*Math.PI-Math.PI/2);cum+=(i<past?mPast:mFut)*seas;}
+    var mx=s[n]||1;
+    function X(i){return padX+i/n*(w-2*padX);}
+    function Y(v){return padT+(1-v/mx)*(h-padT-padB);}
+    function poly(from,to){var p=[];for(var i=from;i<=to;i++)p.push(X(i).toFixed(1)+','+Y(s[i]).toFixed(1));return p.join(' ');}
+    var area=poly(0,n)+' '+X(n).toFixed(1)+','+Y(0).toFixed(1)+' '+X(0).toFixed(1)+','+Y(0).toFixed(1);
+    return '<svg viewBox="0 0 '+w+' '+h+'" width="100%" height="'+h+'" preserveAspectRatio="none" style="display:block">'
+      +'<polygon points="'+area+'" fill="hsl(86 45% 94%)"/>'
+      +'<line x1="'+X(past).toFixed(1)+'" x2="'+X(past).toFixed(1)+'" y1="'+padT+'" y2="'+(h-padB)+'" stroke="var(--border-strong)" stroke-dasharray="3 3"/>'
+      +'<polyline points="'+poly(0,past)+'" fill="none" stroke="var(--text-success)" stroke-width="2.5"/>'
+      +'<polyline points="'+poly(past,n)+'" fill="none" stroke="var(--text-success)" stroke-width="2.5" stroke-dasharray="5 3"/></svg>';
+  }
   function trajChart(sc,apprAnn){
-    var wm=sc.next12/12, wom=sc.without12/12, am=(sc.next12-(apprAnn||0))/12;
-    var n=24,w=340,h=132,padX=8,padT=16,padB=8,today=11,s=[];
-    for(var i=0;i<n;i++){var seas=Math.sin(i/12*Math.PI*2);s.push({without:wom*(1+0.06*seas),wth:wm*(1+0.06*seas),appr:am*(1+0.06*seas)});}
+    var wom=sc.without12/12, savFrac=(sc.without12-sc.next12)/sc.without12, apprFrac=Math.min(0.42,savFrac+(apprAnn||0)/sc.without12);
+    var n=25,w=340,h=120,padX=6,padT=10,padB=8,today=12,s=[];
+    // deterministic, irregular month-to-month variation (sum of sines) — no mythical steady state
+    function noise(i){return 0.055*Math.sin(i*0.9+0.5)+0.03*Math.sin(i*2.15+1.7)+0.018*Math.sin(i*4.3+3.1);}
+    for(var i=0;i<n;i++){
+      var without=wom*(1+noise(i));
+      var g=Math.min(1,i/today); // realized savings ramp in over the trailing year — 0 savings twelve months ago
+      var wth=without*(1-savFrac*g*(1+0.18*Math.sin(i*1.3+0.9)));
+      var target=without*(1-apprFrac*(1+0.18*Math.sin(i*1.3+0.9)));
+      var appr=i<=today?wth:wth+(target-wth)*Math.min(1,(i-today)/8); // approved work ramps in over ~8 months (time-to-value)
+      s.push({without:without,wth:wth,appr:appr});
+    }
     var all=[];s.forEach(function(d){all.push(d.without,d.wth);if(apprAnn)all.push(d.appr);});
-    var mn=Math.min.apply(null,all),mx=Math.max.apply(null,all),sp=(mx-mn)||1;mn-=sp*0.14;mx+=sp*0.08;sp=mx-mn;
+    var mn=0,mx=Math.max.apply(null,all)*1.06,sp=mx-mn;
     function X(i){return padX+i/(n-1)*(w-2*padX);}
     function Y(v){return padT+(1-(v-mn)/sp)*(h-padT-padB);}
     function poly(key,from,to){var p=[];for(var i=from;i<=to;i++)p.push(X(i).toFixed(1)+','+Y(s[i][key]).toFixed(1));return p.join(' ');}
-    var gap=[];for(var i=0;i<=today;i++)gap.push(X(i).toFixed(1)+','+Y(s[i].without).toFixed(1));for(var j=today;j>=0;j--)gap.push(X(j).toFixed(1)+','+Y(s[j].wth).toFixed(1));
+    var gap=[];for(var i=0;i<n;i++)gap.push(X(i).toFixed(1)+','+Y(s[i].without).toFixed(1));for(var j=n-1;j>=0;j--)gap.push(X(j).toFixed(1)+','+Y(s[j].wth).toFixed(1));
     return '<svg viewBox="0 0 '+w+' '+h+'" width="100%" height="'+h+'" preserveAspectRatio="none" style="display:block">'
-      +'<polygon points="'+gap.join(' ')+'" fill="hsl(86 45% 92%)"/>'
+      +'<polygon points="'+gap.join(' ')+'" fill="hsl(86 45% 91%)"/>'
       +'<line x1="'+X(today).toFixed(1)+'" x2="'+X(today).toFixed(1)+'" y1="'+padT+'" y2="'+(h-padB)+'" stroke="var(--border-strong)" stroke-dasharray="3 3"/>'
-      +'<polyline points="'+poly('without',0,n-1)+'" fill="none" stroke="var(--text-warning)" stroke-width="2" stroke-dasharray="5 3"/>'
+      +'<polyline points="'+poly('without',0,today)+'" fill="none" stroke="var(--text-warning)" stroke-width="2"/>'
+      +'<polyline points="'+poly('without',today,n-1)+'" fill="none" stroke="var(--text-warning)" stroke-width="2" stroke-dasharray="5 3"/>'
       +'<polyline points="'+poly('wth',0,today)+'" fill="none" stroke="var(--text-success)" stroke-width="2.5"/>'
       +'<polyline points="'+poly('wth',today,n-1)+'" fill="none" stroke="var(--text-success)" stroke-width="2.5" stroke-dasharray="5 3"/>'
       +(apprAnn?'<polyline points="'+poly('appr',today,n-1)+'" fill="none" stroke="var(--primary)" stroke-width="2" stroke-dasharray="2 3"/>':'')
@@ -348,16 +386,12 @@
     if(S.savView==='property'){
       var c=DATA.contracted.find(function(x){return x.id===S.savLeaf;});
       if(!c){S.screen='savings';return renderSavings();}
-      var apprAnn=approveAnnualFor(c.name),apprN=approveCountFor(c.name),high=c.runPct>100;
-      var chips='<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;margin:14px 0">'
-        +'<div class="chip"><div class="k">Saved to date</div><div class="v mono" style="color:var(--text-success)">'+fmtK(c.saved)+'</div></div>'
-        +'<div class="chip"><div class="k">Now vs expected</div><div class="v mono" style="color:'+(high?'var(--text-warning)':'var(--text-success)')+'">'+c.runPct+'%</div></div>'
-        +'<div class="chip"><div class="k">Next 12 months</div><div class="v mono">'+fmtK(c.next12)+'</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">$'+c.perRoomNight.toFixed(2)+' per occupied room-night</div></div></div>';
-      var legend='<div class="sav-legend"><span><i class="k" style="border-color:var(--text-warning);border-top-style:dashed"></i> without Atrium</span><span><i class="k" style="border-color:var(--text-success)"></i> with Atrium</span>'+(apprAnn?'<span><i class="k" style="border-color:var(--primary);border-top-style:dashed"></i> if you approve the proposed work</span>':'')+'<span>vertical line = today</span></div>';
+      var apprAnn=approveAnnualFor(c.name),apprN=approveCountFor(c.name);
+      var legend='<div class="sav-legend"><span><i class="k" style="border-color:var(--text-warning)"></i> without Atrium</span><span><i class="k" style="border-color:var(--text-success)"></i> with Atrium</span>'+(apprAnn?'<span><i class="k" style="border-color:var(--primary);border-top-style:dashed"></i> if you approve</span>':'')+'<span style="color:var(--text-muted)">dashed = forecast</span></div>';
       var cta=apprAnn?'<div style="margin-top:16px;background:var(--bg-success);border:1px solid hsl(86 40% 82%);border-radius:12px;padding:14px 16px"><div style="font-size:14px">Approve the '+apprN+' proposed project'+(apprN>1?'s':'')+' at '+esc(c.name)+' to save about <b>'+fmtK(apprAnn)+' a year</b> more.</div><button class="cf-btn" data-act="approvehere" data-val="'+esc(c.name)+'" style="margin-top:10px"><i class="ti ti-check"></i> Review &amp; approve here</button></div>':'';
-      app.innerHTML='<div style="margin-bottom:1.1rem">'+backPill()+'<h1 style="margin:14px 0 0;font-size:23px">'+esc(c.name)+'</h1><p style="color:var(--text-secondary);margin:.3rem 0 0">'+(high?'Running a little high for your occupancy and weather — worth a look.':'Running in line with your occupancy and weather.')+'</p></div>'
-        +'<div class="card"><div style="font-size:12px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:.04em;margin-bottom:8px">Energy &amp; water cost — last 12 months and next 12</div>'+trajChart(c,apprAnn)+savAxis()+legend+chips
-        +'<div style="font-size:13px;color:var(--text-secondary)">The shaded gap is what you’ve saved versus running these buildings without Atrium.</div>'+cta+'</div>';
+      app.innerHTML='<div style="margin-bottom:1.1rem">'+backPill()+'<h1 style="margin:14px 0 0;font-size:23px">'+esc(c.name)+'</h1><p style="color:var(--text-secondary);margin:.35rem 0 0">You’ve saved <b style="color:var(--text-success)">'+fmtK(c.saved)+'</b> with Atrium — on track to keep saving.</p></div>'
+        +'<div class="card">'+trajChart(c,apprAnn)
+        +'<div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text-muted);margin-top:2px"><span>12 mo ago</span><span>today</span><span>12 mo ahead</span></div>'+legend+cta+'</div>';
     } else {
       var t=DATA.savedByType.find(function(x){return x.type===S.savLeaf;});
       if(!t){S.screen='savings';return renderSavings();}
@@ -375,8 +409,10 @@
   // OFF. Estimated solutions are NOT firm quotes: they can never be selected,
   // counted in the outcome, or approved — they're shown only for awareness.
   S.excl={};
-  function measured(){return DATA.solutions.filter(function(s){return !est(s);});}
-  function estimated(){return DATA.solutions.filter(function(s){return est(s);});}
+  // The plan holds only solutions not yet approved (approved ones move to the
+  // "Approved this session" strip). Firm = measured; estimated is awareness-only.
+  function measured(){return sols().filter(function(s){return !est(s);});}
+  function estimated(){return sols().filter(function(s){return est(s);});}
   // Selectable = firm only. Estimated is structurally excluded from the plan.
   function included(){return measured().filter(function(s){return !S.excl[s.id];});}
   function on(s){return !est(s)&&!S.excl[s.id];}
@@ -397,10 +433,11 @@
                   :'Everything below is a firm, guaranteed quote.';
     var cta=n?'<button class="pl-cta" data-act="approve-selected"><i class="ti ti-check"></i> Review &amp; approve</button>'
              :'<button class="pl-cta" disabled><i class="ti ti-check"></i> Review &amp; approve</button>';
+    var heroAmt=amtUnit(totalSav);
     return '<div class="pl-sticky"><div class="pl-sumcard">'
       +'<div class="pl-hero-row">'
         +'<div><div class="pl-sumlead">Recommended plan · ready to approve</div>'
-          +'<div class="pl-hero mono">'+(n?'+':'')+fmtK(totalSav)+' <span style="font-size:.44em;font-weight:600;color:var(--text-muted);letter-spacing:0">a year</span></div>'
+          +'<div class="pl-hero mono">'+(n?'+':'')+heroAmt.a+' <span style="font-size:.44em;font-weight:600;color:var(--text-muted);letter-spacing:0">'+heroAmt.u+'</span></div>'
           +'<div class="pl-count">'+lead+'</div></div>'
         +cta+'</div>'
       +'<div class="pl-count" style="margin-top:8px"><i class="ti ti-shield-check" style="color:var(--text-success)"></i> '+reassure+'</div>'
@@ -437,18 +474,25 @@
       +'</div>';
   }
 
-  // #2 sign-up: a control to add the rest of the portfolio.
+  // #2 sign-up: an encouraging control to add the rest of the portfolio. Green, not
+  // amber — this is opportunity, not a warning. "Your other properties" because some
+  // hotels are already saving with Atrium.
   function signupLine(){
     var list=prospects();
     if(!list.length)return '';
-    var idle=Math.round(sumCf(list)/5);
-    return '<button class="pl-signline" data-act="go" data-val="signup"><span><i class="ti ti-plus" style="color:var(--text-warning)"></i> Add more properties to your plan — <span class="amt">'+fmtK(idle)+' a year</span> more</span><i class="ti ti-arrow-right" style="color:var(--text-muted)"></i></button>';
+    var some=DATA.contracted.length>0;
+    var amt=amtUnit(sumCf(list));
+    var label=some?'Bring your other '+list.length+' properties online':'Bring your properties online';
+    return '<button class="pl-signline" data-act="go" data-val="signup"><span><i class="ti ti-plus" style="color:var(--text-success)"></i> '+label+' — <span class="amt">'+amt.a+' '+amt.u+'</span> more</span><i class="ti ti-arrow-right" style="color:var(--text-muted)"></i></button>';
   }
 
-  // #3 savings baseline (quiet): opens the shared savings drill.
+  // #3 savings-to-date: prominent but subordinate to the hero — a compact seasonal
+  // past&future chart (shared savHeroSvg) that taps into the savings drill.
   function savedLine(){
     var tot=DATA.contracted.reduce(function(t,c){return t+c.saved;},0);
-    return '<button class="pl-savedline" data-act="go" data-val="savings"><span><i class="ti ti-trophy" style="color:var(--text-success)"></i> You’ve already saved <b>'+fmtK(tot)+'</b> so far</span><i class="ti ti-arrow-right"></i></button>';
+    return '<button class="pl-savedcard" data-act="go" data-val="savings">'
+      +'<div class="pl-savedtop"><span class="v">'+fmtK(tot)+' saved with Atrium so far</span><span class="k">past &amp; ahead <i class="ti ti-arrow-right"></i></span></div>'
+      +savHeroSvg()+'</button>';
   }
 
   function renderPlanner(){
@@ -463,7 +507,11 @@
     var estRows=ests.length?'<div class="pl-sectlabel" style="margin-top:26px">Early estimates — connect data to firm up</div>'
         +'<p style="color:var(--text-muted);margin:0 2px 9px;font-size:12.5px">Not firm quotes yet, so they aren’t selectable or part of the total above. Connect the data and each becomes a guaranteed quote you can approve.</p>'
         +'<div style="display:flex;flex-direction:column;gap:10px">'+ests.map(plRow).join('')+'</div>':'';
-    app.innerHTML=head+summaryStrip()+measRows+estRows+signupLine()+savedLine();
+    var noneFirm=meas.length?'':'<div class="pl-row"><span class="pl-lock"><i class="ti ti-circle-check" style="color:var(--text-success)"></i></span><div class="pl-name"><div style="font-weight:600;color:var(--text-success)">Every firm project is approved</div><div class="pl-sub">Connect data on the estimates below, or add more properties.</div></div></div>';
+    var appd=DATA.solutions.filter(function(s){return S.approved[s.id];});
+    var au=amtUnit(sumSav(appd));
+    var approvedEl=appd.length?'<div class="approved-strip" style="margin-top:16px"><i class="ti ti-circle-check"></i> Approved this session — <b>'+au.a+' '+au.u+'</b> across '+appd.length+' project'+(appd.length>1?'s':'')+'</div>':'';
+    app.innerHTML=head+summaryStrip()+(meas.length?measRows:noneFirm)+estRows+approvedEl+signupLine()+savedLine();
   }
 
   function renderLeaf(){
@@ -477,9 +525,9 @@
     var list=prospects();
     var rows=list.map(function(p){
       var cta=p.ready?'<button class="cf-btn" data-act="sign" data-val="'+p.id+'">Approve &amp; sign</button>':'<button class="cf-pill" data-act="step" data-val="'+p.id+'">'+p.step+'</button>';
-      return '<div data-row="'+p.id+'" style="display:flex;align-items:center;justify-content:space-between;gap:12px;background:var(--surface-2);border:1px '+(p.est?'dashed':'solid')+' '+(p.est?'var(--border-strong)':'var(--border)')+';border-radius:12px;padding:15px 16px;box-shadow:var(--shadow)"><div style="min-width:0"><p style="margin:0;font-weight:600">'+esc(p.name)+'</p><p style="margin:.15rem 0 0;font-size:13px;color:var(--text-muted)">'+(p.est?'Estimated · '+p.step:p.step)+'</p></div><div style="text-align:right;flex-shrink:0"><div class="cf-amt" style="font-size:19px;color:var(--text-success)">'+fmtK(p.cf)+'</div><div style="margin-top:7px">'+cta+'</div></div></div>';
+      return '<div data-row="'+p.id+'" style="display:flex;align-items:center;justify-content:space-between;gap:12px;background:var(--surface-2);border:1px '+(p.est?'dashed':'solid')+' '+(p.est?'var(--border-strong)':'var(--border)')+';border-radius:12px;padding:15px 16px;box-shadow:var(--shadow)"><div style="min-width:0"><p style="margin:0;font-weight:600">'+esc(p.name)+'</p><p style="margin:.15rem 0 0;font-size:13px;color:var(--text-muted)">'+(p.est?'Estimated · '+p.step:p.step)+'</p></div><div style="text-align:right;flex-shrink:0"><div class="cf-amt" style="font-size:19px;color:var(--text-success)">'+perTile(p.cf)+'</div><div style="margin-top:7px">'+cta+'</div></div></div>';
     }).join('');
-    app.innerHTML='<div style="margin-bottom:1.25rem">'+backPill()+'<h1 style="margin:14px 0 0">Add properties to your plan</h1><p style="color:var(--text-secondary);margin:.3rem 0 0">Each property’s 5-year new cash flow once it’s saving with Atrium.</p></div>'+(list.length?'<div style="display:flex;flex-direction:column;gap:10px">'+rows+'</div>':'<div class="cf-sq" style="text-align:center;padding:2rem"><i class="ti ti-circle-check" style="font-size:26px;color:var(--text-success)"></i><p style="margin:.5rem 0 0">Every property is in your plan.</p></div>');
+    app.innerHTML='<div style="margin-bottom:1.25rem">'+backPill()+'<h1 style="margin:14px 0 0">Add properties to your plan</h1><p style="color:var(--text-secondary);margin:.3rem 0 0">Estimated annual savings once each property is saving with Atrium.</p></div>'+(list.length?'<div style="display:flex;flex-direction:column;gap:10px">'+rows+'</div>':'<div class="cf-sq" style="text-align:center;padding:2rem"><i class="ti ti-circle-check" style="font-size:26px;color:var(--text-success)"></i><p style="margin:.5rem 0 0">Every property is in your plan.</p></div>');
   }
 
   function render(){ if(S.screen==='leaf')renderLeaf(); else if(S.screen==='signup')renderSignup(); else if(S.screen==='savings')renderSavings(); else if(S.screen==='savleaf')renderSavingsLeaf(); else renderPlanner(); }
@@ -489,7 +537,7 @@
     var pertog=e.target.closest('[data-period]'); if(pertog){S.period=pertog.dataset.period;render();return;}
     var seg=e.target.closest('[data-segmode]'); if(seg){S.mode[seg.dataset.sol]=seg.dataset.segmode;render();return;}
     var el=e.target.closest('[data-act],[data-approve]'); if(!el)return;
-    if(el.dataset.approve){var s=DATA.solutions.find(function(x){return x.id===el.dataset.approve;});var m=curMode(s);S.approved[s.id]=1;S.approvedMode[s.id]=m;S.excl[s.id]=0;S.screen='home';render();return;}
+    if(el.dataset.approve){var s=DATA.solutions.find(function(x){return x.id===el.dataset.approve;});var m=curMode(s);window.open('esign.html?doc='+encodeURIComponent(s.type+' — '+s.prop),'_blank');S.approved[s.id]=1;S.approvedMode[s.id]=m;S.excl[s.id]=0;S.screen='home';render();return;}
     var a=el.dataset.act, v=el.dataset.val;
     if(a==='connect'){el.textContent='Request sent →';el.disabled=true;el.style.opacity=.7;}
     else if(a==='toggle'){var ts=DATA.solutions.find(function(x){return x.id===v;});if(ts&&!est(ts)){S.excl[v]=!S.excl[v];render();}}
@@ -503,7 +551,7 @@
     else if(a==='approvehere'){var mh=sols().filter(function(s){return s.prop===v;}).sort(recSort)[0];if(mh){S.leafId=mh.id;S.screen='leaf';}else S.screen='home';render();}
     else if(a==='approvetype'){var mt=sols().filter(function(s){return s.type===v;}).sort(recSort)[0];if(mt){S.leafId=mt.id;S.screen='leaf';}else S.screen='home';render();}
     else if(a==='step'){el.textContent='We’ll guide you →';el.disabled=true;el.style.opacity=.6;}
-    else if(a==='sign'){var p=DATA.prospects.find(function(x){return x.id===v;});S.signed[v]=1;render();}
+    else if(a==='sign'){var p=DATA.prospects.find(function(x){return x.id===v;});window.open('esign.html?doc='+encodeURIComponent('New property — '+p.name),'_blank');S.signed[v]=1;render();}
     else if(a==='back'){var B={leaf:'home',signup:'home',savleaf:'savings',savings:'home'};S.screen=B[S.screen]||'home';render();}
   });
   render();
