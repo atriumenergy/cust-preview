@@ -141,10 +141,10 @@
   /* Sign-up strip — #2 */
   .mk-signup{display:flex;align-items:center;gap:14px;width:100%;text-align:left;font:inherit;color:inherit;cursor:pointer;background:var(--surface-2);border:1px solid var(--border);border-radius:14px;box-shadow:var(--shadow);padding:16px 18px;margin-top:14px;transition:transform .12s,box-shadow .12s,border-color .12s}
   .mk-signup:hover{transform:translateY(-2px);box-shadow:var(--shadow-hover);border-color:var(--border-strong)}
-  .mk-signup-ico{width:42px;height:42px;flex-shrink:0;border-radius:11px;display:flex;align-items:center;justify-content:center;background:var(--bg-warning);color:var(--text-warning);font-size:21px}
-  .mk-signup-body{min-width:0;flex:1}
+  .mk-signup-ico{width:42px;height:42px;flex-shrink:0;border-radius:11px;display:flex;align-items:center;justify-content:center;background:var(--bg-success);color:var(--text-success);font-size:21px}
+  .mk-signup-body{min-width:0;flex:1;display:flex;flex-direction:column;gap:2px}
   .mk-signup-k{font-size:13px;color:var(--text-secondary)}
-  .mk-signup-k b{color:var(--text-warning);font-weight:700}
+  .mk-signup-k b{color:var(--text-success);font-weight:700}
   .mk-signup-v{font-size:15px;font-weight:600;letter-spacing:-.01em;margin-top:1px}
   .mk-signup-cta{flex-shrink:0;display:inline-flex;align-items:center;gap:6px;color:var(--primary);font-size:14px;font-weight:600}
   @media (max-width:540px){
@@ -384,10 +384,9 @@
     var chips=pick.map(function(s){return '<span class="mk-hero-chip"><i class="ti ti-bolt"></i> '+esc(s.type)+' <b>+'+fmtK(s.savings)+'/yr</b></span>';}).join('')
       +(all.length>pick.length?'<span class="mk-hero-chip">+'+(all.length-pick.length)+' more</span>':'');
     var sub=priced.length===all.length
-      ? all.length+' upgrades matched across '+props+' hotel'+(props>1?'s':'')+', priced from your own meter data. Savings start once you approve.'
-      : priced.length+' priced and ready to approve now across '+props+' hotel'+(props>1?'s':'')+'; the rest are estimates awaiting your data.';
+      ? all.length+' matched, priced from your own meter data'
+      : priced.length+' ready to approve now · '+(all.length-priced.length)+' more await your data';
     return '<button class="mk-hero" data-act="review">'
-      +'<span class="mk-hero-tag"><i class="ti ti-award"></i> Matched to your properties</span>'
       +'<div class="mk-hero-label">Your matched upgrades</div>'
       +'<div class="mk-hero-amt mono">+'+fmtK(ann)+'<span class="u"> a year</span></div>'
       +'<div class="mk-hero-sub">'+sub+'</div>'
@@ -401,8 +400,8 @@
     var idle=Math.round(sumCf(list)/5);
     return '<button class="mk-signup" data-act="go" data-val="signup">'
       +'<span class="mk-signup-ico"><i class="ti ti-building-plus"></i></span>'
-      +'<span class="mk-signup-body"><span class="mk-signup-v">Add properties to shop for their upgrades</span>'
-      +'<span class="mk-signup-k"><b>'+fmtK(idle)+' a year</b> is waiting across '+list.length+' more hotel'+(list.length>1?'s':'')+' not yet connected.</span></span>'
+      +'<span class="mk-signup-body"><span class="mk-signup-v">Add your other '+list.length+' properties</span>'
+      +'<span class="mk-signup-k"><b>+'+fmtK(idle)+' a year</b> more, ready when you are</span></span>'
       +'<span class="mk-signup-cta">Add properties <i class="ti ti-arrow-right"></i></span>'
     +'</button>';
   }
