@@ -272,7 +272,7 @@
     if(est(s)){
       var lo=savLo(s),hi=savHi(s);
       return '<div class="card est" data-row="'+s.id+'">'+cardHead(s)
-        +'<div class="fid-banner"><i class="ti ti-alert-triangle"></i> Pre-audit estimate — connect '+esc(s.dataNeed)+' to turn this into a firm, guaranteed quote.<button class="cf-btn sm" data-act="connect" data-val="'+s.id+'">Connect data</button></div>'
+        +'<div class="fid-banner"><i class="ti ti-alert-triangle"></i> Pre-audit estimate — connect '+esc(s.dataNeed)+' to turn this into a firm quote.<button class="cf-btn sm" data-act="connect" data-val="'+s.id+'">Connect data</button></div>'
         +'<div style="margin-bottom:6px"><div style="font-size:12px;color:var(--text-muted)">Estimated savings <span class="esttag"><i class="ti ti-help-circle"></i> rough range</span></div>'
           +'<div class="mono" style="font-size:28px;font-weight:700;color:var(--text-success);letter-spacing:-.02em">'+perRange(lo,hi)+'</div></div>'
         +'<p style="font-size:13px;color:var(--text-secondary);margin:.2rem 0 0">Firm price, incentives, and Cash / Loan / Lease options appear once we have your data.</p>'
@@ -495,7 +495,7 @@
         +'<span style="display:flex;align-items:center;gap:8px"><span style="font-size:13px;color:var(--text-muted)">Amounts:</span>'+perToggle()+'</span></div>';
     var measRows='<div class="pl-sectlabel">Firm quotes ready to approve</div><div style="display:flex;flex-direction:column;gap:10px">'+meas.map(plRow).join('')+'</div>';
     var estRows=ests.length?'<div class="pl-sectlabel" style="margin-top:26px">Early estimates — connect data to firm up</div>'
-        +'<p style="color:var(--text-muted);margin:0 2px 9px;font-size:12.5px">Not firm quotes yet, so they aren’t selectable or part of the total above. Connect the data and each becomes a guaranteed quote you can approve.</p>'
+        +'<p style="color:var(--text-muted);margin:0 2px 9px;font-size:12.5px">Not firm quotes yet, so they aren’t selectable or part of the total above. Connect the data and each becomes a firm quote you can approve.</p>'
         +'<div style="display:flex;flex-direction:column;gap:10px">'+ests.map(plRow).join('')+'</div>':'';
     var noneFirm=meas.length?'':'<div class="pl-row"><span class="pl-lock"><i class="ti ti-circle-check" style="color:var(--text-success)"></i></span><div class="pl-name"><div style="font-weight:600;color:var(--text-success)">Every firm project is approved</div><div class="pl-sub">Connect data on the estimates below, or add more properties.</div></div></div>';
     var appd=DATA.solutions.filter(function(s){return S.approved[s.id];});

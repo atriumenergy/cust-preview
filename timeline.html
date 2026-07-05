@@ -286,7 +286,7 @@
     if(est(s)){
       var lo=savLo(s),hi=savHi(s);
       return '<div class="card est" data-row="'+s.id+'">'+cardHead(s)
-        +'<div class="fid-banner"><i class="ti ti-alert-triangle"></i> Pre-audit estimate — connect '+esc(s.dataNeed)+' to turn this into a firm, guaranteed quote.<button class="cf-btn sm" data-act="connect" data-val="'+s.id+'">Connect data</button></div>'
+        +'<div class="fid-banner"><i class="ti ti-alert-triangle"></i> Pre-audit estimate — connect '+esc(s.dataNeed)+' to turn this into a firm quote.<button class="cf-btn sm" data-act="connect" data-val="'+s.id+'">Connect data</button></div>'
         +'<div style="margin-bottom:6px"><div style="font-size:12px;color:var(--text-muted)">Estimated savings <span class="esttag"><i class="ti ti-help-circle"></i> rough range</span></div>'
           +'<div class="mono" style="font-size:28px;font-weight:700;color:var(--text-success);letter-spacing:-.02em">'+perRange(lo,hi)+'</div></div>'
         +'<p style="font-size:13px;color:var(--text-secondary);margin:.2rem 0 0">Firm price, incentives, and Cash / Loan / Lease options appear once we have your data.</p>'
@@ -377,7 +377,7 @@
     });
     // ---- PAST zone (left): the Today anchor — savings-to-date lives here (savHeroSvg) ----
     var pastZone='<div class="tl-zone"><div class="tl-zonelabel"><i class="ti ti-circle-check"></i> What you’ve done</div>'
-      +'<div class="tl-sum past"><div class="tl-sum-top"><span class="tl-sum-t">Saving with Atrium today</span></div>'
+      +'<div class="tl-sum past" data-act="go" data-val="savings" style="cursor:pointer"><div class="tl-sum-top"><span class="tl-sum-t">Saving with Atrium today</span></div>'
         +'<div class="tl-anchor-v">'+fmtK(banked)+'<span style="font-size:12px;font-weight:600;color:var(--text-muted)"> saved so far</span></div>'
         +savHeroSvg()
         +'<div class="tl-sum-meta" style="margin-top:6px">'+perTile(currentRun)+' saved now · past &amp; ahead</div>'
