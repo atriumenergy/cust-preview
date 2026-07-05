@@ -361,12 +361,11 @@
       +'<div style="min-width:0"><p style="color:var(--text-secondary);margin:0;font-size:14px">'+esc(DATA.portfolio)+'</p>'
         +'<h1 style="margin:.15rem 0 0;font-size:21px">Your savings timeline</h1></div>'
       +'<div class="mtoggle"><button data-period="annual" aria-pressed="'+(S.period==='annual')+'">Annual</button><button data-period="monthly" aria-pressed="'+(S.period==='monthly')+'">Monthly</button></div></div>'
-      +'<p style="color:var(--text-muted);margin:0 0 14px;font-size:13px">'+DATA.contracted.length+' hotels saving today · what you’ve done, what’s worth doing now, and what’s coming up</p>';
+      +'<p style="color:var(--text-muted);margin:0 0 14px;font-size:13px">'+DATA.contracted.length+' hotels saving with Atrium today</p>';
     // Guiding hand (priority 1: approve) — the one-second read. Lead card is the Atrium-recommended top pick.
     var lead=live.slice().sort(recSort)[0]||live[0];
     var banner=live.length?'<button class="tl-cta" data-act="leaf" data-val="'+lead.id+'">'
-      +'<span class="tl-cta-main"><span class="tl-cta-k">Do next</span>'
-      +'<span class="tl-cta-t">Approve your proposed projects</span>'
+      +'<span class="tl-cta-main"><span class="tl-cta-t">Approve your proposed projects</span>'
       +'<span class="tl-cta-s">'+live.length+' projects · '+np+' hotels'+(timeSensitive?' · some are time-sensitive':'')+'</span></span>'
       +'<span class="tl-cta-side"><span class="tl-cta-amt">+'+appA.a+'<span class="tl-cta-u"> '+appA.u+'</span></span>'
       +'<span class="tl-cta-go">Review <i class="ti ti-arrow-right"></i></span></span></button>':'';
