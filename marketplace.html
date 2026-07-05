@@ -415,7 +415,7 @@
       +'<button class="mk-open" data-act="job" data-val="'+s.id+'">'
         +tags
         +'<div class="mk-title"><div class="mk-type">'+esc(s.type)+'</div><div class="mk-prop"><i class="ti ti-building"></i> '+esc(s.prop)+'</div></div>'
-        +'<div class="mk-rec"><div style="display:flex;justify-content:space-between;align-items:center;gap:8px"><span class="mk-rec-tag"><i class="ti ti-award"></i> Atrium’s pick</span><span class="mk-bidcue"><i class="ti ti-gavel"></i> '+n+' vendors bid</span></div>'
+        +'<div class="mk-rec">'
           +'<div class="mk-rec-row"><span class="mk-rec-vendor">'+esc(rec.vendor)+'</span><span class="mk-rec-price">'+fmt(rec.price)+'</span></div>'
           +'<div class="mk-rec-term">'+esc(rec.term)+'</div>'
           +'<div class="mk-rec-save">Saves <b>+'+perTile(s.savings)+'</b></div></div>'
@@ -495,7 +495,6 @@
     var pending=live.filter(est);                                        // jobs not yet out for bid
     var head='<div class="mk-topbar"><span class="mk-brand"><i class="ti ti-gavel" style="color:var(--primary)"></i> '+esc(DATA.portfolio)+' · Job marketplace</span>'
       +'<div class="mtoggle"><button data-period="annual" aria-pressed="'+(S.period==='annual')+'">Annual</button><button data-period="monthly" aria-pressed="'+(S.period==='monthly')+'">Monthly</button></div></div>';
-    var pay=paySwitch();
     var sign=signupStrip();
     var savh=savingsHero();
     var body='';
@@ -512,7 +511,7 @@
     }
     var appd=DATA.solutions.filter(function(s){return S.approved[s.id];});
     var approvedEl=appd.length?'<div class="approved-strip"><i class="ti ti-circle-check"></i> Approved this session — <b>'+amtUnit(sumSav(appd)).a+' '+amtUnit(sumSav(appd)).u+'</b> across '+appd.length+' job'+(appd.length>1?'s':'')+'</div>':'';
-    app.innerHTML=head+pay+sign+savh+approvedEl+body;
+    app.innerHTML=head+sign+savh+approvedEl+body;
   }
 
   // JOB DETAIL — its own marketplace view (NOT the shared solutionCard leaf).
