@@ -119,16 +119,16 @@
       {id:'s1',prop:'Marina Bay Inn',type:'Solar + Batteries',u:0,note:'Start now — about a year to build for the 2027 rebate',vendor:'GreenVolt Partners',install:'about 6 weeks · starts Sep',fidelity:'measured',market:430000,discountPct:12,incentive:130000,savings:75000,loan:{termYears:10,aprPct:6.5},lease:{annualAtrium:44000,annualMarket:52000,termYears:20}},
       {id:'s5',prop:'Cedar Court Hotel',type:'Solar + Batteries',u:0,note:'Start now — about a year to build for the 2027 rebate',vendor:'GreenVolt Partners',install:'about 5 weeks',fidelity:'measured',market:300000,discountPct:12,incentive:90000,savings:53000,loan:{termYears:10,aprPct:6.5},lease:{annualAtrium:31000,annualMarket:37000,termYears:20}},
       {id:'s2',prop:'Marina Bay Inn',type:'Heat Pump Water Heaters',u:1,vendor:'Thermal Systems',install:'about 2 weeks',fidelity:'measured',market:72000,discountPct:12,incentive:15000,savings:17000,loan:{termYears:7,aprPct:6.9},lease:null},
-      {id:'s6',prop:'Cedar Court Hotel',type:'LED Lighting',u:1,vendor:'BrightSwap',install:'about 2 weeks',fidelity:'measured',market:46000,discountPct:13,incentive:6000,savings:13500,loan:{termYears:3,aprPct:7.9},lease:null},
-      {id:'s3',prop:'Marina Bay Inn',type:'LED Lighting',u:2,vendor:'BrightSwap',install:'about 2 weeks',fidelity:'measured',market:34000,discountPct:13,incentive:4000,savings:10000,loan:{termYears:3,aprPct:7.9},lease:null},
+      {id:'s6',prop:'Cedar Court Hotel',type:'LED Lighting',u:0,vendor:'BrightSwap',install:'about 2 weeks',fidelity:'measured',market:46000,discountPct:13,incentive:6000,savings:13500,loan:{termYears:3,aprPct:7.9},lease:null},
+      {id:'s3',prop:'Marina Bay Inn',type:'LED Lighting',u:0,vendor:'BrightSwap',install:'about 2 weeks',fidelity:'measured',market:34000,discountPct:13,incentive:4000,savings:10000,loan:{termYears:3,aprPct:7.9},lease:null},
       {id:'s4',prop:'Marina Bay Inn',type:'Smart Thermostats',u:2,vendor:'Cozy Controls',install:'about 1 week',fidelity:'measured',market:10000,discountPct:14,incentive:1500,savings:4500,loan:{termYears:3,aprPct:7.9},lease:null},
       {id:'s10',prop:'Marina Bay Inn',type:'Building Controls (EMS)',u:1,vendor:'Nodal Systems',install:'about 3 weeks',fidelity:'measured',market:60000,discountPct:12,incentive:9000,savings:22000,loan:{termYears:5,aprPct:6.9},lease:null},
       {id:'s11',prop:'Cedar Court Hotel',type:'Kitchen Hood Controls',u:1,vendor:'AirWise Controls',install:'about 1 week',fidelity:'measured',market:28000,discountPct:12,incentive:3000,savings:9000,loan:{termYears:3,aprPct:7.9},lease:null},
       {id:'s12',prop:'Cedar Court Hotel',type:'Pool Heat Pump',u:2,vendor:'ThermaPool',install:'about 2 weeks',fidelity:'measured',market:38000,discountPct:12,incentive:5000,savings:11000,loan:{termYears:7,aprPct:6.9},lease:null},
-      {id:'s13',prop:'Riverside Lodge',type:'Low-Flow Water Fixtures',u:2,vendor:'AquaTrim',install:'about 1 week',fidelity:'measured',market:14000,discountPct:13,incentive:2000,savings:6500,loan:{termYears:3,aprPct:7.9},lease:null},
+      {id:'s13',prop:'Riverside Lodge',type:'Low-Flow Water Fixtures',u:0,vendor:'AquaTrim',install:'about 1 week',fidelity:'measured',market:14000,discountPct:13,incentive:2000,savings:6500,loan:{termYears:3,aprPct:7.9},lease:null},
       {id:'s8',prop:'Riverside Lodge',type:'Heat Pump Water Heaters',u:0,vendor:'Thermal Systems',install:'about 2 weeks',fidelity:'estimated',dataNeed:'your water-heater metering',savings:12000},
       {id:'s9',prop:'Riverside Lodge',type:'Smart Thermostats',u:1,vendor:'Cozy Controls',install:'about 1 week',fidelity:'estimated',dataNeed:'occupancy data',savings:12500},
-      {id:'s7',prop:'Cedar Court Hotel',type:'Ozone Laundry',u:1,vendor:'PureWash',install:'about 1 week',fidelity:'estimated',dataNeed:'laundry-room metering',savings:10000}
+      {id:'s7',prop:'Cedar Court Hotel',type:'Ozone Laundry',u:0,vendor:'PureWash',install:'about 1 week',fidelity:'measured',market:24000,discountPct:12,incentive:2500,savings:10000,loan:{termYears:3,aprPct:7.9},lease:null}
     ],
     // properties Atrium already operates — these have savings history + a forecast
     contracted:[
@@ -176,10 +176,10 @@
   // Atrium-recommended priority: incentive deadlines first, then quick wins (fast payback / low friction), then value.
   // Rationale: land early wins so customers feel good about Atrium while larger cash flow keeps unlocking over the contract.
   function atriumScore(s){
-    var deadline=s.note?0:1;        // rebate/deadline projects can't wait
-    var friction=est(s)?1:0;        // firm quotes before estimates (estimates still need data)
-    var pay=est(s)?8:payback(s);    // quicker payback = earlier win
-    return deadline*1000 + friction*100 + pay;
+    // Quick wins lead (fast payback = earliest banked win). Deadline projects (e.g. solar's 2027 clock)
+    // get a modest bump so the clock starts, but a true quick win still goes first.
+    var pay=est(s)?8:payback(s);
+    return pay - (s.note?0.5:0);
   }
   function recSort(a,b){ return atriumScore(a)-atriumScore(b); }
   function econ(s,mode){
@@ -295,7 +295,7 @@
     function X(i){return padX+i/n*(w-2*padX);}
     function Y(v){return padT+(1-v/mx)*(h-padT-padB);}
     function poly(from,to){var p=[];for(var i=from;i<=to;i++)p.push(X(i).toFixed(1)+','+Y(s[i]).toFixed(1));return p.join(' ');}
-    var area=poly(0,past)+' '+X(past).toFixed(1)+','+Y(0).toFixed(1)+' '+X(0).toFixed(1)+','+Y(0).toFixed(1);
+    var area=poly(0,n)+' '+X(n).toFixed(1)+','+Y(0).toFixed(1)+' '+X(0).toFixed(1)+','+Y(0).toFixed(1);
     return '<svg viewBox="0 0 '+w+' '+h+'" width="100%" height="'+h+'" preserveAspectRatio="none" style="display:block">'
       +'<polygon points="'+area+'" fill="hsl(86 45% 94%)"/>'
       +'<line x1="'+X(past).toFixed(1)+'" x2="'+X(past).toFixed(1)+'" y1="'+padT+'" y2="'+(h-padB)+'" stroke="var(--border-strong)" stroke-dasharray="3 3"/>'
@@ -365,7 +365,8 @@
     function noise(i){return 0.055*Math.sin(i*0.9+0.5)+0.03*Math.sin(i*2.15+1.7)+0.018*Math.sin(i*4.3+3.1);}
     for(var i=0;i<n;i++){
       var without=wom*(1+noise(i));
-      var wth=without*(1-savFrac*(1+0.18*Math.sin(i*1.3+0.9)));
+      var g=Math.min(1,i/today); // realized savings ramp in over the trailing year — 0 savings twelve months ago
+      var wth=without*(1-savFrac*g*(1+0.18*Math.sin(i*1.3+0.9)));
       var target=without*(1-apprFrac*(1+0.18*Math.sin(i*1.3+0.9)));
       var appr=i<=today?wth:wth+(target-wth)*Math.min(1,(i-today)/8); // approved work ramps in over ~8 months (time-to-value)
       s.push({without:without,wth:wth,appr:appr});
