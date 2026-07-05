@@ -116,8 +116,8 @@
       {id:'p6',name:'Bayside Motor Lodge',cf:95000,ready:false,step:'Add your utility bills',est:true}
     ],
     solutions:[
-      {id:'s1',prop:'Marina Bay Inn',type:'Solar + Batteries',u:0,note:'Rebate ends Aug 31',vendor:'GreenVolt Partners',install:'about 6 weeks · starts Sep',fidelity:'measured',market:430000,discountPct:12,incentive:130000,savings:75000,loan:{termYears:10,aprPct:6.5},lease:{annualAtrium:44000,annualMarket:52000,termYears:20}},
-      {id:'s5',prop:'Cedar Court Hotel',type:'Solar + Batteries',u:0,note:'Rebate ends Aug 31',vendor:'GreenVolt Partners',install:'about 5 weeks',fidelity:'measured',market:300000,discountPct:12,incentive:90000,savings:53000,loan:{termYears:10,aprPct:6.5},lease:{annualAtrium:31000,annualMarket:37000,termYears:20}},
+      {id:'s1',prop:'Marina Bay Inn',type:'Solar + Batteries',u:0,note:'Start now — about a year to build for the 2027 rebate',vendor:'GreenVolt Partners',install:'about 6 weeks · starts Sep',fidelity:'measured',market:430000,discountPct:12,incentive:130000,savings:75000,loan:{termYears:10,aprPct:6.5},lease:{annualAtrium:44000,annualMarket:52000,termYears:20}},
+      {id:'s5',prop:'Cedar Court Hotel',type:'Solar + Batteries',u:0,note:'Start now — about a year to build for the 2027 rebate',vendor:'GreenVolt Partners',install:'about 5 weeks',fidelity:'measured',market:300000,discountPct:12,incentive:90000,savings:53000,loan:{termYears:10,aprPct:6.5},lease:{annualAtrium:31000,annualMarket:37000,termYears:20}},
       {id:'s2',prop:'Marina Bay Inn',type:'Heat Pump Water Heaters',u:1,vendor:'Thermal Systems',install:'about 2 weeks',fidelity:'measured',market:72000,discountPct:12,incentive:15000,savings:17000,loan:{termYears:7,aprPct:6.9},lease:null},
       {id:'s6',prop:'Cedar Court Hotel',type:'LED Lighting',u:1,vendor:'BrightSwap',install:'about 2 weeks',fidelity:'measured',market:46000,discountPct:13,incentive:6000,savings:13500,loan:{termYears:3,aprPct:7.9},lease:null},
       {id:'s3',prop:'Marina Bay Inn',type:'LED Lighting',u:2,vendor:'BrightSwap',install:'about 2 weeks',fidelity:'measured',market:34000,discountPct:13,incentive:4000,savings:10000,loan:{termYears:3,aprPct:7.9},lease:null},
@@ -359,19 +359,28 @@
     app.innerHTML=head+unlockedBanner()+solutionCard(s);
   }
   function trajChart(sc,apprAnn){
-    var wm=sc.next12/12, wom=sc.without12/12, am=(sc.next12-(apprAnn||0))/12;
-    var n=24,w=340,h=132,padX=8,padT=16,padB=8,today=11,s=[];
-    for(var i=0;i<n;i++){var seas=Math.sin(i/12*Math.PI*2);s.push({without:wom*(1+0.06*seas),wth:wm*(1+0.06*seas),appr:am*(1+0.06*seas)});}
+    var wom=sc.without12/12, savFrac=(sc.without12-sc.next12)/sc.without12, apprFrac=savFrac+(apprAnn||0)/sc.without12;
+    var n=25,w=340,h=120,padX=6,padT=10,padB=8,today=12,s=[];
+    // deterministic, irregular month-to-month variation (sum of sines) — no mythical steady state
+    function noise(i){return 0.055*Math.sin(i*0.9+0.5)+0.03*Math.sin(i*2.15+1.7)+0.018*Math.sin(i*4.3+3.1);}
+    for(var i=0;i<n;i++){
+      var without=wom*(1+noise(i));
+      var wth=without*(1-savFrac*(1+0.18*Math.sin(i*1.3+0.9)));
+      var target=without*(1-apprFrac*(1+0.18*Math.sin(i*1.3+0.9)));
+      var appr=i<=today?wth:wth+(target-wth)*Math.min(1,(i-today)/8); // approved work ramps in over ~8 months (time-to-value)
+      s.push({without:without,wth:wth,appr:appr});
+    }
     var all=[];s.forEach(function(d){all.push(d.without,d.wth);if(apprAnn)all.push(d.appr);});
-    var mn=Math.min.apply(null,all),mx=Math.max.apply(null,all),sp=(mx-mn)||1;mn-=sp*0.14;mx+=sp*0.08;sp=mx-mn;
+    var mn=Math.min.apply(null,all),mx=Math.max.apply(null,all),sp=(mx-mn)||1;mn-=sp*0.12;mx+=sp*0.08;sp=mx-mn;
     function X(i){return padX+i/(n-1)*(w-2*padX);}
     function Y(v){return padT+(1-(v-mn)/sp)*(h-padT-padB);}
     function poly(key,from,to){var p=[];for(var i=from;i<=to;i++)p.push(X(i).toFixed(1)+','+Y(s[i][key]).toFixed(1));return p.join(' ');}
-    var gap=[];for(var i=0;i<=today;i++)gap.push(X(i).toFixed(1)+','+Y(s[i].without).toFixed(1));for(var j=today;j>=0;j--)gap.push(X(j).toFixed(1)+','+Y(s[j].wth).toFixed(1));
+    var gap=[];for(var i=0;i<n;i++)gap.push(X(i).toFixed(1)+','+Y(s[i].without).toFixed(1));for(var j=n-1;j>=0;j--)gap.push(X(j).toFixed(1)+','+Y(s[j].wth).toFixed(1));
     return '<svg viewBox="0 0 '+w+' '+h+'" width="100%" height="'+h+'" preserveAspectRatio="none" style="display:block">'
-      +'<polygon points="'+gap.join(' ')+'" fill="hsl(86 45% 92%)"/>'
+      +'<polygon points="'+gap.join(' ')+'" fill="hsl(86 45% 91%)"/>'
       +'<line x1="'+X(today).toFixed(1)+'" x2="'+X(today).toFixed(1)+'" y1="'+padT+'" y2="'+(h-padB)+'" stroke="var(--border-strong)" stroke-dasharray="3 3"/>'
-      +'<polyline points="'+poly('without',0,n-1)+'" fill="none" stroke="var(--text-warning)" stroke-width="2" stroke-dasharray="5 3"/>'
+      +'<polyline points="'+poly('without',0,today)+'" fill="none" stroke="var(--text-warning)" stroke-width="2"/>'
+      +'<polyline points="'+poly('without',today,n-1)+'" fill="none" stroke="var(--text-warning)" stroke-width="2" stroke-dasharray="5 3"/>'
       +'<polyline points="'+poly('wth',0,today)+'" fill="none" stroke="var(--text-success)" stroke-width="2.5"/>'
       +'<polyline points="'+poly('wth',today,n-1)+'" fill="none" stroke="var(--text-success)" stroke-width="2.5" stroke-dasharray="5 3"/>'
       +(apprAnn?'<polyline points="'+poly('appr',today,n-1)+'" fill="none" stroke="var(--primary)" stroke-width="2" stroke-dasharray="2 3"/>':'')
@@ -414,16 +423,12 @@
     if(S.savView==='property'){
       var c=DATA.contracted.find(function(x){return x.id===S.savLeaf;});
       if(!c){S.screen='savings';return renderSavings();}
-      var apprAnn=approveAnnualFor(c.name),apprN=approveCountFor(c.name),high=c.runPct>100;
-      var chips='<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;margin:14px 0">'
-        +'<div class="chip"><div class="k">Saved to date</div><div class="v mono" style="color:var(--text-success)">'+fmtK(c.saved)+'</div></div>'
-        +'<div class="chip"><div class="k">Now vs expected</div><div class="v mono" style="color:'+(high?'var(--text-warning)':'var(--text-success)')+'">'+c.runPct+'%</div></div>'
-        +'<div class="chip"><div class="k">Next 12 months</div><div class="v mono">'+fmtK(c.next12)+'</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">$'+c.perRoomNight.toFixed(2)+' per occupied room-night</div></div></div>';
-      var legend='<div class="sav-legend"><span><i class="k" style="border-color:var(--text-warning);border-top-style:dashed"></i> without Atrium</span><span><i class="k" style="border-color:var(--text-success)"></i> with Atrium</span>'+(apprAnn?'<span><i class="k" style="border-color:var(--primary);border-top-style:dashed"></i> if you approve the proposed work</span>':'')+'<span>vertical line = today</span></div>';
+      var apprAnn=approveAnnualFor(c.name),apprN=approveCountFor(c.name);
+      var legend='<div class="sav-legend"><span><i class="k" style="border-color:var(--text-warning)"></i> without Atrium</span><span><i class="k" style="border-color:var(--text-success)"></i> with Atrium</span>'+(apprAnn?'<span><i class="k" style="border-color:var(--primary);border-top-style:dashed"></i> if you approve</span>':'')+'<span style="color:var(--text-muted)">dashed = forecast</span></div>';
       var cta=apprAnn?'<div style="margin-top:16px;background:var(--bg-success);border:1px solid hsl(86 40% 82%);border-radius:12px;padding:14px 16px"><div style="font-size:14px">Approve the '+apprN+' proposed project'+(apprN>1?'s':'')+' at '+esc(c.name)+' to save about <b>'+fmtK(apprAnn)+' a year</b> more.</div><button class="cf-btn" data-act="approvehere" data-val="'+esc(c.name)+'" style="margin-top:10px"><i class="ti ti-check"></i> Review &amp; approve here</button></div>':'';
-      app.innerHTML='<div style="margin-bottom:1.1rem">'+backPill()+'<h1 style="margin:14px 0 0;font-size:23px">'+esc(c.name)+'</h1><p style="color:var(--text-secondary);margin:.3rem 0 0">'+(high?'Running a little high for your occupancy and weather — worth a look.':'Running in line with your occupancy and weather.')+'</p></div>'
-        +'<div class="card"><div style="font-size:12px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:.04em;margin-bottom:8px">Energy &amp; water cost — last 12 months and next 12</div>'+trajChart(c,apprAnn)+savAxis()+legend+chips
-        +'<div style="font-size:13px;color:var(--text-secondary)">The shaded gap is what you’ve saved versus running these buildings without Atrium.</div>'+cta+'</div>';
+      app.innerHTML='<div style="margin-bottom:1.1rem">'+backPill()+'<h1 style="margin:14px 0 0;font-size:23px">'+esc(c.name)+'</h1><p style="color:var(--text-secondary);margin:.35rem 0 0">You’ve saved <b style="color:var(--text-success)">'+fmtK(c.saved)+'</b> with Atrium — on track to keep saving.</p></div>'
+        +'<div class="card">'+trajChart(c,apprAnn)
+        +'<div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text-muted);margin-top:2px"><span>12 mo ago</span><span>today</span><span>12 mo ahead</span></div>'+legend+cta+'</div>';
     } else {
       var t=DATA.savedByType.find(function(x){return x.type===S.savLeaf;});
       if(!t){S.screen='savings';return renderSavings();}
