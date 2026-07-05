@@ -74,7 +74,17 @@
   .co-title{font-size:19px;font-weight:700;letter-spacing:-.01em;line-height:1.2}
   .co-status{font-size:12px;color:var(--text-muted);display:flex;align-items:center;gap:5px}
   .co-dot{width:7px;height:7px;border-radius:99px;background:var(--text-success);display:inline-block}
-  .co-portfolio{font-size:13px;color:var(--text-secondary);margin:0 0 18px 51px}
+  .co-portfolio{font-size:13px;color:var(--text-secondary);margin:0 0 12px 51px}
+  /* savings-to-date strip in the header — prominent (compact past&future chart) but quieter than the approve number in the thread */
+  .co-savstrip{display:flex;align-items:center;gap:14px;width:100%;text-align:left;font:inherit;color:inherit;cursor:pointer;background:var(--surface-2);border:1px solid var(--border);border-radius:12px;padding:10px 14px;box-shadow:var(--shadow);margin-bottom:16px;transition:box-shadow .12s,border-color .12s}
+  .co-savstrip:hover{box-shadow:var(--shadow-hover);border-color:var(--border-strong)}
+  .co-savstrip-txt{flex-shrink:0}
+  .co-savstrip-v{font-weight:700;color:var(--text-success);letter-spacing:-.01em;font-size:17px;line-height:1.1}
+  .co-savstrip-k{font-size:12px;color:var(--text-secondary);display:flex;align-items:center;gap:4px;margin-top:1px}
+  .co-savstrip-chart{flex:1;min-width:0;max-width:180px;margin-left:auto}
+  .co-approved{display:flex;align-items:center;gap:8px;background:var(--bg-success);border:1px solid hsl(86 40% 82%);border-radius:12px;padding:10px 14px;margin-bottom:16px;font-size:14px;color:var(--text-success)}
+  .co-approved b{font-weight:700}
+  @media (max-width:480px){ .co-savstrip-chart{max-width:120px} }
   .co-thread{display:flex;flex-direction:column;gap:12px;margin-bottom:16px}
   .co-turn{display:flex;gap:9px;align-items:flex-end}
   .co-turn.me{flex-direction:row-reverse}
@@ -88,6 +98,26 @@
   .co-card-wrap .card{margin-bottom:0}
   .co-turn.card-turn{align-items:flex-start}
   .co-turn.card-turn .co-bubble{max-width:calc(100% - 35px);flex:1}
+  /* compact, chat-framed solution card — reads as part of the assistant's turn, not a full-page leaf */
+  .co-mini-card{background:var(--surface-2);border:1px solid var(--border);border-radius:14px;box-shadow:var(--shadow);overflow:hidden}
+  .co-mc-head{padding:13px 15px 11px}
+  .co-mc-type{font-size:15.5px;font-weight:700;letter-spacing:-.01em;line-height:1.2}
+  .co-mc-meta{font-size:12px;color:var(--text-muted);margin-top:2px}
+  .co-mc-when{display:inline-flex;align-items:center;gap:4px;font-size:11.5px;font-weight:600;color:var(--primary);background:hsl(240 60% 96%);border:1px solid hsl(240 40% 90%);border-radius:99px;padding:2px 9px;white-space:nowrap}
+  .co-mc-sav{padding:0 15px 12px;display:flex;align-items:flex-end;justify-content:space-between;gap:12px}
+  .co-mc-savv{font-size:26px;font-weight:700;color:var(--text-success);letter-spacing:-.02em;line-height:1.05}
+  .co-mc-net{font-size:12px;color:var(--text-muted);text-align:right}
+  .co-mc-net b{display:block;font-size:14px;color:var(--text-primary);font-weight:700;letter-spacing:-.01em}
+  .co-mc-pay{padding:0 15px 12px}
+  .co-mc-pay .payseg button{padding:7px 5px;font-size:13px}
+  .co-mc-act{display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:0 15px 13px}
+  .co-mc-act .cf-btn{flex:1;min-width:150px;justify-content:center;display:inline-flex;align-items:center;gap:6px}
+  .co-mc-more{background:none;border:none;cursor:pointer;font:inherit;font-size:13px;font-weight:600;color:var(--text-secondary);display:inline-flex;align-items:center;gap:4px;padding:8px 4px}
+  .co-mc-more:hover{color:var(--text-primary)}
+  .co-mc-full{border-top:1px solid var(--border);padding:2px 15px 13px}
+  .co-mc-full .card{border:none;box-shadow:none;padding:14px 0 0;margin:0;background:none}
+  /* the estimated-fidelity card keeps its own dashed frame; just let it sit flush in the bubble */
+  .co-card-wrap .card.est{margin-bottom:0}
   /* the owner's possible replies — sit on the owner's (right) side so they read as things "you" might say */
   .co-chips{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:8px;margin-top:2px}
   .co-chips-label{width:100%;text-align:right;font-size:11px;color:var(--text-muted);margin-bottom:1px}
@@ -118,7 +148,6 @@
 </head>
 <body>
 <div class="wrap">
-<div class="banner"><i class="ti ti-info-circle"></i> Concept preview · sample data — for feedback, not final visual design</div>
 <div id="app">Loading…</div>
 </div>
 <script>
@@ -127,23 +156,27 @@
   var DATA={
     portfolio:"Coastline Hospitality Group",
     prospects:[
-      {id:'p1',name:'Summit Ridge Suites',cf:180000,ready:true,step:'Proposal ready'},
-      {id:'p2',name:'Harbor Point Hotel',cf:140000,ready:true,step:'Proposal ready'},
-      {id:'p3',name:'Grandview Hotel',cf:110000,ready:false,step:'Complete your audit',est:true},
-      {id:'p4',name:'Old Town Motel',cf:90000,ready:false,step:'Complete your audit',est:true},
-      {id:'p5',name:'Pinewood Inn',cf:70000,ready:false,step:'Add your utility bills',est:true},
-      {id:'p6',name:'Bayside Motor Lodge',cf:60000,ready:false,step:'Add your utility bills',est:true}
+      {id:'p1',name:'Summit Ridge Suites',cf:225000,ready:true,step:'Proposal ready'},
+      {id:'p2',name:'Harbor Point Hotel',cf:195000,ready:true,step:'Proposal ready'},
+      {id:'p3',name:'Grandview Hotel',cf:175000,ready:false,step:'Complete your audit',est:true},
+      {id:'p4',name:'Old Town Motel',cf:150000,ready:false,step:'Complete your audit',est:true},
+      {id:'p5',name:'Pinewood Inn',cf:130000,ready:false,step:'Add your utility bills',est:true},
+      {id:'p6',name:'Bayside Motor Lodge',cf:95000,ready:false,step:'Add your utility bills',est:true}
     ],
     solutions:[
-      {id:'s1',prop:'Marina Bay Inn',type:'Solar + Batteries',u:0,note:'Rebate ends Aug 31',vendor:'GreenVolt Partners',install:'about 6 weeks · starts Sep',fidelity:'measured',market:430000,discountPct:12,incentive:130000,savings:75000,loan:{termYears:10,aprPct:6.5},lease:{annualAtrium:44000,annualMarket:52000,termYears:20}},
-      {id:'s5',prop:'Cedar Court Hotel',type:'Solar + Batteries',u:0,note:'Rebate ends Aug 31',vendor:'GreenVolt Partners',install:'about 5 weeks',fidelity:'measured',market:300000,discountPct:12,incentive:90000,savings:53000,loan:{termYears:10,aprPct:6.5},lease:{annualAtrium:31000,annualMarket:37000,termYears:20}},
-      {id:'s2',prop:'Marina Bay Inn',type:'Heat Pump Water Heaters',u:1,vendor:'Thermal Systems',install:'about 2 weeks',fidelity:'measured',market:72000,discountPct:12,incentive:15000,savings:17000,loan:{termYears:7,aprPct:6.9},lease:null},
-      {id:'s6',prop:'Cedar Court Hotel',type:'LED Lighting',u:1,vendor:'BrightSwap',install:'about 2 weeks',fidelity:'measured',market:46000,discountPct:13,incentive:6000,savings:13500,loan:{termYears:3,aprPct:7.9},lease:null},
-      {id:'s3',prop:'Marina Bay Inn',type:'LED Lighting',u:2,vendor:'BrightSwap',install:'about 2 weeks',fidelity:'measured',market:34000,discountPct:13,incentive:4000,savings:10000,loan:{termYears:3,aprPct:7.9},lease:null},
-      {id:'s4',prop:'Marina Bay Inn',type:'Smart Thermostats',u:2,vendor:'Cozy Controls',install:'about 1 week',fidelity:'measured',market:10000,discountPct:14,incentive:1500,savings:4500,loan:{termYears:3,aprPct:7.9},lease:null},
+      {id:'s1',prop:'Marina Bay Inn',type:'Solar + Batteries',u:0,note:'Start now — about a year to build for the 2027 rebate',vendor:'GreenVolt Partners',install:'about 6 weeks · starts Sep',fidelity:'measured',market:430000,discountPct:12,incentive:130000,savings:75000,loan:{termYears:25,aprPct:6.5},lease:{annualAtrium:44000,annualMarket:52000,termYears:20}},
+      {id:'s5',prop:'Cedar Court Hotel',type:'Solar + Batteries',u:0,note:'Start now — about a year to build for the 2027 rebate',vendor:'GreenVolt Partners',install:'about 5 weeks',fidelity:'measured',market:300000,discountPct:12,incentive:90000,savings:53000,loan:{termYears:25,aprPct:6.5},lease:{annualAtrium:31000,annualMarket:37000,termYears:20}},
+      {id:'s2',prop:'Marina Bay Inn',type:'Heat Pump Water Heaters',u:1,vendor:'Thermal Systems',install:'about 2 weeks',fidelity:'measured',market:72000,discountPct:12,incentive:15000,savings:17000,loan:{termYears:5,aprPct:6.9},lease:null},
+      {id:'s6',prop:'Cedar Court Hotel',type:'LED Lighting',u:0,vendor:'BrightSwap',install:'about 2 weeks',fidelity:'measured',market:46000,discountPct:13,incentive:6000,savings:13500,loan:{termYears:5,aprPct:7.9},lease:null},
+      {id:'s3',prop:'Marina Bay Inn',type:'LED Lighting',u:0,vendor:'BrightSwap',install:'about 2 weeks',fidelity:'measured',market:34000,discountPct:13,incentive:4000,savings:10000,loan:{termYears:5,aprPct:7.9},lease:null},
+      {id:'s4',prop:'Marina Bay Inn',type:'Smart Thermostats',u:2,vendor:'Cozy Controls',install:'about 1 week',fidelity:'measured',market:10000,discountPct:14,incentive:1500,savings:4500,loan:{termYears:5,aprPct:7.9},lease:null},
+      {id:'s10',prop:'Marina Bay Inn',type:'Building Controls (EMS)',u:1,vendor:'Nodal Systems',install:'about 3 weeks',fidelity:'measured',market:60000,discountPct:12,incentive:9000,savings:22000,loan:{termYears:5,aprPct:6.9},lease:null},
+      {id:'s11',prop:'Cedar Court Hotel',type:'Kitchen Hood Controls',u:1,vendor:'AirWise Controls',install:'about 1 week',fidelity:'measured',market:28000,discountPct:12,incentive:3000,savings:9000,loan:{termYears:5,aprPct:7.9},lease:null},
+      {id:'s12',prop:'Cedar Court Hotel',type:'Pool Heat Pump',u:2,vendor:'ThermaPool',install:'about 2 weeks',fidelity:'measured',market:38000,discountPct:12,incentive:5000,savings:11000,loan:{termYears:5,aprPct:6.9},lease:null},
+      {id:'s13',prop:'Riverside Lodge',type:'Low-Flow Water Fixtures',u:0,vendor:'AquaTrim',install:'about 1 week',fidelity:'measured',market:14000,discountPct:13,incentive:2000,savings:6500,loan:{termYears:5,aprPct:7.9},lease:null},
       {id:'s8',prop:'Riverside Lodge',type:'Heat Pump Water Heaters',u:0,vendor:'Thermal Systems',install:'about 2 weeks',fidelity:'estimated',dataNeed:'your water-heater metering',savings:12000},
       {id:'s9',prop:'Riverside Lodge',type:'Smart Thermostats',u:1,vendor:'Cozy Controls',install:'about 1 week',fidelity:'estimated',dataNeed:'occupancy data',savings:12500},
-      {id:'s7',prop:'Cedar Court Hotel',type:'Ozone Laundry',u:1,vendor:'PureWash',install:'about 1 week',fidelity:'estimated',dataNeed:'laundry-room metering',savings:10000}
+      {id:'s7',prop:'Cedar Court Hotel',type:'Ozone Laundry',u:0,vendor:'PureWash',install:'about 1 week',fidelity:'measured',market:24000,discountPct:12,incentive:2500,savings:10000,loan:{termYears:5,aprPct:7.9},lease:null}
     ],
     // properties Atrium already operates — these have savings history + a forecast
     contracted:[
@@ -158,7 +191,7 @@
       {type:'Smart Thermostats',saved:47000,pace:44000}
     ]
   };
-  var S={screen:'home',bucket:2,solView:'type',group:null,leafId:null,savView:'property',savLeaf:null,period:'annual',signed:{},approved:{},approvedMode:{},mode:{},disc:{},unlocked:0};
+  var S={screen:'home',bucket:2,solView:'type',group:null,leafId:null,savView:'property',savLeaf:null,period:'annual',signed:{},approved:{},approvedMode:{},mode:{},disc:{},cardOpen:{},unlocked:0};
   var UL=['Now','Soon','Later'];
   function fmtK(n){n=Math.round(n);var s=n<0?'-':'';n=Math.abs(n);if(n>=1e6)return s+'$'+(n/1e6).toFixed(2).replace(/\.?0+$/,'')+'M';if(n>=1e3)return s+'$'+Math.round(n/1e3)+'K';return s+'$'+n;}
   function fmt(n){return '$'+Math.round(n).toLocaleString();}
@@ -177,6 +210,8 @@
   function solModes(s){var m=['cash'];if(s.loan)m.push('loan');if(s.lease)m.push('lease');return m;}
   function curMode(s){var ms=solModes(s);var d=s.loan?'loan':(s.lease?'lease':'cash');var m=S.mode[s.id]||d;return ms.indexOf(m)>=0?m:d;}
   function per(x){return S.period==='monthly'?fmt(x/12)+'/mo':fmt(x)+'/yr';}
+  function amtUnit(annual){ return S.period==='monthly' ? {a:fmtK(annual/12),u:'a month'} : {a:fmtK(annual),u:'a year'}; }
+  function perTile(annual){var v=S.period==='monthly'?annual/12:annual;return fmtK(v)+'<span style="font-size:.6em;color:var(--text-muted);font-weight:600"> '+(S.period==='monthly'?'/mo':'/yr')+'</span>';}
   function perRange(lo,hi){return S.period==='monthly'?fmt(Math.round(lo/12))+'–'+fmt(Math.round(hi/12))+'/mo':fmtK(lo)+'–'+fmtK(hi)+'/yr';}
   function prospects(){return DATA.prospects.filter(function(p){return !S.signed[p.id];});}
   function sols(){return DATA.solutions.filter(function(s){return !S.approved[s.id];});}
@@ -186,7 +221,15 @@
   function distinctProps(a){var o={};a.forEach(function(s){o[s.prop]=1;});return Object.keys(o).length;}
   function approveAnnualFor(name){return sols().filter(function(s){return s.prop===name;}).reduce(function(t,s){return t+s.savings;},0);}
   function approveCountFor(name){return sols().filter(function(s){return s.prop===name;}).length;}
-  function recSort(a,b){ if(a.u!==b.u)return a.u-b.u; if((!!b.note)!==(!!a.note))return (b.note?1:0)-(a.note?1:0); return tileVal(b)-tileVal(a); }
+  // Atrium-recommended priority: incentive deadlines first, then quick wins (fast payback / low friction), then value.
+  // Rationale: land early wins so customers feel good about Atrium while larger cash flow keeps unlocking over the contract.
+  function atriumScore(s){
+    // Quick wins lead (fast payback = earliest banked win). Deadline projects (e.g. solar's 2027 clock)
+    // get a modest bump so the clock starts, but a true quick win still goes first.
+    var pay=est(s)?8:payback(s);
+    return pay - (s.note?1.3:0);
+  }
+  function recSort(a,b){ return atriumScore(a)-atriumScore(b); }
   function econ(s,mode){
     var sav=s.savings,nt=net(s),pay=payback(s);
     if(mode==='cash'){
@@ -197,22 +240,22 @@
     }
     if(mode==='loan'){
       var m=pmtMo(nt,s.loan.aprPct,s.loan.termYears),ann=m*12,t=s.loan.termYears;
-      return {hero:'+'+per(sav-ann), sub:'$0 down · '+t+'-yr loan @ '+s.loan.aprPct+'%',
-        chips:[['Savings','+'+per(sav),'var(--text-success)'],['Loan payment',per(ann)]],
+      return {hero:'+'+per(sav), sub:'$0 down · '+t+'-yr loan @ '+s.loan.aprPct+'% · '+per(ann)+', then it’s yours',
+        chips:[['Loan payment',per(ann)],['Term',t+' yrs']],
         series:(function(){var a=[0],cum=0;for(var y=1;y<=10;y++){cum+=sav-(y<=t?ann:0);a.push(cum);}return a;})(), be:0.05, beLabel:'cash-flow positive from day one',
-        takeaway:'$0 down; you net '+per(sav-ann)+' from day one — best near-term cash flow.'};
+        takeaway:''};
     }
     var la=s.lease.annualAtrium,t2=s.lease.termYears;
-    return {hero:'+'+per(sav-la), sub:'$0 down · '+t2+'-yr lease',
-      chips:[['Savings','+'+per(sav),'var(--text-success)'],['Lease cost',per(la)],['Term',t2+' yrs']],
+    return {hero:'+'+per(sav), sub:'$0 down · '+t2+'-yr lease · '+per(la)+' · no ownership or upkeep',
+      chips:[['Lease cost',per(la)],['Term',t2+' yrs']],
       series:(function(){var a=[0],cum=0;for(var y=1;y<=10;y++){cum+=sav-la;a.push(cum);}return a;})(), be:0.05, beLabel:'cash-flow positive from year one',
-      takeaway:'$0 down; net '+per(sav-la)+' a year, no ownership or upkeep.'};
+      takeaway:''};
   }
   function spark(series,be){
     var w=300,h=72,padX=8,padT=8,padB=8,N=120;
     function stepAt(yr){var i=Math.max(0,Math.min(series.length-2,Math.floor(yr)));return series[i+1]-series[i];}
     var cum=series[0],pts=[[0,cum]];
-    for(var m=1;m<=N;m++){var yr=m/12;var mult=1+0.5*Math.sin((m-1)/12*2*Math.PI-Math.PI/2);cum+=stepAt(yr-1e-9)/12*mult;pts.push([yr,cum]);}
+    for(var m=1;m<=N;m++){var yr=m/12;var mult=1+0.1*Math.sin((m-1)/12*2*Math.PI-Math.PI/2);cum+=stepAt(yr-1e-9)/12*mult;pts.push([yr,cum]);}
     var vals=pts.map(function(p){return p[1];}).concat([0]);
     var mn=Math.min.apply(null,vals),mx=Math.max.apply(null,vals),sp=(mx-mn)||1;
     function X(yr){return padX+(yr/10)*(w-2*padX);}
@@ -258,44 +301,65 @@
     var chips=e.chips.map(function(k){return '<div class="chip"><div class="k">'+k[0]+'</div><div class="v mono"'+(k[2]?' style="color:'+k[2]+'"':'')+'>'+k[1]+'</div></div>';}).join('');
     var savePct=Math.round((s.market-price(s))/s.market*100);
     return '<div class="card" data-row="'+s.id+'">'+cardHead(s)
-      +'<div style="margin-bottom:12px"><span class="measured"><i class="ti ti-circle-check"></i> Measured from your data</span></div>'
       +'<div style="display:flex;flex-wrap:wrap;align-items:center;gap:8px;font-size:13px;color:var(--text-secondary);background:hsl(240 20% 98%);border:1px solid var(--border);border-radius:10px;padding:9px 12px;margin-bottom:16px">'
-        +'<span style="text-decoration:line-through;color:var(--text-muted)">'+fmt(s.market)+' market</span><i class="ti ti-arrow-right" style="color:var(--text-muted)"></i>'
+        +'<span style="color:var(--text-muted)">'+fmt(s.market)+' market</span><i class="ti ti-arrow-right" style="color:var(--text-muted)"></i>'
         +'<span>'+fmt(price(s))+' Atrium price <span style="color:var(--text-success);font-weight:600">(−'+savePct+'%)</span></span><i class="ti ti-arrow-right" style="color:var(--text-muted)"></i>'
         +'<span style="color:var(--text-success);font-weight:600">−'+fmt(s.incentive)+' incentive</span><i class="ti ti-arrow-right" style="color:var(--text-muted)"></i>'
-        +'<span style="font-weight:700;color:var(--text-primary)">'+fmt(net(s))+' your net</span></div>'
-      +'<div style="font-size:12px;color:var(--text-muted);font-weight:600;text-transform:uppercase;letter-spacing:.04em;margin-bottom:7px">How you’ll pay</div>'
+        +'<span style="font-weight:700;color:var(--text-primary)">'+fmt(net(s))+' your net price</span></div>'
       +'<div class="payseg" style="margin-bottom:16px">'+payseg+'</div>'
-      +'<div style="margin-bottom:14px"><div style="font-size:12px;color:var(--text-muted)">Net cash flow</div>'
+      +'<div style="margin-bottom:14px"><div style="font-size:12px;color:var(--text-muted)">Savings</div>'
         +'<div class="mono" style="font-size:30px;font-weight:700;color:var(--text-success);letter-spacing:-.02em">'+e.hero+'</div>'
         +'<div style="font-size:13px;color:var(--text-secondary);margin-top:2px">'+e.sub+'</div></div>'
       +'<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(128px,1fr));gap:8px;margin-bottom:12px">'+chips+'</div>'
-      +'<div style="background:hsl(240 20% 98.5%);border:1px solid var(--border);border-radius:10px;padding:10px 12px;margin-bottom:12px">'+spark(e.series,e.be)
-        +'<div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text-muted);margin-top:2px"><span>Now</span><span>'+e.beLabel+'</span><span>10 yrs</span></div></div>'
-      +'<div style="font-size:13px;color:var(--text-secondary);margin-bottom:14px"><i class="ti ti-bulb" style="color:var(--text-warning)"></i> '+e.takeaway+'</div>'
-      +'<div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">'
-        +'<button class="cf-btn" data-approve="'+s.id+'"><i class="ti ti-check"></i> Approve with '+cap(mode)+'</button>'
-        +'<button class="ghost"><i class="ti ti-file-text"></i> View full quote</button></div>'
+      +'<div style="background:hsl(240 20% 98.5%);border:1px solid var(--border);border-radius:10px;padding:10px 12px;margin-bottom:14px">'+spark(e.series,e.be)
+        +'<div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text-muted);margin-top:2px"><span>Now</span><span>'+e.beLabel+'</span><span style="color:var(--text-secondary);font-weight:600">'+fmtK(e.series[e.series.length-1])+' over 10 yrs</span></div></div>'
+      +'<button class="cf-btn" data-approve="'+s.id+'"><i class="ti ti-check"></i> Approve with '+cap(mode)+'</button>'
       +discussion(s)+'</div>';
   }
-  function unlockedBanner(){ if(!S.unlocked)return ''; return '<div style="display:flex;align-items:center;gap:8px;background:var(--bg-success);border:1px solid hsl(86 40% 82%);border-radius:var(--radius);padding:9px 13px;margin-bottom:1rem;font-size:14px;color:var(--text-success)"><i class="ti ti-sparkles"></i>Unlocked this session: <span style="font-weight:700">'+fmt(S.unlocked)+'</span> over 5 years</div>'; }
+  function unlockedBanner(){ return ''; }
   function backPill(label){return '<button class="cf-pill" data-act="back" style="display:inline-flex;align-items:center;gap:4px"><i class="ti ti-arrow-left"></i> '+(label||'Back')+'</button>';}
   function perToggle(){return '<div class="seg"><button data-period="annual" aria-pressed="'+(S.period==='annual')+'">Annual</button><button data-period="monthly" aria-pressed="'+(S.period==='monthly')+'">Monthly</button></div>';}
   /* ===== shared savings/forecast drill (copied verbatim from cashflow.html) ===== */
+  function savHeroSvg(){
+    var saved=DATA.contracted.reduce(function(t,c){return t+c.saved;},0);
+    var pace=DATA.savedByType.reduce(function(t,x){return t+x.pace;},0);
+    var w=300,h=46,padX=1,padT=5,padB=3,past=18,n=past+10,mPast=saved/past,mFut=pace/12,cum=0,s=[];
+    for(var i=0;i<=n;i++){s.push(cum);var seas=1+0.4*Math.sin(i/12*2*Math.PI-Math.PI/2);cum+=(i<past?mPast:mFut)*seas;}
+    var mx=s[n]||1;
+    function X(i){return padX+i/n*(w-2*padX);}
+    function Y(v){return padT+(1-v/mx)*(h-padT-padB);}
+    function poly(from,to){var p=[];for(var i=from;i<=to;i++)p.push(X(i).toFixed(1)+','+Y(s[i]).toFixed(1));return p.join(' ');}
+    var area=poly(0,n)+' '+X(n).toFixed(1)+','+Y(0).toFixed(1)+' '+X(0).toFixed(1)+','+Y(0).toFixed(1);
+    return '<svg viewBox="0 0 '+w+' '+h+'" width="100%" height="'+h+'" preserveAspectRatio="none" style="display:block">'
+      +'<polygon points="'+area+'" fill="hsl(86 45% 94%)"/>'
+      +'<line x1="'+X(past).toFixed(1)+'" x2="'+X(past).toFixed(1)+'" y1="'+padT+'" y2="'+(h-padB)+'" stroke="var(--border-strong)" stroke-dasharray="3 3"/>'
+      +'<polyline points="'+poly(0,past)+'" fill="none" stroke="var(--text-success)" stroke-width="2.5"/>'
+      +'<polyline points="'+poly(past,n)+'" fill="none" stroke="var(--text-success)" stroke-width="2.5" stroke-dasharray="5 3"/></svg>';
+  }
   function trajChart(sc,apprAnn){
-    var wm=sc.next12/12, wom=sc.without12/12, am=(sc.next12-(apprAnn||0))/12;
-    var n=24,w=340,h=132,padX=8,padT=16,padB=8,today=11,s=[];
-    for(var i=0;i<n;i++){var seas=Math.sin(i/12*Math.PI*2);s.push({without:wom*(1+0.06*seas),wth:wm*(1+0.06*seas),appr:am*(1+0.06*seas)});}
+    var wom=sc.without12/12, savFrac=(sc.without12-sc.next12)/sc.without12, apprFrac=Math.min(0.42,savFrac+(apprAnn||0)/sc.without12);
+    var n=25,w=340,h=120,padX=6,padT=10,padB=8,today=12,s=[];
+    // deterministic, irregular month-to-month variation (sum of sines) — no mythical steady state
+    function noise(i){return 0.055*Math.sin(i*0.9+0.5)+0.03*Math.sin(i*2.15+1.7)+0.018*Math.sin(i*4.3+3.1);}
+    for(var i=0;i<n;i++){
+      var without=wom*(1+noise(i));
+      var g=Math.min(1,i/today); // realized savings ramp in over the trailing year — 0 savings twelve months ago
+      var wth=without*(1-savFrac*g*(1+0.18*Math.sin(i*1.3+0.9)));
+      var target=without*(1-apprFrac*(1+0.18*Math.sin(i*1.3+0.9)));
+      var appr=i<=today?wth:wth+(target-wth)*Math.min(1,(i-today)/8); // approved work ramps in over ~8 months (time-to-value)
+      s.push({without:without,wth:wth,appr:appr});
+    }
     var all=[];s.forEach(function(d){all.push(d.without,d.wth);if(apprAnn)all.push(d.appr);});
-    var mn=Math.min.apply(null,all),mx=Math.max.apply(null,all),sp=(mx-mn)||1;mn-=sp*0.14;mx+=sp*0.08;sp=mx-mn;
+    var mn=0,mx=Math.max.apply(null,all)*1.06,sp=mx-mn;
     function X(i){return padX+i/(n-1)*(w-2*padX);}
     function Y(v){return padT+(1-(v-mn)/sp)*(h-padT-padB);}
     function poly(key,from,to){var p=[];for(var i=from;i<=to;i++)p.push(X(i).toFixed(1)+','+Y(s[i][key]).toFixed(1));return p.join(' ');}
-    var gap=[];for(var i=0;i<=today;i++)gap.push(X(i).toFixed(1)+','+Y(s[i].without).toFixed(1));for(var j=today;j>=0;j--)gap.push(X(j).toFixed(1)+','+Y(s[j].wth).toFixed(1));
+    var gap=[];for(var i=0;i<n;i++)gap.push(X(i).toFixed(1)+','+Y(s[i].without).toFixed(1));for(var j=n-1;j>=0;j--)gap.push(X(j).toFixed(1)+','+Y(s[j].wth).toFixed(1));
     return '<svg viewBox="0 0 '+w+' '+h+'" width="100%" height="'+h+'" preserveAspectRatio="none" style="display:block">'
-      +'<polygon points="'+gap.join(' ')+'" fill="hsl(86 45% 92%)"/>'
+      +'<polygon points="'+gap.join(' ')+'" fill="hsl(86 45% 91%)"/>'
       +'<line x1="'+X(today).toFixed(1)+'" x2="'+X(today).toFixed(1)+'" y1="'+padT+'" y2="'+(h-padB)+'" stroke="var(--border-strong)" stroke-dasharray="3 3"/>'
-      +'<polyline points="'+poly('without',0,n-1)+'" fill="none" stroke="var(--text-warning)" stroke-width="2" stroke-dasharray="5 3"/>'
+      +'<polyline points="'+poly('without',0,today)+'" fill="none" stroke="var(--text-warning)" stroke-width="2"/>'
+      +'<polyline points="'+poly('without',today,n-1)+'" fill="none" stroke="var(--text-warning)" stroke-width="2" stroke-dasharray="5 3"/>'
       +'<polyline points="'+poly('wth',0,today)+'" fill="none" stroke="var(--text-success)" stroke-width="2.5"/>'
       +'<polyline points="'+poly('wth',today,n-1)+'" fill="none" stroke="var(--text-success)" stroke-width="2.5" stroke-dasharray="5 3"/>'
       +(apprAnn?'<polyline points="'+poly('appr',today,n-1)+'" fill="none" stroke="var(--primary)" stroke-width="2" stroke-dasharray="2 3"/>':'')
@@ -338,16 +402,12 @@
     if(S.savView==='property'){
       var c=DATA.contracted.find(function(x){return x.id===S.savLeaf;});
       if(!c){S.screen='savings';return renderSavings();}
-      var apprAnn=approveAnnualFor(c.name),apprN=approveCountFor(c.name),high=c.runPct>100;
-      var chips='<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;margin:14px 0">'
-        +'<div class="chip"><div class="k">Saved to date</div><div class="v mono" style="color:var(--text-success)">'+fmtK(c.saved)+'</div></div>'
-        +'<div class="chip"><div class="k">Now vs expected</div><div class="v mono" style="color:'+(high?'var(--text-warning)':'var(--text-success)')+'">'+c.runPct+'%</div></div>'
-        +'<div class="chip"><div class="k">Next 12 months</div><div class="v mono">'+fmtK(c.next12)+'</div><div style="font-size:11px;color:var(--text-muted);margin-top:2px">$'+c.perRoomNight.toFixed(2)+' per occupied room-night</div></div></div>';
-      var legend='<div class="sav-legend"><span><i class="k" style="border-color:var(--text-warning);border-top-style:dashed"></i> without Atrium</span><span><i class="k" style="border-color:var(--text-success)"></i> with Atrium</span>'+(apprAnn?'<span><i class="k" style="border-color:var(--primary);border-top-style:dashed"></i> if you approve the proposed work</span>':'')+'<span>vertical line = today</span></div>';
+      var apprAnn=approveAnnualFor(c.name),apprN=approveCountFor(c.name);
+      var legend='<div class="sav-legend"><span><i class="k" style="border-color:var(--text-warning)"></i> without Atrium</span><span><i class="k" style="border-color:var(--text-success)"></i> with Atrium</span>'+(apprAnn?'<span><i class="k" style="border-color:var(--primary);border-top-style:dashed"></i> if you approve</span>':'')+'<span style="color:var(--text-muted)">dashed = forecast</span></div>';
       var cta=apprAnn?'<div style="margin-top:16px;background:var(--bg-success);border:1px solid hsl(86 40% 82%);border-radius:12px;padding:14px 16px"><div style="font-size:14px">Approve the '+apprN+' proposed project'+(apprN>1?'s':'')+' at '+esc(c.name)+' to save about <b>'+fmtK(apprAnn)+' a year</b> more.</div><button class="cf-btn" data-act="approvehere" data-val="'+esc(c.name)+'" style="margin-top:10px"><i class="ti ti-check"></i> Review &amp; approve here</button></div>':'';
-      app.innerHTML='<div style="margin-bottom:1.1rem">'+backPill()+'<h1 style="margin:14px 0 0;font-size:23px">'+esc(c.name)+'</h1><p style="color:var(--text-secondary);margin:.3rem 0 0">'+(high?'Running a little high for your occupancy and weather — worth a look.':'Running in line with your occupancy and weather.')+'</p></div>'
-        +'<div class="card"><div style="font-size:12px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:.04em;margin-bottom:8px">Energy &amp; water cost — last 12 months and next 12</div>'+trajChart(c,apprAnn)+savAxis()+legend+chips
-        +'<div style="font-size:13px;color:var(--text-secondary)">The shaded gap is what you’ve saved versus running these buildings without Atrium.</div>'+cta+'</div>';
+      app.innerHTML='<div style="margin-bottom:1.1rem">'+backPill()+'<h1 style="margin:14px 0 0;font-size:23px">'+esc(c.name)+'</h1><p style="color:var(--text-secondary);margin:.35rem 0 0">You’ve saved <b style="color:var(--text-success)">'+fmtK(c.saved)+'</b> with Atrium — on track to keep saving.</p></div>'
+        +'<div class="card">'+trajChart(c,apprAnn)
+        +'<div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text-muted);margin-top:2px"><span>12 mo ago</span><span>today</span><span>12 mo ahead</span></div>'+legend+cta+'</div>';
     } else {
       var t=DATA.savedByType.find(function(x){return x.type===S.savLeaf;});
       if(!t){S.screen='savings';return renderSavings();}
@@ -373,6 +433,30 @@
   function youTurn(text){return {who:'you',text:text};}
   function cardTurn(id,lead){return {who:'card',id:id,lead:lead};}
 
+  // A compact, chat-framed card for a MEASURED solution — the SAVINGS headline, net price,
+  // pay mode and Approve, all inside the assistant's bubble. Feedback #1: opening a solution
+  // should feel like part of the thread, not a full-page dashboard leaf. "See full breakdown"
+  // expands the verbatim shared econ leaf (solutionCard) inline for anyone who wants every number.
+  function chatCard(s){
+    if(est(s)) return '<div class="co-card-wrap">'+solutionCard(s)+'</div>'; // estimated card is already conversation-sized
+    var mode=curMode(s), e=econ(s,mode), ms=solModes(s), open=S.cardOpen[s.id];
+    var hint={cash:'Buy outright',loan:'Finance',lease:'Rent'};
+    var payseg=ms.map(function(m){return '<button data-sol="'+s.id+'" data-segmode="'+m+'" aria-pressed="'+(mode===m)+'"><span style="display:block">'+cap(m)+'</span><span style="display:block;font-size:11px;font-weight:500;opacity:.85">'+hint[m]+'</span></button>';}).join('');
+    return '<div class="co-card-wrap"><div class="co-mini-card" data-row="'+s.id+'">'
+      +'<div class="co-mc-head" style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px">'
+        +'<div style="min-width:0"><div class="co-mc-type">'+esc(s.type)+'</div>'
+          +'<div class="co-mc-meta">'+esc(s.prop)+' · '+esc(s.install)+'</div></div>'
+        +'<span class="co-mc-when"><i class="ti ti-calendar"></i> '+UL[s.u]+'</span></div>'
+      +'<div class="co-mc-sav"><div><div style="font-size:12px;color:var(--text-muted)">Savings</div>'
+        +'<div class="co-mc-savv mono">'+e.hero+'</div></div>'
+        +'<div class="co-mc-net">your net price<b class="mono">'+fmt(net(s))+'</b></div></div>'
+      +'<div class="co-mc-pay"><div class="payseg">'+payseg+'</div></div>'
+      +'<div class="co-mc-act"><button class="cf-btn" data-approve="'+s.id+'"><i class="ti ti-check"></i> Approve with '+cap(mode)+'</button>'
+        +'<button class="co-mc-more" data-cardopen="'+s.id+'">'+(open?'Hide breakdown <i class="ti ti-chevron-up"></i>':'See full breakdown <i class="ti ti-chevron-down"></i>')+'</button></div>'
+      +(open?'<div class="co-mc-full">'+solutionCard(s)+'</div>':'')
+      +'</div></div>';
+  }
+
   // ---- render one transcript turn ----
   function renderTurn(t){
     if(t.who==='card'){
@@ -380,7 +464,7 @@
       return '<div class="co-turn card-turn"><div class="co-mini adv"><i class="ti ti-sparkles"></i></div>'
         +'<div class="co-bubble">'
         +(t.lead?'<div class="disc-msg" style="max-width:100%;margin-bottom:8px"><div class="disc-text">'+t.lead+'</div></div>':'')
-        +'<div class="co-card-wrap">'+solutionCard(s)+'</div>'
+        +chatCard(s)
         +'</div></div>';
     }
     if(t.who==='you'){
@@ -403,11 +487,21 @@
     var head='<div class="co-head"><div class="co-avatar"><i class="ti ti-sparkles"></i></div>'
       +'<div><div class="co-title">Your energy advisor</div>'
       +'<div class="co-status"><span class="co-dot"></span> Atrium Copilot · always on</div></div>'
-      +'<span style="margin-left:auto">'+backPill('Restart chat')+'</span></div>'
+      +'<span style="margin-left:auto;display:flex;align-items:center;gap:8px">'+perToggle()+backPill('Restart chat')+'</span></div>'
       +'<p class="co-portfolio">'+esc(DATA.portfolio)+' · reviewing your portfolio with you</p>';
+    // savings-to-date: prominent strip near the top, taps into the shared drill; quieter than the approve number in the thread
+    var savedTot=DATA.contracted.reduce(function(t,c){return t+c.saved;},0);
+    var savStrip='<button class="co-savstrip" data-act="go" data-val="savings">'
+      +'<span class="co-savstrip-txt"><span class="co-savstrip-v">'+fmtK(savedTot)+' saved</span>'
+      +'<span class="co-savstrip-k">with Atrium · past &amp; ahead <i class="ti ti-arrow-right"></i></span></span>'
+      +'<span class="co-savstrip-chart">'+savHeroSvg()+'</span></button>';
+    // "Approved this session" strip (see cashflow renderHome)
+    var appd=DATA.solutions.filter(function(s){return S.approved[s.id];});
+    var appA=amtUnit(sumSav(appd));
+    var approvedEl=appd.length?'<div class="co-approved"><i class="ti ti-circle-check"></i> Approved this session — <b>'+appA.a+' '+appA.u+'</b> across '+appd.length+' project'+(appd.length>1?'s':'')+'</div>':'';
     var thread='<div class="co-thread">'+C.turns.map(renderTurn).join('')+'</div>';
     var composer='<div class="co-composer"><input placeholder="Ask about any property or project…" disabled><button class="co-send"><i class="ti ti-arrow-up"></i></button></div>';
-    app.innerHTML=head+unlockedBanner()+thread+renderChips()+composer;
+    app.innerHTML=head+savStrip+approvedEl+thread+renderChips()+composer;
     // keep the latest turn in view
     var t=app.querySelectorAll('.co-turn');
     if(t.length){t[t.length-1].scrollIntoView({block:'nearest'});}
@@ -419,10 +513,13 @@
   // priority 2 (sign up) second, savings-to-date is the quiet third chip.
   function stepGreet(){
     var live=sols();
+    var A=amtUnit(sumSav(live));
+    var first=live.slice().sort(recSort)[0];
+    var hasDeadline=live.some(function(s){return s.note;});
     var head=live.length
       ? '<div style="font-size:14px;color:var(--text-secondary);margin-bottom:2px">You’ve got '+live.length+' projects ready to approve across '+distinctProps(live)+' hotels. Approve them all and that’s about</div>'
-        +'<div class="mono" style="font-size:34px;font-weight:700;color:var(--text-success);letter-spacing:-.02em;line-height:1.05">+'+fmtK(sumSav(live))+'<span style="font-size:.42em;font-weight:600;color:var(--text-muted);letter-spacing:0"> a year</span></div>'
-        +'<div style="font-size:14px;margin-top:8px">A couple of rebates end <b>Aug 31</b>, so if you’ve got a minute I’d start there. Want to take a look together?</div>'
+        +'<div class="mono" style="font-size:34px;font-weight:700;color:var(--text-success);letter-spacing:-.02em;line-height:1.05">+'+A.a+'<span style="font-size:.42em;font-weight:600;color:var(--text-muted);letter-spacing:0"> '+A.u+'</span></div>'
+        +'<div style="font-size:14px;margin-top:8px">I’d start with the quick wins — projects that pay for themselves fastest'+(hasDeadline?', then the solar work that has a rebate clock running':'')+'. First up is <b>'+esc(first.prop)+'’s '+esc(first.type)+'</b>. Want to take a look together?</div>'
       : '<div style="font-size:14px">You’re all caught up — every proposed project is approved. Whenever you’re ready, I’d love to bring the rest of your portfolio online too.</div>';
     C.turns=[
       advTurn('Morning! I went through all your properties overnight — here’s what I’d do first.'),
@@ -445,8 +542,8 @@
     var top=live.slice().sort(recSort)[0];
     C.turns.push(youTurn('Sure, let’s go through them.'));
     C.turns.push(cardTurn(top.id, top.note
-      ? 'Great. Let’s start with <b>'+esc(top.prop)+'’s '+esc(top.type)+'</b> — its '+esc(top.note).toLowerCase()+', and it pays for itself from day one. Have a look, and just approve it right here when you’re happy.'
-      : 'Great. Let’s start with <b>'+esc(top.prop)+'’s '+esc(top.type)+'</b> — the biggest, soonest win. Have a look, and just approve it right here when you’re happy.'));
+      ? 'Great. Let’s start with <b>'+esc(top.prop)+'’s '+esc(top.type)+'</b> — '+esc(top.note).toLowerCase()+'. Have a look, and just approve it right here when you’re happy.'
+      : 'Great. Let’s start with <b>'+esc(top.prop)+'’s '+esc(top.type)+'</b> — it’s the quickest to pay for itself, so it’s the easiest first win. Have a look, and just approve it right here when you’re happy.'));
     C.chips=[
       {id:'urgent',label:'Is anything else on a deadline?',icon:'ti-clock'},
       {id:'biggest',label:'Which one saves the most?',icon:'ti-trending-up'},
@@ -459,13 +556,13 @@
     var list=prospects();
     C.turns.push(youTurn('What about my other properties?'));
     if(!list.length){ C.turns.push(advTurn('Every property is already on board — that’s all of them! Nothing left for me to add.')); C.chips=[{id:'review',label:'Let’s go through the projects',icon:'ti-checks'},{id:'saved',label:'How much have I saved so far?',icon:'ti-trophy'}]; return renderCopilot(); }
-    var idle=Math.round(sumCf(list)/5);
+    var W=amtUnit(sumCf(list));
     var ready=list.filter(function(p){return p.ready;}).length;
     var rows=list.map(function(p){
       var cta=p.ready?'<button class="cf-btn sm" data-act="sign" data-val="'+p.id+'">Approve &amp; sign</button>':'<button class="cf-pill" style="font-size:13px;padding:5px 11px" data-act="step" data-val="'+p.id+'">'+esc(p.step)+'</button>';
-      return '<div data-row="'+p.id+'" style="display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--surface-2);border:1px '+(p.est?'dashed':'solid')+' '+(p.est?'var(--border-strong)':'var(--border)')+';border-radius:10px;padding:11px 12px"><div style="min-width:0"><div style="font-weight:600;font-size:14px">'+esc(p.name)+'</div><div style="font-size:12px;color:var(--text-muted)">'+(p.est?'Estimated · '+esc(p.step):esc(p.step))+'</div></div><div style="text-align:right;flex-shrink:0"><div class="cf-amt" style="font-size:16px;color:var(--text-success)">'+fmtK(p.cf)+'</div><div style="margin-top:5px">'+cta+'</div></div></div>';
+      return '<div data-row="'+p.id+'" style="display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--surface-2);border:1px '+(p.est?'dashed':'solid')+' '+(p.est?'var(--border-strong)':'var(--border)')+';border-radius:10px;padding:11px 12px"><div style="min-width:0"><div style="font-weight:600;font-size:14px">'+esc(p.name)+'</div><div style="font-size:12px;color:var(--text-muted)">'+(p.est?'Estimated · '+esc(p.step):esc(p.step))+'</div></div><div style="text-align:right;flex-shrink:0"><div class="cf-amt" style="font-size:16px;color:var(--text-success)">'+perTile(p.cf)+'</div><div style="margin-top:5px">'+cta+'</div></div></div>';
     }).join('');
-    C.turns.push(advTurn('Love that you’re thinking about the rest. You’ve got <b>'+list.length+'</b> not on Atrium yet — together they could be worth around <b>'+fmtK(idle)+' a year</b> once they’re running. No rush at all, bring them online whenever you’re ready.'));
+    C.turns.push(advTurn('Love that you’re thinking about the rest. You’ve got <b>'+list.length+'</b> not on Atrium yet — together they could be worth around <b>'+W.a+' '+W.u+'</b> once they’re running. No rush at all, bring them online whenever you’re ready.'));
     C.turns.push(advTurn('Here they are. '+(ready?'The '+(ready===1?'first one is':(ready+' at the top are'))+' ready to sign right now':'They each just need one quick step from you')+' — the rest I can walk you through:'
       +'<div style="display:flex;flex-direction:column;gap:8px;margin-top:10px">'+rows+'</div>'));
     C.chips=[
@@ -503,7 +600,7 @@
   // "What's most urgent?" — advisor calls out the two rebate-driven Solar jobs.
   function stepUrgent(){
     C.turns.push(youTurn('Is anything else on a deadline?'));
-    C.turns.push(advTurn('Yes — two share the <b>Aug 31</b> rebate deadline: <b>Cedar Court</b> and <b>Marina Bay Inn</b>, both Solar + Batteries. Cedar Court is the smaller, faster install, so I’d lock it in first and do Marina Bay next. Here’s Cedar Court:'));
+    C.turns.push(advTurn('Yes — the two <b>Solar + Batteries</b> projects, at <b>Cedar Court</b> and <b>Marina Bay Inn</b>. Solar takes about a year to build, so to catch the <b>2027 rebate</b> we’d want to start soon. Cedar Court is the smaller, faster install, so I’d lock it in first and do Marina Bay next. Here’s Cedar Court:'));
     C.turns.push(cardTurn('s5',''));
     C.chips=[
       {id:'numbers-s1',label:'Show me Marina Bay’s numbers',icon:'ti-calculator'},
@@ -516,7 +613,7 @@
   // "Biggest payoff" — advisor points at Marina Bay Solar (largest fiveCash).
   function stepBiggest(){
     C.turns.push(youTurn('Which one saves the most?'));
-    C.turns.push(advTurn('That’d be <b>Marina Bay Inn’s Solar + Batteries</b> — over five years it nets the most by a wide margin, and it’s on that same Aug 31 rebate clock. It’s a bigger install, so let’s go through it together:'));
+    C.turns.push(advTurn('That’d be <b>Marina Bay Inn’s Solar + Batteries</b> — over five years it nets the most by a wide margin, and it’s on that same 2027 rebate clock. It’s a bigger install, so let’s go through it together:'));
     C.turns.push(cardTurn('s1',''));
     C.chips=[
       {id:'urgent',label:'Is anything else on a deadline?',icon:'ti-clock'},
@@ -545,7 +642,7 @@
     if(id==='add') return stepAdd();
     if(id==='saved') return stepSaved();
     if(id==='numbers-s5') return stepShowCard('s5','Take me back to Cedar Court.','Sure — here’s Cedar Court’s Solar + Batteries again. Financed, you’re ahead from day one: the payment stays below what you save.');
-    if(id==='numbers-s1') return stepShowCard('s1','Show me Marina Bay’s numbers.','Here you go — Marina Bay Inn’s Solar + Batteries, your largest opportunity. The same Aug 31 rebate applies here too.');
+    if(id==='numbers-s1') return stepShowCard('s1','Show me Marina Bay’s numbers.','Here you go — Marina Bay Inn’s Solar + Batteries, your largest opportunity. The same 2027 rebate applies here too.');
     if(id==='urgent') return stepUrgent();
     if(id==='biggest') return stepBiggest();
     if(id==='riverside') return stepRiverside();
@@ -563,15 +660,16 @@
   app.addEventListener('click',function(e){
     // shared card interactions (discussion toggle, period toggle, pay mode, approve)
     var d=e.target.closest('[data-disc]'); if(d){S.disc[d.dataset.disc]=!S.disc[d.dataset.disc];render();return;}
+    var co=e.target.closest('[data-cardopen]'); if(co){S.cardOpen[co.dataset.cardopen]=!S.cardOpen[co.dataset.cardopen];render();return;}
     var pertog=e.target.closest('[data-period]'); if(pertog){S.period=pertog.dataset.period;render();return;}
     var seg=e.target.closest('[data-segmode]'); if(seg){S.mode[seg.dataset.sol]=seg.dataset.segmode;render();return;}
     var chip=e.target.closest('[data-chip]'); if(chip){handleChip(chip.dataset.chip);return;}
     var el=e.target.closest('[data-act],[data-approve]'); if(!el)return;
-    if(el.dataset.approve){var s=solById(el.dataset.approve);var m=curMode(s);unlockRow(s.id,fiveCash(s),function(){S.approved[s.id]=1;S.approvedMode[s.id]=m;S.screen='home';
+    if(el.dataset.approve){var s=solById(el.dataset.approve);var m=curMode(s);window.open('esign.html?doc='+encodeURIComponent(s.type+' — '+s.prop),'_blank');unlockRow(s.id,fiveCash(s),function(){S.approved[s.id]=1;S.approvedMode[s.id]=m;S.screen='home';
       // advisor acknowledges the approval and nudges the next best move
-      var rem=sols();
+      var rem=sols(),remA=amtUnit(sumSav(rem));
       C.turns.push(advTurn('Done! <b>'+esc(s.type)+'</b> at <b>'+esc(s.prop)+'</b> is approved. I’ll get scheduling started with '+esc(s.vendor)+' and keep you posted.'
-        +(rem.length?' That leaves <b>'+rem.length+'</b> more worth <b>+'+fmtK(sumSav(rem))+' a year</b> — shall we do the next one?':' And that’s every proposed project approved. Really nicely done.')));
+        +(rem.length?' That leaves <b>'+rem.length+'</b> more worth <b>+'+remA.a+' '+remA.u+'</b> — shall we do the next one?':' And that’s every proposed project approved. Really nicely done.')));
       C.chips=rem.length?[
         {id:'review',label:'Yes, show me the next one',icon:'ti-arrow-right'},
         {id:'add',label:'What about my other properties?',icon:'ti-building-community'},
@@ -591,7 +689,7 @@
     else if(a==='approvehere'){var mh=sols().filter(function(s){return s.prop===v;}).sort(recSort)[0];S.screen='home';if(mh){C.turns.push(youTurn('Let’s approve the work at '+v+'.'));C.turns.push(cardTurn(mh.id,'Perfect. Here’s '+esc(v)+'’s next project — approve it right here, or ask me anything first.'));C.chips=[{id:'urgent',label:'Is anything else on a deadline?',icon:'ti-clock'},{id:'add',label:'What about my other properties?',icon:'ti-building-community'},{id:'saved',label:'How much have I saved so far?',icon:'ti-trophy'}];}render();}
     else if(a==='approvetype'){var mt=sols().filter(function(s){return s.type===v;}).sort(recSort)[0];S.screen='home';if(mt){C.turns.push(youTurn('Let’s approve a '+v+' project.'));C.turns.push(cardTurn(mt.id,'Great — here’s a '+esc(v)+' project ready to go. Approve it whenever you’re happy, or ask me anything first.'));C.chips=[{id:'urgent',label:'Is anything else on a deadline?',icon:'ti-clock'},{id:'add',label:'What about my other properties?',icon:'ti-building-community'},{id:'saved',label:'How much have I saved so far?',icon:'ti-trophy'}];}render();}
     else if(a==='step'){el.textContent='We’ll guide you →';el.disabled=true;el.style.opacity=.6;}
-    else if(a==='sign'){var p=DATA.prospects.find(function(x){return x.id===v;});unlockRow(v,p.cf,function(){S.signed[v]=1;S.screen='home';
+    else if(a==='sign'){var p=DATA.prospects.find(function(x){return x.id===v;});window.open('esign.html?doc='+encodeURIComponent('New property — '+p.name),'_blank');unlockRow(v,p.cf,function(){S.signed[v]=1;S.screen='home';
       C.turns.push(advTurn('Wonderful — <b>'+esc(p.name)+'</b> is on board! I’ll get its audit moving and bring you its projects as soon as they’re ready.'));
       C.chips=[{id:'add',label:'Let’s add another',icon:'ti-building-community'},{id:'review',label:'Back to approving projects',icon:'ti-checks'},{id:'saved',label:'How much have I saved so far?',icon:'ti-trophy'}];
       renderCopilot();
