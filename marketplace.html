@@ -444,26 +444,7 @@
       +'<polyline points="'+poly(past,n)+'" fill="none" stroke="var(--text-success)" stroke-width="2.5" stroke-dasharray="5 3"/></svg>';
   }
 
-  // #1 — featured hero: the whole matched BASKET of jobs, reconciled to GROSS annual savings.
-  function heroBundle(){
-    var all=sols();                                   // every matched job → the headline number
-    if(!all.length) return '';
-    var appA=amtUnit(sumSav(all));                    // sum of each job's gross yearly saving = basket total
-    var priced=all.filter(function(s){return !est(s);});
-    var pick=priced.slice().sort(recSort).slice(0,3);
-    var chips=pick.map(function(s){return '<span class="mk-hero-chip"><i class="ti ti-bolt"></i> '+esc(s.type)+' <b>+'+fmtK(s.savings)+'</b></span>';}).join('')
-      +(all.length>pick.length?'<span class="mk-hero-chip">+'+(all.length-pick.length)+' more</span>':'');
-    var sub=priced.length===all.length
-      ? all.length+' jobs matched to your buildings, each competitively bid'
-      : priced.length+' jobs out for bid and ready to approve · '+(all.length-priced.length)+' more await your data';
-    return '<button class="mk-featured" data-act="review">'
-      +'<div class="mk-hero-label">Your matched basket of jobs</div>'
-      +'<div class="mk-hero-amt mono">+'+appA.a+'<span class="u"> '+appA.u+' saved</span></div>'
-      +'<div class="mk-hero-sub">'+sub+'</div>'
-      +'<div class="mk-hero-bundle">'+chips+'</div>'
-      +'<span class="mk-hero-cta"><i class="ti ti-checks"></i> Review &amp; approve <i class="ti ti-arrow-right"></i></span>'
-    +'</button>';
-  }
+  // (removed) featured basket-aggregate hero — the shop is 1:1 job cards now.
   // #2 — sign-up strip (green, encouraging, context-aware "other properties")
   function signupStrip(){
     var list=prospects(); if(!list.length) return '';
@@ -482,12 +463,7 @@
       +'<div class="mk-savhero-top"><span class="mk-savhero-v">'+fmtK(tot)+' saved with Atrium</span><span class="mk-savhero-k">past &amp; ahead <i class="ti ti-arrow-right"></i></span></div>'
       +savHeroSvg()+'</button>';
   }
-  // marketplace-global pay-mode switch — Financed default, remembered into the job leaf
-  function paySwitch(){
-    var fin=S.payMode==='financed';
-    return '<div class="mk-payswitch"><span class="mk-payswitch-k">How you’d like to pay across the shop — <b>'+(fin?'financed ($0 down)':'cash upfront')+'</b>. You can still change it on any job.</span>'
-      +'<div class="seg"><button data-pay="financed" aria-pressed="'+fin+'">Financed</button><button data-pay="cash" aria-pressed="'+(!fin)+'">Cash</button></div></div>';
-  }
+  // (removed) global cash/finance switch — the job leaf still defaults to financed via S.payMode.
 
   function renderShop(){
     var live=sols();
