@@ -58,6 +58,8 @@
   .saved-line{display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;text-align:left;font:inherit;background:none;border:none;border-top:1px solid var(--border);margin-top:4px;padding:15px 3px 3px;cursor:pointer;color:var(--text-secondary);font-size:14px}
   .saved-line b{color:var(--text-success);font-weight:700}
   .saved-line:hover{color:var(--text-primary)}
+  .sb-chart{display:block;width:100%;text-align:left;background:hsl(158 40% 98.5%);border:1px solid var(--eco-border);border-radius:10px;padding:9px 11px 7px;cursor:pointer;transition:background .12s,border-color .12s}
+  .sb-chart:hover{background:hsl(158 45% 96%);border-color:var(--eco)}
   .sav-legend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:12px;color:var(--text-secondary);margin-top:8px}
   .sav-legend span{display:inline-flex;align-items:center;gap:5px}
   .sav-legend i.k{width:16px;height:0;border-top-width:2px;border-top-style:solid;display:inline-block}
@@ -436,7 +438,7 @@
         +'<div style="display:flex;align-items:baseline;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:7px">'
           +'<div><span style="font-size:22px;font-weight:700;letter-spacing:-.01em;color:'+(isCash?'var(--text-success)':'var(--eco)')+'">'+headV+'</span> <span style="font-size:13px;color:var(--text-secondary)">'+headK+'</span></div>'
           +'<div class="seg"><button data-imp="cash" aria-pressed="'+isCash+'">$ saved</button><button data-imp="ghg" aria-pressed="'+(!isCash)+'">CO₂ avoided</button></div></div>'
-        +'<button data-act="go" data-val="savings" style="display:block;width:100%;text-align:left;background:none;border:none;padding:0;cursor:pointer">'+sumChart
+        +'<button class="sb-chart" data-act="go" data-val="savings">'+sumChart
           +'<div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text-muted);margin-top:3px"><span>past &amp; ahead</span><span style="color:var(--text-secondary);font-weight:600">see where it’s headed <i class="ti ti-arrow-right"></i></span></div></button>'
       +'</div></div>';
     // ---- build the ladder, DOM top(top rating)→bottom(today) ----
@@ -538,14 +540,15 @@
   }
   function trajChart(sc,apprAnn){
     var wom=sc.without12/12, savFrac=(sc.without12-sc.next12)/sc.without12, apprFrac=Math.min(0.42,savFrac+(apprAnn||0)/sc.without12);
-    var n=25,w=340,h=120,padX=6,padT=10,padB=8,today=12,s=[];
+    var n=25,w=340,h=120,padX=6,padT=10,padB=8,today=12,infl=0.08,s=[]; // infl = counterfactual energy-cost inflation; with-Atrium stays near-flat, so the gap fans open over time
     function noise(i){return 0.055*Math.sin(i*0.9+0.5)+0.03*Math.sin(i*2.15+1.7)+0.018*Math.sin(i*4.3+3.1);}
     for(var i=0;i<n;i++){
-      var without=wom*(1+noise(i));
+      var yr=(i-today)/12, infF=1+infl*yr, wf=1+0.12*infl*yr, wig=1+0.14*Math.sin(i*1.3+0.9);
+      var without=wom*infF*(1+noise(i));
       var g=Math.min(1,i/today);
-      var wth=without*(1-savFrac*g*(1+0.18*Math.sin(i*1.3+0.9)));
-      var target=without*(1-apprFrac*(1+0.18*Math.sin(i*1.3+0.9)));
-      var appr=i<=today?wth:wth+(target-wth)*Math.min(1,(i-today)/8);
+      var withFull=wom*(1-savFrac)*wf*wig, targetFull=wom*(1-apprFrac)*wf*wig;
+      var wth=without-(without-withFull)*g;                               // savings ramp in over the past year
+      var appr=i<=today?wth:wth+(targetFull-wth)*Math.min(1,(i-today)/8); // "if you approve all" pulls further down after today
       s.push({without:without,wth:wth,appr:appr});
     }
     var all=[];s.forEach(function(d){all.push(d.without,d.wth);if(apprAnn)all.push(d.appr);});
