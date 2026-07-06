@@ -543,12 +543,14 @@
     var n=25,w=340,h=120,padX=6,padT=10,padB=8,today=12,infl=0.08,s=[]; // infl = counterfactual energy-cost inflation; with-Atrium stays near-flat, so the gap fans open over time
     function noise(i){return 0.055*Math.sin(i*0.9+0.5)+0.03*Math.sin(i*2.15+1.7)+0.018*Math.sin(i*4.3+3.1);}
     for(var i=0;i<n;i++){
-      var yr=(i-today)/12, infF=1+infl*yr, wf=1+0.12*infl*yr, wig=1+0.14*Math.sin(i*1.3+0.9);
-      var without=wom*infF*(1+noise(i));
-      var g=Math.min(1,i/today);
-      var withFull=wom*(1-savFrac)*wf*wig, targetFull=wom*(1-apprFrac)*wf*wig;
-      var wth=without-(without-withFull)*g;                               // savings ramp in over the past year
-      var appr=i<=today?wth:wth+(targetFull-wth)*Math.min(1,(i-today)/8); // "if you approve all" pulls further down after today
+      var yr=(i-today)/12, infF=1+infl*yr;
+      var without=wom*infF*(1+noise(i));                                  // counterfactual rises with inflation
+      var g=Math.min(1,i/today);                                          // savings ramp in over the past year
+      // with-Atrium is always a fraction BELOW the counterfactual (never above); the fraction widens ahead as the counterfactual inflates
+      var savNow=savFrac+Math.max(0,0.88*infl*yr), apprNow=apprFrac+Math.max(0,0.88*infl*yr);
+      var wth=without*(1-savNow*g);
+      var target=without*(1-apprNow);
+      var appr=i<=today?wth:wth+(target-wth)*Math.min(1,(i-today)/8);     // "if you approve all" pulls further down after today
       s.push({without:without,wth:wth,appr:appr});
     }
     var all=[];s.forEach(function(d){all.push(d.without,d.wth);if(apprAnn)all.push(d.appr);});
