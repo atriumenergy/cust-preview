@@ -321,16 +321,18 @@
       +'<polyline points="'+poly(past,n)+'" fill="none" stroke="var(--text-success)" stroke-width="2.5" stroke-dasharray="5 3"/></svg>';
   }
   function trajChart(sc,apprAnn){
-    var wom=sc.without12/12, savFrac=(sc.without12-sc.next12)/sc.without12, apprFrac=Math.min(0.42,savFrac+(apprAnn||0)/sc.without12);
-    var n=25,w=340,h=120,padX=6,padT=10,padB=8,today=12,s=[];
-    // deterministic, irregular month-to-month variation (sum of sines) — no mythical steady state
+    var wom=sc.without12/12, savFrac=(sc.without12-sc.next12)/sc.without12, apprFrac=Math.max(savFrac,0.30);
+    var n=25,w=340,h=120,padX=6,padT=10,padB=8,today=12,infl=0.08,s=[]; // infl = counterfactual energy-cost inflation; with-Atrium stays near-flat, so the gap fans open over time
     function noise(i){return 0.055*Math.sin(i*0.9+0.5)+0.03*Math.sin(i*2.15+1.7)+0.018*Math.sin(i*4.3+3.1);}
     for(var i=0;i<n;i++){
-      var without=wom*(1+noise(i));
-      var g=Math.min(1,i/today); // realized savings ramp in over the trailing year — 0 savings twelve months ago
-      var wth=without*(1-savFrac*g*(1+0.18*Math.sin(i*1.3+0.9)));
-      var target=without*(1-apprFrac*(1+0.18*Math.sin(i*1.3+0.9)));
-      var appr=i<=today?wth:wth+(target-wth)*Math.min(1,(i-today)/8); // approved work ramps in over ~8 months (time-to-value)
+      var yr=(i-today)/12, infF=1+infl*yr;
+      var without=wom*infF*(1+noise(i));                                  // counterfactual rises with inflation
+      var g=Math.min(1,i/today);                                          // savings ramp in over the past year
+      // with-Atrium is always a fraction BELOW the counterfactual (never above); the fraction widens ahead as the counterfactual inflates
+      var savNow=savFrac+Math.max(0,0.88*infl*yr), apprNow=apprFrac+Math.max(0,0.88*infl*yr);
+      var wth=without*(1-savNow*g);
+      var target=without*(1-apprNow);
+      var appr=i<=today?wth:wth+(target-wth)*Math.min(1,(i-today)/8);     // "if you approve all" pulls further down after today
       s.push({without:without,wth:wth,appr:appr});
     }
     var all=[];s.forEach(function(d){all.push(d.without,d.wth);if(apprAnn)all.push(d.appr);});
@@ -339,15 +341,23 @@
     function Y(v){return padT+(1-(v-mn)/sp)*(h-padT-padB);}
     function poly(key,from,to){var p=[];for(var i=from;i<=to;i++)p.push(X(i).toFixed(1)+','+Y(s[i][key]).toFixed(1));return p.join(' ');}
     var gap=[];for(var i=0;i<n;i++)gap.push(X(i).toFixed(1)+','+Y(s[i].without).toFixed(1));for(var j=n-1;j>=0;j--)gap.push(X(j).toFixed(1)+','+Y(s[j].wth).toFixed(1));
-    return '<svg viewBox="0 0 '+w+' '+h+'" width="100%" height="'+h+'" preserveAspectRatio="none" style="display:block">'
+    var uw=[];for(var i=today;i<n;i++)uw.push(X(i).toFixed(1)+','+Y(s[i].wth).toFixed(1));for(var j=n-1;j>=today;j--)uw.push(X(j).toFixed(1)+','+Y(s[j].appr).toFixed(1));
+    var ylab='position:absolute;left:2px;font-size:10px;color:var(--text-muted);background:rgba(255,255,255,.72);padding:0 3px;border-radius:3px;line-height:1.2;pointer-events:none';
+    return '<div style="position:relative">'
+      +'<svg viewBox="0 0 '+w+' '+h+'" width="100%" height="'+h+'" preserveAspectRatio="none" style="display:block">'
       +'<polygon points="'+gap.join(' ')+'" fill="hsl(86 45% 91%)"/>'
+      +(apprAnn?'<polygon points="'+uw.join(' ')+'" fill="hsl(240 55% 93%)" opacity="0.8"/>':'')
       +'<line x1="'+X(today).toFixed(1)+'" x2="'+X(today).toFixed(1)+'" y1="'+padT+'" y2="'+(h-padB)+'" stroke="var(--border-strong)" stroke-dasharray="3 3"/>'
       +'<polyline points="'+poly('without',0,today)+'" fill="none" stroke="var(--text-warning)" stroke-width="2"/>'
       +'<polyline points="'+poly('without',today,n-1)+'" fill="none" stroke="var(--text-warning)" stroke-width="2" stroke-dasharray="5 3"/>'
       +'<polyline points="'+poly('wth',0,today)+'" fill="none" stroke="var(--text-success)" stroke-width="2.5"/>'
       +'<polyline points="'+poly('wth',today,n-1)+'" fill="none" stroke="var(--text-success)" stroke-width="2.5" stroke-dasharray="5 3"/>'
       +(apprAnn?'<polyline points="'+poly('appr',today,n-1)+'" fill="none" stroke="var(--primary)" stroke-width="2" stroke-dasharray="2 3"/>':'')
-      +'</svg>';
+      +'</svg>'
+      +'<span style="'+ylab+';top:2px">'+fmtK(mx*12)+'</span>'
+      +'<span style="'+ylab+';top:50%;transform:translateY(-50%)">'+fmtK(mx*12/2)+'</span>'
+      +'<span style="'+ylab+';bottom:3px">$0</span>'
+      +'</div>';
   }
   function cumChart(saved,pace){
     var n=24,w=340,h=118,padX=8,padT=12,padB=8,today=12,s=[],cum=0,pp=saved/12,pf=pace/12;
@@ -370,9 +380,9 @@
     var grid;
     if(byProp){
       grid=DATA.contracted.map(function(c){
-        var high=c.runPct>100;
-        var status=high?'<span style="display:inline-flex;align-items:center;gap:4px;color:var(--text-warning);font-size:13px;font-weight:500"><i class="ti ti-alert-triangle"></i> Running high</span>':'<span style="display:inline-flex;align-items:center;gap:4px;color:var(--text-success);font-size:13px;font-weight:500"><i class="ti ti-circle-check"></i> In line</span>';
-        return '<button class="cf-sq" data-act="savleaf" data-val="'+c.id+'" style="display:flex;flex-direction:column;gap:5px;min-height:130px"><span style="font-size:15px;font-weight:600">'+esc(c.name)+'</span><span style="font-size:12px;color:var(--text-muted)">Saved to date</span><span class="cf-amt" style="font-size:24px;color:var(--text-success);margin-top:-3px">'+fmtK(c.saved)+'</span><span style="margin-top:auto;display:flex;justify-content:space-between;align-items:center">'+status+'<i class="ti ti-arrow-right" style="color:var(--text-muted)"></i></span></button>';
+        var rate=Math.round((c.without12-c.next12)/c.without12*100);
+        var status='<span style="display:inline-flex;align-items:center;gap:4px;color:var(--text-success);font-size:13px;font-weight:500"><i class="ti ti-leaf"></i> saving '+rate+'%</span>';
+        return '<button class="cf-sq" data-act="savleaf" data-val="'+c.id+'" style="display:flex;flex-direction:column;gap:4px;min-height:112px"><span style="font-size:14px;font-weight:600">'+esc(c.name)+'</span><span style="font-size:11px;color:var(--text-muted)">Saved to date</span><span class="cf-amt" style="font-size:21px;color:var(--text-success);margin-top:-2px">'+fmtK(c.saved)+'</span><span style="margin-top:auto;display:flex;justify-content:space-between;align-items:center">'+status+'<i class="ti ti-arrow-right" style="color:var(--text-muted)"></i></span></button>';
       }).join('');
     } else {
       grid=DATA.savedByType.map(function(t){
@@ -380,7 +390,7 @@
       }).join('');
     }
     var tot=DATA.contracted.reduce(function(t,c){return t+c.saved;},0);
-    app.innerHTML='<div style="margin-bottom:1.1rem">'+backPill()+'<h1 style="margin:14px 0 0;font-size:23px">Savings so far</h1><p style="color:var(--text-secondary);margin:.3rem 0 0">You’ve saved <b style="color:var(--text-success)">'+fmtK(tot)+'</b> with Atrium. Open any '+(byProp?'hotel':'solution type')+' to see where it’s headed.</p></div>'+toggle+'<div class="grid">'+grid+'</div>';
+    app.innerHTML='<div style="margin-bottom:1.1rem">'+backPill()+'<h1 style="margin:14px 0 0;font-size:23px">Savings so far</h1><p style="color:var(--text-secondary);margin:.3rem 0 0">You’ve saved <b style="color:var(--text-success)">'+fmtK(tot)+'</b> with Atrium. Open any '+(byProp?'hotel':'solution type')+' to see where it’s headed.</p></div>'+('<div class="card" style="margin-bottom:18px">'+trajChart({without12:DATA.contracted.reduce(function(t,c){return t+c.without12;},0),next12:DATA.contracted.reduce(function(t,c){return t+c.next12;},0)},sols().reduce(function(t,s){return t+s.savings;},0))+'<div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text-muted);margin-top:2px"><span>12 mo ago</span><span>today</span><span>12 mo ahead</span></div>'+'<div class="sav-legend"><span><i class="k" style="border-color:var(--text-warning)"></i> without Atrium</span><span><i class="k" style="border-color:var(--text-success)"></i> with Atrium</span><span><i class="k" style="border-color:var(--primary);border-top-style:dashed"></i> if you approve all</span><span style="color:var(--text-muted)">dashed = forecast</span></div></div>')+toggle+'<div class="grid">'+grid+'</div>';
   }
   function renderSavingsLeaf(){
     if(S.savView==='property'){
