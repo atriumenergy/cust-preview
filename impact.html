@@ -194,17 +194,17 @@
       {id:'p6',name:'Bayside Motor Lodge',cf:26000,ready:false,step:'Add your utility bills',est:true}
     ],
     solutions:[
-      {id:'s1',prop:'Marina Bay Inn',type:'Solar + Batteries',u:0,note:'Start now — about a year to build for the 2027 rebate',vendor:'GreenVolt Partners',install:'about 6 weeks · starts Sep',fidelity:'measured',co2:180,market:150000,discountPct:12,incentive:45000,savings:26000,loan:{termYears:25,aprPct:6.5},lease:{annualAtrium:44000,annualMarket:52000,termYears:20}},
-      {id:'s5',prop:'Cedar Court Hotel',type:'Solar + Batteries',u:0,note:'Start now — about a year to build for the 2027 rebate',vendor:'GreenVolt Partners',install:'about 5 weeks',fidelity:'measured',co2:128,market:105000,discountPct:12,incentive:31000,savings:18000,loan:{termYears:25,aprPct:6.5},lease:{annualAtrium:31000,annualMarket:37000,termYears:20}},
+      {id:'s1',prop:'Marina Bay Inn',type:'Solar + Batteries',u:2,note:'Start now — about a year to build for the 2027 rebate',vendor:'GreenVolt Partners',install:'about 6 weeks · starts Sep',fidelity:'measured',co2:180,market:150000,discountPct:12,incentive:45000,savings:26000,loan:{termYears:25,aprPct:6.5},lease:{annualAtrium:44000,annualMarket:52000,termYears:20}},
+      {id:'s5',prop:'Cedar Court Hotel',type:'Solar + Batteries',u:2,note:'Start now — about a year to build for the 2027 rebate',vendor:'GreenVolt Partners',install:'about 5 weeks',fidelity:'measured',co2:128,market:105000,discountPct:12,incentive:31000,savings:18000,loan:{termYears:25,aprPct:6.5},lease:{annualAtrium:31000,annualMarket:37000,termYears:20}},
       {id:'s2',prop:'Marina Bay Inn',type:'Heat Pump Water Heaters',u:1,vendor:'Thermal Systems',install:'about 2 weeks',fidelity:'measured',co2:55,market:25000,discountPct:12,incentive:5000,savings:6000,loan:{termYears:5,aprPct:6.9},lease:null},
       {id:'s6',prop:'Cedar Court Hotel',type:'LED Lighting',u:0,vendor:'BrightSwap',install:'about 2 weeks',fidelity:'measured',co2:34,market:16000,discountPct:13,incentive:2000,savings:4800,loan:{termYears:5,aprPct:7.9},lease:null},
       {id:'s3',prop:'Marina Bay Inn',type:'LED Lighting',u:0,vendor:'BrightSwap',install:'about 2 weeks',fidelity:'measured',co2:24,market:12000,discountPct:13,incentive:1400,savings:3600,loan:{termYears:5,aprPct:7.9},lease:null},
-      {id:'s4',prop:'Marina Bay Inn',type:'Smart Thermostats',u:2,vendor:'Cozy Controls',install:'about 1 week',fidelity:'measured',co2:11,market:3600,discountPct:14,incentive:500,savings:1600,loan:{termYears:5,aprPct:7.9},lease:null},
+      {id:'s4',prop:'Marina Bay Inn',type:'Smart Thermostats',u:1,vendor:'Cozy Controls',install:'about 1 week',fidelity:'measured',co2:11,market:3600,discountPct:14,incentive:500,savings:1600,loan:{termYears:5,aprPct:7.9},lease:null},
       {id:'s10',prop:'Marina Bay Inn',type:'Building Controls (EMS)',u:1,vendor:'Nodal Systems',install:'about 3 weeks',fidelity:'measured',co2:48,market:21000,discountPct:12,incentive:3000,savings:7800,loan:{termYears:5,aprPct:6.9},lease:null},
       {id:'s11',prop:'Cedar Court Hotel',type:'Kitchen Hood Controls',u:1,vendor:'AirWise Controls',install:'about 1 week',fidelity:'measured',co2:21,market:10000,discountPct:12,incentive:1000,savings:3200,loan:{termYears:5,aprPct:7.9},lease:null},
-      {id:'s12',prop:'Cedar Court Hotel',type:'Pool Heat Pump',u:2,vendor:'ThermaPool',install:'about 2 weeks',fidelity:'measured',co2:26,market:13500,discountPct:12,incentive:1800,savings:3900,loan:{termYears:5,aprPct:6.9},lease:null},
+      {id:'s12',prop:'Cedar Court Hotel',type:'Pool Heat Pump',u:1,vendor:'ThermaPool',install:'about 2 weeks',fidelity:'measured',co2:26,market:13500,discountPct:12,incentive:1800,savings:3900,loan:{termYears:5,aprPct:6.9},lease:null},
       {id:'s13',prop:'Riverside Lodge',type:'Low-Flow Water Fixtures',u:0,vendor:'AquaTrim',install:'about 1 week',fidelity:'measured',co2:9,market:5000,discountPct:13,incentive:700,savings:2300,loan:{termYears:5,aprPct:7.9},lease:null},
-      {id:'s8',prop:'Riverside Lodge',type:'Heat Pump Water Heaters',u:0,vendor:'Thermal Systems',install:'about 2 weeks',fidelity:'estimated',co2:40,dataNeed:'your water-heater metering',savings:4200},
+      {id:'s8',prop:'Riverside Lodge',type:'Heat Pump Water Heaters',u:1,vendor:'Thermal Systems',install:'about 2 weeks',fidelity:'estimated',co2:40,dataNeed:'your water-heater metering',savings:4200},
       {id:'s9',prop:'Riverside Lodge',type:'Smart Thermostats',u:1,vendor:'Cozy Controls',install:'about 1 week',fidelity:'estimated',co2:22,dataNeed:'occupancy data',savings:4400},
       {id:'s7',prop:'Cedar Court Hotel',type:'Ozone Laundry',u:0,vendor:'PureWash',install:'about 1 week',fidelity:'measured',co2:18,market:8500,discountPct:12,incentive:900,savings:3600,loan:{termYears:5,aprPct:7.9},lease:null}
     ],
@@ -430,7 +430,7 @@
       var otherW=live.length?'other ':'';
       var subSign='Your '+pros.length+' '+(pros.length>1?'properties':'property')+' waiting can start earning their own rating whenever you’re ready';
       steps.push(rung('<i class="ti ti-plus"></i>','extend','Go further','Bring your '+otherW+'properties online',
-        '+'+fmtK(Math.round(sumCf(pros)/5)),'a year','Each earns a rating','of its own',null,'Add properties','signup','go'));
+        '+'+amtUnit(Math.round(sumCf(pros)/5)).a,amtUnit(Math.round(sumCf(pros)/5)).u,'Each earns a rating','of its own',null,'Add properties','signup','go'));
     } else steps.push(doneRung('<i class="ti ti-check"></i>','Every property is earning a rating'));
     // the approve steps — least-urgent up top so the biggest/soonest sits nearest today
     if(cats.length){
@@ -444,7 +444,7 @@
         if(isNext){ ecoV='Toward '+G.targetName; ecoSub='avoids '+co2Line(x.co2); }
         else { ecoV=x.co2+' t CO₂/yr'; ecoSub='counts toward '+G.targetName; }
         steps.push(rung('<i class="ti '+x.c.icon+'"></i>',isNext?'next':'',kick,x.c.verb,
-          '+'+fmtK(x.ann),'a year',ecoV,ecoSub,note,isNext?'Review &amp; approve':'Open this step',x.c.key,'cat'));
+          '+'+amtUnit(x.ann).a,amtUnit(x.ann).u,ecoV,ecoSub,note,isNext?'Review &amp; approve':'Open this step',x.c.key,'cat'));
       });
     } else steps.push(doneRung('<i class="ti ti-check"></i>','Every proposed step approved'));
     // ---- the ground: "you are here" today marker ----
@@ -480,7 +480,7 @@
       +'<h1 style="margin:6px 0 0">'+esc(c.title)+'</h1></div>'
       // theme-level CO-EQUAL summary band
       +'<div class="eco-band"><div class="ib"><i class="ti '+c.icon+'"></i></div><div style="display:flex;gap:22px;flex-wrap:wrap">'
-        +'<div><div class="bk"><i class="ti ti-cash"></i> Cash flow, whole step</div><div class="bv" style="color:var(--text-success)">+'+fmtK(sumSav(live))+' a year</div><div class="bsub">'+live.length+' project'+(live.length>1?'s':'')+'</div></div>'
+        +'<div><div class="bk"><i class="ti ti-cash"></i> Cash flow, whole step</div><div class="bv" style="color:var(--text-success)">+'+amtUnit(sumSav(live)).a+' '+amtUnit(sumSav(live)).u+'</div><div class="bsub">'+live.length+' project'+(live.length>1?'s':'')+'</div></div>'
         +'<div><div class="bk"><i class="ti ti-leaf"></i> Green outcome</div><div class="bv" style="color:var(--eco)">'+sumCo2(live)+' t CO₂ a year</div><div class="bsub">points toward '+esc(G.targetName)+'</div></div>'
       +'</div></div>'
       +'<div class="grid">'+grid+'</div>';

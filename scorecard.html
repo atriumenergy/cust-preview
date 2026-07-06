@@ -173,17 +173,17 @@
       {id:'p6',name:'Bayside Motor Lodge',cf:26000,ready:false,step:'Add your utility bills',est:true}
     ],
     solutions:[
-      {id:'s1',prop:'Marina Bay Inn',type:'Solar + Batteries',u:0,note:'Start now — about a year to build for the 2027 rebate',vendor:'GreenVolt Partners',install:'about 6 weeks · starts Sep',fidelity:'measured',market:150000,discountPct:12,incentive:45000,savings:26000,loan:{termYears:25,aprPct:6.5},lease:{annualAtrium:44000,annualMarket:52000,termYears:20}},
-      {id:'s5',prop:'Cedar Court Hotel',type:'Solar + Batteries',u:0,note:'Start now — about a year to build for the 2027 rebate',vendor:'GreenVolt Partners',install:'about 5 weeks',fidelity:'measured',market:105000,discountPct:12,incentive:31000,savings:18000,loan:{termYears:25,aprPct:6.5},lease:{annualAtrium:31000,annualMarket:37000,termYears:20}},
+      {id:'s1',prop:'Marina Bay Inn',type:'Solar + Batteries',u:2,note:'Start now — about a year to build for the 2027 rebate',vendor:'GreenVolt Partners',install:'about 6 weeks · starts Sep',fidelity:'measured',market:150000,discountPct:12,incentive:45000,savings:26000,loan:{termYears:25,aprPct:6.5},lease:{annualAtrium:44000,annualMarket:52000,termYears:20}},
+      {id:'s5',prop:'Cedar Court Hotel',type:'Solar + Batteries',u:2,note:'Start now — about a year to build for the 2027 rebate',vendor:'GreenVolt Partners',install:'about 5 weeks',fidelity:'measured',market:105000,discountPct:12,incentive:31000,savings:18000,loan:{termYears:25,aprPct:6.5},lease:{annualAtrium:31000,annualMarket:37000,termYears:20}},
       {id:'s2',prop:'Marina Bay Inn',type:'Heat Pump Water Heaters',u:1,vendor:'Thermal Systems',install:'about 2 weeks',fidelity:'measured',market:25000,discountPct:12,incentive:5000,savings:6000,loan:{termYears:5,aprPct:6.9},lease:null},
       {id:'s6',prop:'Cedar Court Hotel',type:'LED Lighting',u:0,vendor:'BrightSwap',install:'about 2 weeks',fidelity:'measured',market:16000,discountPct:13,incentive:2000,savings:4800,loan:{termYears:5,aprPct:7.9},lease:null},
       {id:'s3',prop:'Marina Bay Inn',type:'LED Lighting',u:0,vendor:'BrightSwap',install:'about 2 weeks',fidelity:'measured',market:12000,discountPct:13,incentive:1400,savings:3600,loan:{termYears:5,aprPct:7.9},lease:null},
-      {id:'s4',prop:'Marina Bay Inn',type:'Smart Thermostats',u:2,vendor:'Cozy Controls',install:'about 1 week',fidelity:'measured',market:3600,discountPct:14,incentive:500,savings:1600,loan:{termYears:5,aprPct:7.9},lease:null},
+      {id:'s4',prop:'Marina Bay Inn',type:'Smart Thermostats',u:1,vendor:'Cozy Controls',install:'about 1 week',fidelity:'measured',market:3600,discountPct:14,incentive:500,savings:1600,loan:{termYears:5,aprPct:7.9},lease:null},
       {id:'s10',prop:'Marina Bay Inn',type:'Building Controls (EMS)',u:1,vendor:'Nodal Systems',install:'about 3 weeks',fidelity:'measured',market:21000,discountPct:12,incentive:3000,savings:7800,loan:{termYears:5,aprPct:6.9},lease:null},
       {id:'s11',prop:'Cedar Court Hotel',type:'Kitchen Hood Controls',u:1,vendor:'AirWise Controls',install:'about 1 week',fidelity:'measured',market:10000,discountPct:12,incentive:1000,savings:3200,loan:{termYears:5,aprPct:7.9},lease:null},
-      {id:'s12',prop:'Cedar Court Hotel',type:'Pool Heat Pump',u:2,vendor:'ThermaPool',install:'about 2 weeks',fidelity:'measured',market:13500,discountPct:12,incentive:1800,savings:3900,loan:{termYears:5,aprPct:6.9},lease:null},
+      {id:'s12',prop:'Cedar Court Hotel',type:'Pool Heat Pump',u:1,vendor:'ThermaPool',install:'about 2 weeks',fidelity:'measured',market:13500,discountPct:12,incentive:1800,savings:3900,loan:{termYears:5,aprPct:6.9},lease:null},
       {id:'s13',prop:'Riverside Lodge',type:'Low-Flow Water Fixtures',u:0,vendor:'AquaTrim',install:'about 1 week',fidelity:'measured',market:5000,discountPct:13,incentive:700,savings:2300,loan:{termYears:5,aprPct:7.9},lease:null},
-      {id:'s8',prop:'Riverside Lodge',type:'Heat Pump Water Heaters',u:0,vendor:'Thermal Systems',install:'about 2 weeks',fidelity:'estimated',dataNeed:'your water-heater metering',savings:4200},
+      {id:'s8',prop:'Riverside Lodge',type:'Heat Pump Water Heaters',u:1,vendor:'Thermal Systems',install:'about 2 weeks',fidelity:'estimated',dataNeed:'your water-heater metering',savings:4200},
       {id:'s9',prop:'Riverside Lodge',type:'Smart Thermostats',u:1,vendor:'Cozy Controls',install:'about 1 week',fidelity:'estimated',dataNeed:'occupancy data',savings:4400},
       {id:'s7',prop:'Cedar Court Hotel',type:'Ozone Laundry',u:0,vendor:'PureWash',install:'about 1 week',fidelity:'measured',market:8500,discountPct:12,incentive:900,savings:3600,loan:{termYears:5,aprPct:7.9},lease:null}
     ],
@@ -369,19 +369,16 @@
       +'<polyline points="'+poly(past,n)+'" fill="none" stroke="var(--text-success)" stroke-width="2.5" stroke-dasharray="5 3"/></svg>';
   }
   function propRow(c){
-    var margin=effMargin(c), gd=gradeFor(margin), high=c.runPct>100, rate=savRatePct(c);
-    var status=high
-      ? '<span class="sc-prop-status high"><i class="ti ti-trending-up"></i> running '+(c.runPct-100)+'% over expected</span>'
-      : '<span class="sc-prop-status ok"><i class="ti ti-trending-down"></i> '+margin+'% under expected</span>';
-    // bar: fill = savings rate vs a no-Atrium year; tick at the ABE-expected mark (100%)
-    var fill=Math.max(6,Math.min(100,rate*3)); // visual only, capped
-    var tick=Math.min(100,rate*3*(c.runPct/100)); // where expected sits relative to actual — indicative
+    var rate=savRatePct(c);
+    var appAnn=sols().filter(function(s){return s.prop===c.name;}).reduce(function(t,s){return t+s.savings;},0);
+    var note=appAnn>0
+      ? '<span class="sc-prop-status ok"><i class="ti ti-arrow-up-right"></i> +'+fmtK(appAnn)+'/yr more within reach</span>'
+      : '<span class="sc-prop-status ok"><i class="ti ti-circle-check"></i> fully optimized</span>';
     return '<button class="sc-prop" data-act="savleaf" data-val="'+c.id+'">'
-      +gradeChip(gd,false)
+      +'<span class="sc-pgrade g-a"><i class="ti ti-leaf"></i></span>'
       +'<span class="sc-prop-main">'
-        +'<span class="sc-prop-name">'+esc(c.name)+' '+status+'</span>'
-        +'<span class="sc-prop-line">cutting <b>'+rate+'%</b> off a no-Atrium year · '+c.rooms+' rooms · '+fmt(c.perRoomNight)+'/room-night</span>'
-        +'<span class="sc-bar'+(high?' high':'')+'"><i style="width:'+fill+'%"></i><u style="left:'+tick+'%"></u></span>'
+        +'<span class="sc-prop-name">'+esc(c.name)+' '+note+'</span>'
+        +'<span class="sc-prop-line">saving <b style="color:var(--text-success)">'+rate+'%</b> off a no-Atrium year · '+c.rooms+' rooms · '+fmt(c.perRoomNight)+'/room-night</span>'
       +'</span>'
       +'<span class="sc-prop-right"><span class="sc-prop-saved">'+fmtK(c.saved)+'</span><span class="sc-prop-savedk">saved</span></span>'
       +'<i class="ti ti-chevron-right sc-prop-chev"></i></button>';
@@ -394,15 +391,14 @@
     var paceYr=DATA.savedByType.reduce(function(t,x){return t+x.pace;},0);
     // portfolio efficiency vs a typical operator: our expected-margin against a benchmark band
     var peerBeat=Math.round(pMargin+9); // room-weighted margin plus a modest peer gap (illustrative benchmark)
+    var pRate=Math.round(DATA.contracted.reduce(function(t,c){return t+(c.without12-c.next12);},0)/DATA.contracted.reduce(function(t,c){return t+c.without12;},0)*100); // portfolio savings vs a no-Atrium year — always positive
 
     var toggle='<div class="mtoggle"><button data-period="annual" aria-pressed="'+(S.period==='annual')+'">Annual</button><button data-period="monthly" aria-pressed="'+(S.period==='monthly')+'">Monthly</button></div>';
 
     // ---- the report card: grade + saved-to-date + three standings ----
-    var subLine=pMargin>=0
-      ? 'Your hotels are running <b>'+Math.round(pMargin)+'% under</b> the cost Atrium’s model expects for your occupancy and weather.'
-      : 'Your hotels are running a little over expected right now — one property needs a look.';
+    var subLine='Across '+DATA.contracted.length+' hotels you’re saving <b>+'+fmtK(paceYr)+' a year</b> — cutting about <b>'+pRate+'%</b> off what they’d cost without Atrium, and running leaner than most comparable hotels.';
     var report='<div class="sc-report">'
-      +'<div class="sc-report-top">'+gradeChip(pGrade,true)
+      +'<div class="sc-report-top"><span class="grade g-a">'+pRate+'<sup>%</sup></span>'
         +'<div class="sc-report-hd">'
           +'<p style="color:var(--text-secondary);margin:0;font-size:13px">'+esc(DATA.portfolio)+'</p>'
           +'<div style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap"><h1>Portfolio scorecard</h1>'+toggle+'</div>'
@@ -413,15 +409,15 @@
           +'<div class="sc-saved-top"><span class="sc-saved-v">'+fmtK(savedTot)+' saved with Atrium</span><span class="sc-saved-k">past &amp; ahead <i class="ti ti-arrow-right"></i></span></div>'
           +savedHeroSvg()+'</button>'
         +'<div class="sc-metrics">'
-          +'<div class="sc-metric"><div class="k">Grade</div><div class="v" style="color:'+(pGrade.cls==='g-c'?'var(--text-warning)':'var(--text-success)')+'">'+pGrade.g+(pGrade.s||'')+'</div><div class="n">portfolio standing</div></div>'
-          +'<div class="sc-metric"><div class="k">Hotels on track</div><div class="v">'+okCount+' of '+DATA.contracted.length+'</div><div class="n">at or under expected</div></div>'
+          +'<div class="sc-metric"><div class="k">Cutting</div><div class="v" style="color:var(--text-success)">'+pRate+'%</div><div class="n">off a no-Atrium year</div></div>'
+          +'<div class="sc-metric"><div class="k">Hotels saving</div><div class="v">'+DATA.contracted.length+' of '+DATA.contracted.length+'</div><div class="n">every one earning back</div></div>'
           +'<div class="sc-metric"><div class="k">On pace</div><div class="v mono" style="color:var(--text-success)">+'+fmtK(S.period==='monthly'?paceYr/12:paceYr)+'</div><div class="n">'+(S.period==='monthly'?'a month':'this year')+'</div></div>'
         +'</div>'
       +'</div></div>';
 
     // ---- each property, graded ----
     var propsSection='<div class="sc-sec">How each hotel is doing</div>'
-      +DATA.contracted.slice().sort(function(a,b){return effMargin(b)-effMargin(a);}).map(propRow).join('');
+      +DATA.contracted.slice().sort(function(a,b){return b.saved-a.saved;}).map(propRow).join('');
 
     // ---- standing rows: peer benchmark + green certification ----
     var benchTag=peerBeat>0?'<span class="sc-tag ok">top quartile</span>':'<span class="sc-tag near">middle</span>';
@@ -438,7 +434,7 @@
     if(live.length){
       var appA=amtUnit(sumSav(live));
       actions+='<button class="sc-act" data-act="go" data-val="solutions"><i class="ti ti-clipboard-check lead"></i>'
-        +'<div class="m"><div class="t">'+live.length+' proposed projects could raise your grade</div>'
+        +'<div class="m"><div class="t">'+live.length+' proposed projects add even more savings</div>'
         +'<div class="d">Across '+distinctProps(live)+' hotels · adds about <b>'+appA.a+' '+appA.u+'</b> once approved</div></div>'
         +'<span class="sc-act-cta">Review &amp; approve <i class="ti ti-arrow-right"></i></span></button>';
     }
@@ -457,7 +453,7 @@
     var appd=DATA.solutions.filter(function(s){return S.approved[s.id];});
     var approvedEl=appd.length?'<div class="approved-strip"><i class="ti ti-circle-check"></i> Approved this session — <b>'+amtUnit(sumSav(appd)).a+' '+amtUnit(sumSav(appd)).u+'</b> across '+appd.length+' project'+(appd.length>1?'s':'')+'</div>':'';
 
-    app.innerHTML=report+propsSection+standing+'<div class="sc-sec">Raise your grade</div>'+actions+approvedEl;
+    app.innerHTML=report+propsSection+standing+'<div class="sc-sec">Do more</div>'+actions+approvedEl;
   }
   function renderSignup(){
     var list=prospects();
@@ -546,9 +542,9 @@
     var grid;
     if(byProp){
       grid=DATA.contracted.map(function(c){
-        var margin=effMargin(c),gd=gradeFor(margin),high=c.runPct>100;
-        var status=high?'<span style="display:inline-flex;align-items:center;gap:4px;color:var(--text-warning);font-size:13px;font-weight:500"><i class="ti ti-alert-triangle"></i> Running high</span>':'<span style="display:inline-flex;align-items:center;gap:4px;color:var(--text-success);font-size:13px;font-weight:500"><i class="ti ti-circle-check"></i> '+margin+'% under expected</span>';
-        return '<button class="cf-sq" data-act="savleaf" data-val="'+c.id+'" style="display:flex;flex-direction:column;gap:5px;min-height:130px"><span style="display:flex;align-items:center;gap:8px">'+gradeChip(gd,false)+'<span style="font-size:15px;font-weight:600">'+esc(c.name)+'</span></span><span style="font-size:12px;color:var(--text-muted);margin-top:4px">Saved to date</span><span class="cf-amt" style="font-size:24px;color:var(--text-success);margin-top:-3px">'+fmtK(c.saved)+'</span><span style="margin-top:auto;display:flex;justify-content:space-between;align-items:center">'+status+'<i class="ti ti-arrow-right" style="color:var(--text-muted)"></i></span></button>';
+        var rate=savRatePct(c);
+        var status='<span style="display:inline-flex;align-items:center;gap:4px;color:var(--text-success);font-size:13px;font-weight:500"><i class="ti ti-leaf"></i> saving '+rate+'%</span>';
+        return '<button class="cf-sq" data-act="savleaf" data-val="'+c.id+'" style="display:flex;flex-direction:column;gap:5px;min-height:130px"><span style="display:flex;align-items:center;gap:8px"><span class="sc-pgrade g-a"><i class="ti ti-leaf"></i></span><span style="font-size:15px;font-weight:600">'+esc(c.name)+'</span></span><span style="font-size:12px;color:var(--text-muted);margin-top:4px">Saved to date</span><span class="cf-amt" style="font-size:24px;color:var(--text-success);margin-top:-3px">'+fmtK(c.saved)+'</span><span style="margin-top:auto;display:flex;justify-content:space-between;align-items:center">'+status+'<i class="ti ti-arrow-right" style="color:var(--text-muted)"></i></span></button>';
       }).join('');
     } else {
       grid=DATA.savedByType.map(function(t){
@@ -562,12 +558,12 @@
     if(S.savView==='property'){
       var c=DATA.contracted.find(function(x){return x.id===S.savLeaf;});
       if(!c){S.screen='savings';return renderSavings();}
-      var apprAnn=approveAnnualFor(c.name),apprN=approveCountFor(c.name),high=c.runPct>100,margin=effMargin(c),gd=gradeFor(margin),rate=savRatePct(c);
+      var apprAnn=approveAnnualFor(c.name),apprN=approveCountFor(c.name),rate=savRatePct(c);
       var legend='<div class="sav-legend"><span><i class="k" style="border-color:var(--text-warning)"></i> without Atrium</span><span><i class="k" style="border-color:var(--text-success)"></i> with Atrium</span>'+(apprAnn?'<span><i class="k" style="border-color:var(--primary);border-top-style:dashed"></i> if you approve</span>':'')+'<span style="color:var(--text-muted)">dashed = forecast</span></div>';
       var cta=apprAnn?'<div style="margin-top:16px;background:var(--bg-success);border:1px solid hsl(86 40% 82%);border-radius:12px;padding:14px 16px"><div style="font-size:14px">Approve the '+apprN+' proposed project'+(apprN>1?'s':'')+' at '+esc(c.name)+' to save about <b>'+fmtK(apprAnn)+' a year</b> more.</div><button class="cf-btn" data-act="approvehere" data-val="'+esc(c.name)+'" style="margin-top:10px"><i class="ti ti-check"></i> Review &amp; approve here</button></div>':'';
       app.innerHTML='<div style="margin-bottom:1.1rem">'+backPill()
-        +'<div style="display:flex;align-items:center;gap:12px;margin:14px 0 0">'+gradeChip(gd,true)+'<div><h1 style="font-size:23px">'+esc(c.name)+'</h1>'
-          +'<p style="color:var(--text-secondary);margin:.2rem 0 0">'+(high?'Running '+(c.runPct-100)+'% over what your occupancy and weather predict — worth a look.':margin+'% under expected · cutting '+rate+'% off a no-Atrium year')+'</p></div></div>'
+        +'<div style="display:flex;align-items:center;gap:12px;margin:14px 0 0"><span class="grade g-a"><i class="ti ti-leaf"></i></span><div><h1 style="font-size:23px">'+esc(c.name)+'</h1>'
+          +'<p style="color:var(--text-secondary);margin:.2rem 0 0">Cutting <b style="color:var(--text-success)">'+rate+'%</b> off a no-Atrium year'+(apprAnn?' · <b>+'+fmtK(apprAnn)+'/yr</b> more within reach':'')+'</p></div></div>'
         +'<p style="color:var(--text-secondary);margin:.5rem 0 0">You’ve saved <b style="color:var(--text-success)">'+fmtK(c.saved)+'</b> with Atrium — on track to keep saving.</p></div>'
         +'<div class="card">'+trajChart(c,apprAnn)
         +'<div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text-muted);margin-top:2px"><span>12 mo ago</span><span>today</span><span>12 mo ahead</span></div>'+legend+cta+'</div>';

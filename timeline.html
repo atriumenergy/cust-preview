@@ -155,17 +155,17 @@
       {id:'p6',name:'Bayside Motor Lodge',cf:26000,ready:false,step:'Add your utility bills',est:true}
     ],
     solutions:[
-      {id:'s1',prop:'Marina Bay Inn',type:'Solar + Batteries',u:0,note:'Start now — about a year to build for the 2027 rebate',vendor:'GreenVolt Partners',install:'about 6 weeks · starts Sep',fidelity:'measured',market:150000,discountPct:12,incentive:45000,savings:26000,loan:{termYears:25,aprPct:6.5},lease:{annualAtrium:44000,annualMarket:52000,termYears:20}},
-      {id:'s5',prop:'Cedar Court Hotel',type:'Solar + Batteries',u:0,note:'Start now — about a year to build for the 2027 rebate',vendor:'GreenVolt Partners',install:'about 5 weeks',fidelity:'measured',market:105000,discountPct:12,incentive:31000,savings:18000,loan:{termYears:25,aprPct:6.5},lease:{annualAtrium:31000,annualMarket:37000,termYears:20}},
+      {id:'s1',prop:'Marina Bay Inn',type:'Solar + Batteries',u:2,note:'Start now — about a year to build for the 2027 rebate',vendor:'GreenVolt Partners',install:'about 6 weeks · starts Sep',fidelity:'measured',market:150000,discountPct:12,incentive:45000,savings:26000,loan:{termYears:25,aprPct:6.5},lease:{annualAtrium:44000,annualMarket:52000,termYears:20}},
+      {id:'s5',prop:'Cedar Court Hotel',type:'Solar + Batteries',u:2,note:'Start now — about a year to build for the 2027 rebate',vendor:'GreenVolt Partners',install:'about 5 weeks',fidelity:'measured',market:105000,discountPct:12,incentive:31000,savings:18000,loan:{termYears:25,aprPct:6.5},lease:{annualAtrium:31000,annualMarket:37000,termYears:20}},
       {id:'s2',prop:'Marina Bay Inn',type:'Heat Pump Water Heaters',u:1,vendor:'Thermal Systems',install:'about 2 weeks',fidelity:'measured',market:25000,discountPct:12,incentive:5000,savings:6000,loan:{termYears:5,aprPct:6.9},lease:null},
       {id:'s6',prop:'Cedar Court Hotel',type:'LED Lighting',u:0,vendor:'BrightSwap',install:'about 2 weeks',fidelity:'measured',market:16000,discountPct:13,incentive:2000,savings:4800,loan:{termYears:5,aprPct:7.9},lease:null},
       {id:'s3',prop:'Marina Bay Inn',type:'LED Lighting',u:0,vendor:'BrightSwap',install:'about 2 weeks',fidelity:'measured',market:12000,discountPct:13,incentive:1400,savings:3600,loan:{termYears:5,aprPct:7.9},lease:null},
-      {id:'s4',prop:'Marina Bay Inn',type:'Smart Thermostats',u:2,vendor:'Cozy Controls',install:'about 1 week',fidelity:'measured',market:3600,discountPct:14,incentive:500,savings:1600,loan:{termYears:5,aprPct:7.9},lease:null},
+      {id:'s4',prop:'Marina Bay Inn',type:'Smart Thermostats',u:1,vendor:'Cozy Controls',install:'about 1 week',fidelity:'measured',market:3600,discountPct:14,incentive:500,savings:1600,loan:{termYears:5,aprPct:7.9},lease:null},
       {id:'s10',prop:'Marina Bay Inn',type:'Building Controls (EMS)',u:1,vendor:'Nodal Systems',install:'about 3 weeks',fidelity:'measured',market:21000,discountPct:12,incentive:3000,savings:7800,loan:{termYears:5,aprPct:6.9},lease:null},
       {id:'s11',prop:'Cedar Court Hotel',type:'Kitchen Hood Controls',u:1,vendor:'AirWise Controls',install:'about 1 week',fidelity:'measured',market:10000,discountPct:12,incentive:1000,savings:3200,loan:{termYears:5,aprPct:7.9},lease:null},
-      {id:'s12',prop:'Cedar Court Hotel',type:'Pool Heat Pump',u:2,vendor:'ThermaPool',install:'about 2 weeks',fidelity:'measured',market:13500,discountPct:12,incentive:1800,savings:3900,loan:{termYears:5,aprPct:6.9},lease:null},
+      {id:'s12',prop:'Cedar Court Hotel',type:'Pool Heat Pump',u:1,vendor:'ThermaPool',install:'about 2 weeks',fidelity:'measured',market:13500,discountPct:12,incentive:1800,savings:3900,loan:{termYears:5,aprPct:6.9},lease:null},
       {id:'s13',prop:'Riverside Lodge',type:'Low-Flow Water Fixtures',u:0,vendor:'AquaTrim',install:'about 1 week',fidelity:'measured',market:5000,discountPct:13,incentive:700,savings:2300,loan:{termYears:5,aprPct:7.9},lease:null},
-      {id:'s8',prop:'Riverside Lodge',type:'Heat Pump Water Heaters',u:0,vendor:'Thermal Systems',install:'about 2 weeks',fidelity:'estimated',dataNeed:'your water-heater metering',savings:4200},
+      {id:'s8',prop:'Riverside Lodge',type:'Heat Pump Water Heaters',u:1,vendor:'Thermal Systems',install:'about 2 weeks',fidelity:'estimated',dataNeed:'your water-heater metering',savings:4200},
       {id:'s9',prop:'Riverside Lodge',type:'Smart Thermostats',u:1,vendor:'Cozy Controls',install:'about 1 week',fidelity:'estimated',dataNeed:'occupancy data',savings:4400},
       {id:'s7',prop:'Cedar Court Hotel',type:'Ozone Laundry',u:0,vendor:'PureWash',install:'about 1 week',fidelity:'measured',market:8500,discountPct:12,incentive:900,savings:3600,loan:{termYears:5,aprPct:7.9},lease:null}
     ],
@@ -343,16 +343,15 @@
     return '<button class="tl-sum now" data-act="togbucket" data-val="'+b.u+'" aria-expanded="'+open+'">'
       +'<div class="tl-sum-top"><span class="tl-sum-t">'+b.title+'</span>'
         +'<span class="tl-sum-chev">'+(open?'Hide':'Show')+' <i class="ti ti-chevron-'+(open?'up':'down')+'"></i></span></div>'
-      +'<div class="tl-sum-meta">'+list.length+' project'+(list.length>1?'s':'')+' · '+np+' hotel'+(np>1?'s':'')+'</div>'
-      +'<div class="tl-sum-add">+'+perTile(add)+'<span class="u"> this adds</span></div>'
-      +'<div class="tl-run">running total '+perTile(b.run)+'</div></button>'
+      +'<div class="tl-sum-meta">'+list.length+' project'+(list.length>1?'s':'')+' · '+np+' hotel'+(np>1?'s':'')+(list.some(function(s){return s.note;})?' · <span style="color:var(--text-warning);font-weight:600">time-sensitive</span>':'')+'</div>'
+      +'<div class="tl-sum-add">+'+perTile(add)+'<span class="u"> this adds</span></div></button>'
       +(open?'<div style="margin:2px 0 10px">'+list.map(eventCard).join('')+'</div>':'');
   }
   function renderHome(){
     var live=sols();
     var appAnn=sumSav(live), np=distinctProps(live);
     var byU=function(u){return live.filter(function(s){return s.u===u;}).sort(recSort);};
-    var nowList=byU(0), timeSensitive=nowList.some(function(s){return s.note;});
+    var nowList=byU(0), nowSensitive=nowList.some(function(s){return s.note;}), anySensitive=live.some(function(s){return s.note;});
     var banked=DATA.contracted.reduce(function(t,c){return t+c.saved;},0);
     var currentRun=DATA.currentRun;
     var appA=amtUnit(appAnn);
@@ -362,18 +361,15 @@
         +'<h1 style="margin:.15rem 0 0;font-size:21px">Your savings timeline</h1></div>'
       +'<div class="mtoggle"><button data-period="annual" aria-pressed="'+(S.period==='annual')+'">Annual</button><button data-period="monthly" aria-pressed="'+(S.period==='monthly')+'">Monthly</button></div></div>'
       +'<p style="color:var(--text-muted);margin:0 0 14px;font-size:13px">'+DATA.contracted.length+' hotels saving with Atrium today</p>';
-    // Guiding hand (priority 1: approve) — the one-second read. Lead card is the Atrium-recommended top pick.
-    var lead=live.slice().sort(recSort)[0]||live[0];
-    var banner=live.length?'<button class="tl-cta" data-act="leaf" data-val="'+lead.id+'">'
+    // Guiding hand: the one-second read — total proposed opportunity. The columns below are where you act.
+    var banner=live.length?'<div class="tl-cta" style="cursor:default">'
       +'<span class="tl-cta-main"><span class="tl-cta-t">Approve your proposed projects</span>'
-      +'<span class="tl-cta-s">'+live.length+' projects · '+np+' hotels'+(timeSensitive?' · some are time-sensitive':'')+'</span></span>'
-      +'<span class="tl-cta-side"><span class="tl-cta-amt">+'+appA.a+'<span class="tl-cta-u"> '+appA.u+'</span></span>'
-      +'<span class="tl-cta-go">Review <i class="ti ti-arrow-right"></i></span></span></button>':'';
+      +'<span class="tl-cta-s">'+live.length+' projects · '+np+' hotels'+(anySensitive?' · some are time-sensitive':'')+'</span></span>'
+      +'<span class="tl-cta-side"><span class="tl-cta-amt">+'+appA.a+'<span class="tl-cta-u"> '+appA.u+'</span></span></span></div>':'';
     // running savings rate stepping forward in time, so each bucket can show what it adds
-    var runNow=currentRun+nowList.reduce(function(t,s){return t+s.savings;},0);
-    var run=runNow;
-    var futures=[{u:1,title:'Next 3 months'},{u:2,title:'Later this year'}].map(function(b){
-      b.list=byU(b.u); run+=b.list.reduce(function(t,s){return t+s.savings;},0); b.run=run; return b;
+    var nowAdd=nowList.reduce(function(t,s){return t+s.savings;},0);
+    var futures=[{u:1,title:'Soon'},{u:2,title:'Later'}].map(function(b){
+      b.list=byU(b.u); return b;
     });
     // ---- PAST zone (left): the Today anchor — savings-to-date lives here (savHeroSvg) ----
     var pastZone='<div class="tl-zone"><div class="tl-zonelabel"><i class="ti ti-circle-check"></i> What you’ve done</div>'
@@ -386,13 +382,12 @@
     var nowEv=nowList.length?nowList.map(eventCard).join(''):'<div style="font-size:13px;color:var(--text-secondary);padding:8px 0 12px"><i class="ti ti-circle-check" style="color:var(--text-success)"></i> Nothing needs approval right now — you’re all caught up.</div>';
     var nowFocus='<div class="tl-zone"><div class="tl-zonelabel" style="color:var(--text-warning)"><i class="ti ti-player-play"></i> Now — do this next</div>'
       +'<div class="tl-focus"><div class="tl-focus-head"><span class="tl-focus-t">Now</span>'
-        +'<span class="tl-focus-run">'+perTile(runNow)+' once approved</span></div>'
-      +'<div class="tl-focus-sub">'+(nowList.length?nowList.length+' ready to approve'+(timeSensitive?' · some are time-sensitive':''):'You’re caught up here')+'</div>'
+        +'<span class="tl-focus-run">+'+perTile(nowAdd)+' this adds</span></div>'
+      +'<div class="tl-focus-sub">'+(nowList.length?nowList.length+' ready to approve'+(nowSensitive?' · some are time-sensitive':''):'You’re caught up here')+'</div>'
       +nowEv+'</div></div>';
     // ---- FUTURE zone (right): collapsed summaries, biggest/most-urgent leads, expand on tap ----
     var futureZone='<div class="tl-zone"><div class="tl-zonelabel"><i class="ti ti-calendar"></i> Coming up</div>'
-      +futures.map(futureBucket).join('')
-      +'<div class="tl-run" style="margin:2px 2px 0">All approved: '+perTile(run)+'</div></div>';
+      +futures.map(futureBucket).join('')+'</div>';
     // ---- encouraging sign-up: behind the rail hero, green, context-aware ----
     var prN=prospects().length;
     var some=DATA.contracted.length>0;
