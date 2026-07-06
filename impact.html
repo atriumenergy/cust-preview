@@ -417,12 +417,28 @@
       +'<div><p style="color:var(--text-secondary);margin:0;font-size:14px">'+esc(DATA.portfolio)+'</p>'
       +'<h1 style="margin:.15rem 0 0;font-size:21px">Raise your hotels’ green rating</h1></div>'
       +'<div class="mtoggle"><button data-period="annual" aria-pressed="'+(S.period==='annual')+'">Annual</button><button data-period="monthly" aria-pressed="'+(S.period==='monthly')+'">Monthly</button></div></div>';
-    // ---- standing: current real green rating, next target ----
-    var standing='<div class="standing"><div class="standing-key"><span class="n">'+G.current+'</span><span class="of">/ '+G.max+' '+G.unitPlural+'</span></div>'
-      +'<div class="standing-main"><div class="standing-prog">'+esc(G.program)+' · '+esc(G.brand.program)+' '+esc(G.brand.current.split(' · ')[0])+'</div>'
-      +'<div class="standing-name">Now at '+esc(G.currentName)+' — next is '+esc(G.targetName)+'</div>'
-      +'<div class="standing-sub">'+esc(G.targetName)+' is '+esc(G.targetWhy)+'. Each step below earns points toward it.</div>'
-      +keyMeter(G.current,G.target)+'</div></div>';
+    // ---- standing: green rating + banked savings/GHG with a toggle-able summary chart ----
+    var metric=S.impMetric||'cash', isCash=metric==='cash';
+    var cashSaved=DATA.contracted.reduce(function(t,c){return t+c.saved;},0);
+    var cashPace=DATA.savedByType.reduce(function(t,x){return t+x.pace;},0);
+    var ghgToDate=DATA.tonsToDate, ghgPace=Math.round(cashPace*ghgToDate/cashSaved);
+    var headV=isCash?fmtK(cashSaved):ghgToDate.toLocaleString()+' t';
+    var headK=isCash?'saved with Atrium so far':'CO₂ avoided so far';
+    var sumChart=isCash?savHeroSvg(cashSaved,cashPace):savHeroSvg(ghgToDate,ghgPace,'var(--eco)','hsl(158 45% 92%)');
+    var standing='<div class="standing" style="flex-direction:column;align-items:stretch;gap:0">'
+      +'<div style="display:flex;align-items:center;gap:13px;width:100%">'
+        +'<div class="standing-key"><span class="n">'+G.current+'</span><span class="of">/ '+G.max+' '+G.unitPlural+'</span></div>'
+        +'<div class="standing-main"><div class="standing-prog">'+esc(G.program)+' · '+esc(G.brand.program)+' '+esc(G.brand.current.split(' · ')[0])+'</div>'
+        +'<div class="standing-name">Now at '+esc(G.currentName)+' — next is '+esc(G.targetName)+'</div>'
+        +'<div class="standing-sub">'+esc(G.targetName)+' is '+esc(G.targetWhy)+'. Each step below earns points toward it.</div>'
+        +keyMeter(G.current,G.target)+'</div></div>'
+      +'<div style="border-top:1px solid var(--eco-border);margin-top:13px;padding-top:12px">'
+        +'<div style="display:flex;align-items:baseline;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:7px">'
+          +'<div><span style="font-size:22px;font-weight:700;letter-spacing:-.01em;color:'+(isCash?'var(--text-success)':'var(--eco)')+'">'+headV+'</span> <span style="font-size:13px;color:var(--text-secondary)">'+headK+'</span></div>'
+          +'<div class="seg"><button data-imp="cash" aria-pressed="'+isCash+'">$ saved</button><button data-imp="ghg" aria-pressed="'+(!isCash)+'">CO₂ avoided</button></div></div>'
+        +'<button data-act="go" data-val="savings" style="display:block;width:100%;text-align:left;background:none;border:none;padding:0;cursor:pointer">'+sumChart
+          +'<div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text-muted);margin-top:3px"><span>past &amp; ahead</span><span style="color:var(--text-secondary);font-weight:600">see where it’s headed <i class="ti ti-arrow-right"></i></span></div></button>'
+      +'</div></div>';
     // ---- build the ladder, DOM top(top rating)→bottom(today) ----
     var steps=[];
     // near the top: the invitation to extend the ladder (sign up) — green, never chiding
@@ -451,13 +467,11 @@
     var ground='<div class="ground"><span class="gnode"><i class="ti ti-map-pin"></i></span>'
       +'<div class="ground-in"><span class="now">Today</span>'
       +'<span>'+DATA.contracted.length+' hotels already saving with Atrium · '+esc(G.currentName)+'</span></div></div>';
-    // ---- saved + GHG to date (opens the shared savings drill) ----
-    var tot=DATA.contracted.reduce(function(t,c){return t+c.saved;},0);
-    var saved='<button class="saved-line" data-act="go" data-val="savings"><span><i class="ti ti-trophy" style="color:var(--text-success)"></i> Already banked <b>'+fmtK(tot)+'</b> — and cut '+DATA.tonsToDate.toLocaleString()+' t CO₂ — getting here</span><i class="ti ti-arrow-right"></i></button>';
+    // (banked savings/GHG summary + toggle chart now lives in the standing card above)
     // ---- approved this session strip ----
     var appd=DATA.solutions.filter(function(s){return S.approved[s.id];});
     var approvedEl=appd.length?'<div class="approved-strip"><i class="ti ti-circle-check"></i> Approved this session — <b>'+amtUnit(sumSav(appd)).a+' '+amtUnit(sumSav(appd)).u+'</b> and <b>'+sumCo2(appd)+' t CO₂/yr</b> across '+appd.length+' project'+(appd.length>1?'s':'')+'</div>':'';
-    app.innerHTML=header+standing+'<div class="climb">'+steps.join('')+'</div>'+ground+saved+approvedEl;
+    app.innerHTML=header+standing+'<div class="climb">'+steps.join('')+'</div>'+ground+approvedEl;
   }
   function renderCat(){
     var c=CATS.find(function(x){return x.key===S.cat;});
@@ -505,9 +519,10 @@
     app.innerHTML=head+band+solutionCard(s);
   }
   /* ===== savings drill — copied VERBATIM from cashflow.html ===== */
-  function savHeroSvg(){
-    var saved=DATA.contracted.reduce(function(t,c){return t+c.saved;},0);
-    var pace=DATA.savedByType.reduce(function(t,x){return t+x.pace;},0);
+  function savHeroSvg(toDate,perYear,stroke,fill){
+    var saved=toDate!=null?toDate:DATA.contracted.reduce(function(t,c){return t+c.saved;},0);
+    var pace=perYear!=null?perYear:DATA.savedByType.reduce(function(t,x){return t+x.pace;},0);
+    stroke=stroke||'var(--text-success)'; fill=fill||'hsl(86 45% 94%)';
     var w=300,h=46,padX=1,padT=5,padB=3,past=18,n=past+10,mPast=saved/past,mFut=pace/12,cum=0,s=[];
     for(var i=0;i<=n;i++){s.push(cum);var seas=1+0.4*Math.sin(i/12*2*Math.PI-Math.PI/2);cum+=(i<past?mPast:mFut)*seas;}
     var mx=s[n]||1;
@@ -516,10 +531,10 @@
     function poly(from,to){var p=[];for(var i=from;i<=to;i++)p.push(X(i).toFixed(1)+','+Y(s[i]).toFixed(1));return p.join(' ');}
     var area=poly(0,n)+' '+X(n).toFixed(1)+','+Y(0).toFixed(1)+' '+X(0).toFixed(1)+','+Y(0).toFixed(1);
     return '<svg viewBox="0 0 '+w+' '+h+'" width="100%" height="'+h+'" preserveAspectRatio="none" style="display:block">'
-      +'<polygon points="'+area+'" fill="hsl(86 45% 94%)"/>'
+      +'<polygon points="'+area+'" fill="'+fill+'"/>'
       +'<line x1="'+X(past).toFixed(1)+'" x2="'+X(past).toFixed(1)+'" y1="'+padT+'" y2="'+(h-padB)+'" stroke="var(--border-strong)" stroke-dasharray="3 3"/>'
-      +'<polyline points="'+poly(0,past)+'" fill="none" stroke="var(--text-success)" stroke-width="2.5"/>'
-      +'<polyline points="'+poly(past,n)+'" fill="none" stroke="var(--text-success)" stroke-width="2.5" stroke-dasharray="5 3"/></svg>';
+      +'<polyline points="'+poly(0,past)+'" fill="none" stroke="'+stroke+'" stroke-width="2.5"/>'
+      +'<polyline points="'+poly(past,n)+'" fill="none" stroke="'+stroke+'" stroke-width="2.5" stroke-dasharray="5 3"/></svg>';
   }
   function trajChart(sc,apprAnn){
     var wom=sc.without12/12, savFrac=(sc.without12-sc.next12)/sc.without12, apprFrac=Math.min(0.42,savFrac+(apprAnn||0)/sc.without12);
@@ -621,6 +636,7 @@
   app.addEventListener('click',function(e){
     var d=e.target.closest('[data-disc]'); if(d){S.disc[d.dataset.disc]=!S.disc[d.dataset.disc];render();return;}
     var pertog=e.target.closest('[data-period]'); if(pertog){S.period=pertog.dataset.period;render();return;}
+    var imptog=e.target.closest('[data-imp]'); if(imptog){S.impMetric=imptog.dataset.imp;render();return;}
     var seg=e.target.closest('[data-segmode]'); if(seg){S.mode[seg.dataset.sol]=seg.dataset.segmode;render();return;}
     var el=e.target.closest('[data-act],[data-approve]'); if(!el)return;
     if(el.dataset.approve){var s=DATA.solutions.find(function(x){return x.id===el.dataset.approve;});var m=curMode(s);window.open('esign.html?doc='+encodeURIComponent(s.type+' — '+s.prop),'_blank');unlockRow(s.id,fiveCash(s),function(){S.approved[s.id]=1;S.approvedMode[s.id]=m;S.screen='cat';render();});return;}
