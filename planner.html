@@ -149,16 +149,16 @@
     solutions:[
       {id:'s1',prop:'Marina Bay Inn',type:'Solar + Batteries',u:2,note:'Start now — about a year to build for the 2027 rebate',vendor:'GreenVolt Partners',install:'about 6 weeks · starts Sep',fidelity:'measured',market:150000,discountPct:12,incentive:45000,savings:26000,loan:{termYears:25,aprPct:6.5},lease:{annualAtrium:44000,annualMarket:52000,termYears:20}},
       {id:'s5',prop:'Cedar Court Hotel',type:'Solar + Batteries',u:2,note:'Start now — about a year to build for the 2027 rebate',vendor:'GreenVolt Partners',install:'about 5 weeks',fidelity:'measured',market:105000,discountPct:12,incentive:31000,savings:18000,loan:{termYears:25,aprPct:6.5},lease:{annualAtrium:31000,annualMarket:37000,termYears:20}},
-      {id:'s2',prop:'Marina Bay Inn',type:'Heat Pump Water Heaters',u:1,vendor:'Thermal Systems',install:'about 2 weeks',fidelity:'measured',market:25000,discountPct:12,incentive:5000,savings:6000,loan:{termYears:5,aprPct:6.9},lease:null},
+      {id:'s2',prop:'Marina Bay Inn',type:'Heat Pump Water Heaters',u:1,vendor:'Thermal Systems',install:'about 2 weeks',fidelity:'measured',market:25000,discountPct:12,incentive:40000,savings:6000,loan:{termYears:5,aprPct:6.9},lease:null},
       {id:'s6',prop:'Cedar Court Hotel',type:'LED Lighting',u:0,vendor:'BrightSwap',install:'about 2 weeks',fidelity:'measured',market:16000,discountPct:13,incentive:2000,savings:4800,loan:{termYears:5,aprPct:7.9},lease:null},
       {id:'s3',prop:'Marina Bay Inn',type:'LED Lighting',u:0,vendor:'BrightSwap',install:'about 2 weeks',fidelity:'measured',market:12000,discountPct:13,incentive:1400,savings:3600,loan:{termYears:5,aprPct:7.9},lease:null},
-      {id:'s4',prop:'Marina Bay Inn',type:'Smart Thermostats',u:1,vendor:'Cozy Controls',install:'about 1 week',fidelity:'measured',market:3600,discountPct:14,incentive:500,savings:1600,loan:{termYears:5,aprPct:7.9},lease:null},
+      {id:'s4',prop:'Marina Bay Inn',type:'Smart Thermostats',u:1,vendor:'Cozy Controls',install:'about 1 week',fidelity:'measured',market:28800,discountPct:14,incentive:4000,savings:12800,loan:{termYears:5,aprPct:7.9},lease:null},
       {id:'s10',prop:'Marina Bay Inn',type:'Building Controls (EMS)',u:1,vendor:'Nodal Systems',install:'about 3 weeks',fidelity:'measured',market:21000,discountPct:12,incentive:3000,savings:7800,loan:{termYears:5,aprPct:6.9},lease:null},
       {id:'s11',prop:'Cedar Court Hotel',type:'Kitchen Hood Controls',u:1,vendor:'AirWise Controls',install:'about 1 week',fidelity:'measured',market:10000,discountPct:12,incentive:1000,savings:3200,loan:{termYears:5,aprPct:7.9},lease:null},
       {id:'s12',prop:'Cedar Court Hotel',type:'Pool Heat Pump',u:1,vendor:'ThermaPool',install:'about 2 weeks',fidelity:'measured',market:13500,discountPct:12,incentive:1800,savings:3900,loan:{termYears:5,aprPct:6.9},lease:null},
       {id:'s13',prop:'Riverside Lodge',type:'Low-Flow Water Fixtures',u:0,vendor:'AquaTrim',install:'about 1 week',fidelity:'measured',market:5000,discountPct:13,incentive:700,savings:2300,loan:{termYears:5,aprPct:7.9},lease:null},
       {id:'s8',prop:'Riverside Lodge',type:'Heat Pump Water Heaters',u:1,vendor:'Thermal Systems',install:'about 2 weeks',fidelity:'estimated',dataNeed:'your water-heater metering',savings:4200},
-      {id:'s9',prop:'Riverside Lodge',type:'Smart Thermostats',u:1,vendor:'Cozy Controls',install:'about 1 week',fidelity:'estimated',dataNeed:'occupancy data',savings:4400},
+      {id:'s9',prop:'Riverside Lodge',type:'Smart Thermostats',u:1,vendor:'Cozy Controls',install:'about 1 week',fidelity:'estimated',dataNeed:'occupancy data',savings:35200},
       {id:'s7',prop:'Cedar Court Hotel',type:'Ozone Laundry',u:0,vendor:'PureWash',install:'about 1 week',fidelity:'measured',market:8500,discountPct:12,incentive:900,savings:3600,loan:{termYears:5,aprPct:7.9},lease:null}
     ],
     // properties Atrium already operates — these have savings history + a forecast
@@ -244,11 +244,10 @@
     function X(yr){return padX+(yr/10)*(w-2*padX);}
     function Y(v){return padT+(1-(v-mn)/sp)*(h-padT-padB);}
     var line=pts.map(function(p){return X(p[0]).toFixed(1)+','+Y(p[1]).toFixed(1);}).join(' ');
-    var area=line+' '+X(10).toFixed(1)+','+Y(mn).toFixed(1)+' '+X(0).toFixed(1)+','+Y(mn).toFixed(1);
+    var area=pts.map(function(p){return X(p[0]).toFixed(1)+','+Y(Math.max(0,p[1])).toFixed(1);}).join(' ')+' '+X(10).toFixed(1)+','+Y(0).toFixed(1)+' '+X(0).toFixed(1)+','+Y(0).toFixed(1);
     return '<svg viewBox="0 0 '+w+' '+h+'" width="100%" height="'+h+'" preserveAspectRatio="none" style="display:block">'
       +'<polygon points="'+area+'" fill="hsl(86 45% 95%)"/>'
       +'<line x1="'+padX+'" x2="'+(w-padX)+'" y1="'+Y(0).toFixed(1)+'" y2="'+Y(0).toFixed(1)+'" stroke="var(--border-strong)" stroke-dasharray="3 3"/>'
-      +'<line x1="'+X(be).toFixed(1)+'" x2="'+X(be).toFixed(1)+'" y1="'+padT+'" y2="'+(h-padB)+'" stroke="var(--primary)" stroke-width="1.5" stroke-dasharray="2 2" opacity=".5"/>'
       +'<polyline points="'+line+'" fill="none" stroke="var(--text-success)" stroke-width="2.5"/></svg>';
   }
   var THREAD=[
@@ -304,21 +303,46 @@
   function perToggle(){return '<div class="seg"><button data-period="annual" aria-pressed="'+(S.period==='annual')+'">Annual</button><button data-period="monthly" aria-pressed="'+(S.period==='monthly')+'">Monthly</button></div>';}
 
   /* ===== Shared savings/forecast drill — verbatim from cashflow.html ===== */
-  function savHeroSvg(){
-    var saved=DATA.contracted.reduce(function(t,c){return t+c.saved;},0);
-    var pace=DATA.savedByType.reduce(function(t,x){return t+x.pace;},0);
-    var w=300,h=46,padX=1,padT=5,padB=3,past=18,n=past+10,mPast=saved/past,mFut=pace/12,cum=0,s=[];
-    for(var i=0;i<=n;i++){s.push(cum);var seas=1+0.4*Math.sin(i/12*2*Math.PI-Math.PI/2);cum+=(i<past?mPast:mFut)*seas;}
-    var mx=s[n]||1;
-    function X(i){return padX+i/n*(w-2*padX);}
+  function savHeroSvg(toDate,perYear,stroke,areaFill){
+    var paceCash=DATA.savedByType.reduce(function(t,x){return t+x.pace;},0);
+    var without=DATA.contracted.reduce(function(t,c){return t+c.without12;},0);
+    var ratio=(0.30*without)/(paceCash||1);                            // approve-all is this multiple of the current rate
+    var saved=toDate!=null?toDate:DATA.contracted.reduce(function(t,c){return t+c.saved;},0);
+    var pace=perYear!=null?perYear:paceCash;
+    var fullPace=pace*ratio;
+    stroke=stroke||'var(--text-success)'; areaFill=areaFill||'hsl(86 45% 93%)';
+    var w=300,h=96,padX=1,padT=7,padB=5,past=24,fut=24,n=past+fut;
+    // seasonality: "now" = summer. Summer = big peak (HVAC + occupancy + rates all high); winter = smaller peak
+    // (heating high, occupancy lower); spring & fall = troughs. cos(annual) makes summer>winter; cos(semi-annual) makes the two peaks.
+    function seas(m){var k=(m-past)/12;return 1+0.22*Math.cos(2*Math.PI*k)+0.34*Math.cos(4*Math.PI*k);}
+    // PAST: annual savings rate grows 5%/yr (counterfactual inflation) -> cumulative accelerates; scaled to hit `saved` at today
+    var raw=[0],rc=0;
+    for(var m=1;m<=past;m++){var yr=(m-past)/12;rc+=(pace/12)*Math.pow(1.05,yr)*seas(m);raw.push(rc);}
+    var scale=saved/(raw[past]||1),sol=raw.map(function(v){return v*scale;});
+    // FORECASTS from today: current pace, and approve-all (rate ramps to fullPace as now/soon/later deploy), both compounding 5%/yr
+    var cur=[saved],full=[saved],cc=saved,fc=saved;
+    for(var m=1;m<=fut;m++){
+      var yr=m/12;
+      cc+=(pace/12)*Math.pow(1.05,yr)*seas(past+m);cur.push(cc);
+      var r=pace+(fullPace-pace)*Math.min(1,m/12);
+      fc+=(r/12)*Math.pow(1.05,yr)*seas(past+m);full.push(fc);
+    }
+    var mx=fc*1.04;
+    function X(m){return padX+m/n*(w-2*padX);}
     function Y(v){return padT+(1-v/mx)*(h-padT-padB);}
-    function poly(from,to){var p=[];for(var i=from;i<=to;i++)p.push(X(i).toFixed(1)+','+Y(s[i]).toFixed(1));return p.join(' ');}
-    var area=poly(0,n)+' '+X(n).toFixed(1)+','+Y(0).toFixed(1)+' '+X(0).toFixed(1)+','+Y(0).toFixed(1);
+    var solP=[],curP=[],fullP=[];
+    for(var i=0;i<=past;i++)solP.push(X(i).toFixed(1)+','+Y(sol[i]).toFixed(1));
+    for(var i=0;i<=fut;i++){curP.push(X(past+i).toFixed(1)+','+Y(cur[i]).toFixed(1));fullP.push(X(past+i).toFixed(1)+','+Y(full[i]).toFixed(1));}
+    var greenArea=solP.join(' ')+' '+curP.join(' ')+' '+X(n).toFixed(1)+','+Y(0).toFixed(1)+' '+X(0).toFixed(1)+','+Y(0).toFixed(1);
+    var wedge=fullP.join(' ')+' '+curP.slice().reverse().join(' ');
+    var tX=X(past).toFixed(1);
     return '<svg viewBox="0 0 '+w+' '+h+'" width="100%" height="'+h+'" preserveAspectRatio="none" style="display:block">'
-      +'<polygon points="'+area+'" fill="hsl(86 45% 94%)"/>'
-      +'<line x1="'+X(past).toFixed(1)+'" x2="'+X(past).toFixed(1)+'" y1="'+padT+'" y2="'+(h-padB)+'" stroke="var(--border-strong)" stroke-dasharray="3 3"/>'
-      +'<polyline points="'+poly(0,past)+'" fill="none" stroke="var(--text-success)" stroke-width="2.5"/>'
-      +'<polyline points="'+poly(past,n)+'" fill="none" stroke="var(--text-success)" stroke-width="2.5" stroke-dasharray="5 3"/></svg>';
+      +'<polygon points="'+greenArea+'" fill="'+areaFill+'"/>'
+      +'<polygon points="'+wedge+'" fill="hsl(240 55% 93%)" opacity="0.8"/>'
+      +'<line x1="'+tX+'" x2="'+tX+'" y1="'+padT+'" y2="'+(h-padB)+'" stroke="var(--border-strong)" stroke-dasharray="2 3"/>'
+      +'<polyline points="'+solP.join(' ')+'" fill="none" stroke="'+stroke+'" stroke-width="2.6"/>'
+      +'<polyline points="'+curP.join(' ')+'" fill="none" stroke="'+stroke+'" stroke-width="2.1" stroke-dasharray="1 3.5" stroke-linecap="round" opacity="0.8"/>'
+      +'<polyline points="'+fullP.join(' ')+'" fill="none" stroke="var(--primary)" stroke-width="2.4" stroke-dasharray="1 3.5" stroke-linecap="round"/></svg>';
   }
   function trajChart(sc,apprAnn){
     var wom=sc.without12/12, savFrac=(sc.without12-sc.next12)/sc.without12, apprFrac=Math.max(savFrac,0.30);
