@@ -570,9 +570,9 @@
     var grid;
     if(byProp){
       grid=DATA.contracted.map(function(c){
-        var high=c.runPct>100;
-        var status=high?'<span style="display:inline-flex;align-items:center;gap:4px;color:var(--text-warning);font-size:13px;font-weight:500"><i class="ti ti-alert-triangle"></i> Running high</span>':'<span style="display:inline-flex;align-items:center;gap:4px;color:var(--text-success);font-size:13px;font-weight:500"><i class="ti ti-circle-check"></i> In line</span>';
-        return '<button class="cf-sq" data-act="savleaf" data-val="'+c.id+'" style="display:flex;flex-direction:column;gap:5px;min-height:130px"><span style="font-size:15px;font-weight:600">'+esc(c.name)+'</span><span style="font-size:12px;color:var(--text-muted)">Saved to date</span><span class="cf-amt" style="font-size:24px;color:var(--text-success);margin-top:-3px">'+fmtK(c.saved)+'</span><span style="margin-top:auto;display:flex;justify-content:space-between;align-items:center">'+status+'<i class="ti ti-arrow-right" style="color:var(--text-muted)"></i></span></button>';
+        var rate=Math.round((c.without12-c.next12)/c.without12*100);
+        var status='<span style="display:inline-flex;align-items:center;gap:4px;color:var(--text-success);font-size:13px;font-weight:500"><i class="ti ti-leaf"></i> saving '+rate+'%</span>';
+        return '<button class="cf-sq" data-act="savleaf" data-val="'+c.id+'" style="display:flex;flex-direction:column;gap:4px;min-height:112px"><span style="font-size:14px;font-weight:600">'+esc(c.name)+'</span><span style="font-size:11px;color:var(--text-muted)">Saved to date</span><span class="cf-amt" style="font-size:21px;color:var(--text-success);margin-top:-2px">'+fmtK(c.saved)+'</span><span style="margin-top:auto;display:flex;justify-content:space-between;align-items:center">'+status+'<i class="ti ti-arrow-right" style="color:var(--text-muted)"></i></span></button>';
       }).join('');
     } else {
       grid=DATA.savedByType.map(function(t){
@@ -580,7 +580,13 @@
       }).join('');
     }
     var tot=DATA.contracted.reduce(function(t,c){return t+c.saved;},0);
-    app.innerHTML='<div style="margin-bottom:1.1rem">'+backPill()+'<h1 style="margin:14px 0 0;font-size:23px">Savings so far</h1><p style="color:var(--text-secondary);margin:.3rem 0 0">You’ve saved <b style="color:var(--text-success)">'+fmtK(tot)+'</b> and cut <b class="eco-word">'+DATA.tonsToDate.toLocaleString()+' t CO₂</b> with Atrium. Open any '+(byProp?'hotel':'solution type')+' to see where it’s headed.</p></div>'+toggle+'<div class="grid">'+grid+'</div>';
+    // portfolio total chart = the per-hotel trajChart fed summed costs (same detail, aggregated)
+    var port={without12:DATA.contracted.reduce(function(t,c){return t+c.without12;},0),next12:DATA.contracted.reduce(function(t,c){return t+c.next12;},0)};
+    var totAppr=sols().reduce(function(t,s){return t+s.savings;},0);
+    var topChart='<div class="card" style="margin-bottom:18px">'+trajChart(port,totAppr)
+      +'<div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text-muted);margin-top:2px"><span>12 mo ago</span><span>today</span><span>12 mo ahead</span></div>'
+      +'<div class="sav-legend"><span><i class="k" style="border-color:var(--text-warning)"></i> without Atrium</span><span><i class="k" style="border-color:var(--text-success)"></i> with Atrium</span>'+(totAppr?'<span><i class="k" style="border-color:var(--primary);border-top-style:dashed"></i> if you approve all</span>':'')+'<span style="color:var(--text-muted)">dashed = forecast</span></div></div>';
+    app.innerHTML='<div style="margin-bottom:1.1rem">'+backPill()+'<h1 style="margin:14px 0 0;font-size:23px">Savings so far</h1><p style="color:var(--text-secondary);margin:.3rem 0 0">You’ve saved <b style="color:var(--text-success)">'+fmtK(tot)+'</b> and cut <b class="eco-word">'+DATA.tonsToDate.toLocaleString()+' t CO₂</b> with Atrium. Open any '+(byProp?'hotel':'solution type')+' to see where it’s headed.</p></div>'+topChart+toggle+'<div class="grid">'+grid+'</div>';
   }
   function renderSavingsLeaf(){
     if(S.savView==='property'){
