@@ -80,7 +80,7 @@
   .pl-metric .v{font-size:18px;font-weight:700;letter-spacing:-.01em;margin-top:1px}
   .pl-row{display:flex;align-items:center;gap:13px;background:var(--surface-2);border:1px solid var(--border);border-radius:12px;padding:13px 15px;box-shadow:var(--shadow);transition:border-color .12s,box-shadow .12s,opacity .12s}
   .pl-row:hover{border-color:var(--border-strong)}
-  .pl-row.off{opacity:.5}
+  .pl-row.off{opacity:.82}
   .pl-row.dash{border-style:dashed;border-color:var(--border-strong)}
   .pl-row.noselect{background:hsl(240 20% 98.5%)}
   .pl-lock{flex-shrink:0;width:44px;height:26px;display:inline-flex;align-items:center;justify-content:center;color:var(--text-muted);font-size:15px}
@@ -127,6 +127,19 @@
     .pl-row{flex-wrap:wrap}
     .pl-fig{text-align:left;width:100%;padding-left:57px}
   }
+  .wf-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}
+  .wf-steplabel{font-size:14px;color:var(--text-secondary)}
+  .wf-skip{background:none;border:none;color:var(--text-muted);font:inherit;font-size:14px;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:4px;padding:6px 8px;border-radius:8px}
+  .wf-skip:hover{color:var(--text-primary);background:hsl(240 20% 96%)}
+  .wf-dots{display:flex;gap:5px;margin-bottom:16px}
+  .wf-dot{flex:1;height:4px;border-radius:2px;background:var(--border)}
+  .wf-dot.cur{background:var(--primary)}
+  .wf-dot.ok{background:var(--text-success)}
+  .wf-dot.sk{background:var(--border-strong)}
+  .wf-done{max-width:440px;margin:7vh auto 0;padding:0 4px;text-align:center}
+  .wf-donehero{width:60px;height:60px;border-radius:50%;background:var(--bg-success);display:flex;align-items:center;justify-content:center;margin:0 auto;color:var(--text-success);font-size:32px}
+  .wf-donelist{margin-top:16px;display:flex;flex-direction:column;gap:8px;text-align:left}
+  .wf-donerow{display:flex;align-items:center;gap:8px;font-size:14px;background:hsl(240 20% 98.5%);border:1px solid var(--border);border-radius:10px;padding:10px 12px}
 </style>
 </head>
 <body>
@@ -590,7 +603,7 @@
     var appd=DATA.solutions.filter(function(s){return S.approved[s.id];});
     var au=amtUnit(sumSav(appd));
     var approvedEl=appd.length?'<div class="approved-strip" style="margin-top:16px"><i class="ti ti-circle-check"></i> Approved this session — <b>'+au.a+' '+au.u+'</b> across '+appd.length+' project'+(appd.length>1?'s':'')+'</div>':'';
-    app.innerHTML=head+summaryStrip()+(meas.length?measRows:noneFirm)+estRows+approvedEl+signupLine()+savedLine();
+    app.innerHTML=head+savedLine()+signupLine()+summaryStrip()+(meas.length?measRows:noneFirm)+estRows+approvedEl;
   }
 
   function renderLeaf(){
@@ -598,6 +611,38 @@
     if(!s){S.screen='home';return renderPlanner();}
     var head='<div style="display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:16px">'+backPill()+(est(s)?'':'<span style="display:flex;align-items:center;gap:8px"><span style="font-size:13px;color:var(--text-muted)">Amounts:</span>'+perToggle()+'</span>')+'</div>';
     app.innerHTML=head+solutionCard(s);
+  }
+
+  // "Review & approve" steps through the selected (included) solutions one card at a
+  // time. Each card's "Approve with …" button records the approval and advances;
+  // "Skip" advances without approving. A summary screen closes the flow.
+  function renderReview(){
+    if(!S.wf||S.wfIdx>=S.wf.length)return renderReviewDone();
+    var s=DATA.solutions.find(function(x){return x.id===S.wf[S.wfIdx];});
+    if(!s){S.wfIdx++;return renderReview();}
+    var n=S.wf.length,step=S.wfIdx+1;
+    var dots=S.wf.map(function(id,i){var dec=S.wfDec[id];var cls=i===S.wfIdx?'cur':(dec==='approve'?'ok':(dec==='skip'?'sk':''));return '<span class="wf-dot '+cls+'"></span>';}).join('');
+    var head='<div class="wf-head">'
+      +'<button class="cf-pill" data-act="wf-prev" style="display:inline-flex;align-items:center;gap:4px"><i class="ti ti-arrow-left"></i> '+(step>1?'Back':'Exit')+'</button>'
+      +'<div class="wf-steplabel">Step <b>'+step+'</b> of '+n+'</div>'
+      +'<button class="wf-skip" data-act="wf-skip">Skip <i class="ti ti-arrow-right"></i></button>'
+      +'</div><div class="wf-dots">'+dots+'</div>';
+    app.innerHTML=head+solutionCard(s);
+  }
+  function renderReviewDone(){
+    var appr=(S.wf||[]).filter(function(id){return S.wfDec[id]==='approve';});
+    var skip=(S.wf||[]).filter(function(id){return S.wfDec[id]==='skip';});
+    var apprSols=appr.map(function(id){return DATA.solutions.find(function(x){return x.id===id;});}).filter(Boolean);
+    var au=amtUnit(apprSols.reduce(function(t,s){return t+s.savings;},0));
+    var list=apprSols.map(function(s){return '<div class="wf-donerow"><i class="ti ti-circle-check" style="color:var(--text-success)"></i> '+esc(s.type)+' <span style="color:var(--text-muted)">· '+esc(s.prop)+'</span><span class="mono" style="margin-left:auto;color:var(--text-success);font-weight:600">'+per(s.savings)+'</span></div>';}).join('');
+    app.innerHTML='<div class="wf-done">'
+      +'<div class="wf-donehero"><i class="ti ti-circle-check"></i></div>'
+      +'<h1 style="margin:12px 0 2px;font-size:23px">'+(appr.length?'Approving '+appr.length+' project'+(appr.length>1?'s':''):'Nothing approved')+'</h1>'
+      +'<p style="color:var(--text-secondary);margin:0">'+(appr.length?'<b style="color:var(--text-success)">+'+au.a+' '+au.u+'</b> in new savings'+(skip.length?' · '+skip.length+' skipped':''):(skip.length?'You skipped all '+skip.length+' for now.':''))+'</p>'
+      +(list?'<div class="wf-donelist">'+list+'</div>':'')
+      +(appr.length?'<p style="font-size:13px;color:var(--text-muted);margin:14px 0 0"><i class="ti ti-file-text"></i> We’ll send your contract'+(appr.length>1?'s':'')+' to e-sign.</p>':'')
+      +'<button class="pl-cta" data-act="wf-exit" style="width:100%;justify-content:center;margin-top:18px">Back to plan</button>'
+      +'</div>';
   }
 
   function renderSignup(){
@@ -609,14 +654,14 @@
     app.innerHTML='<div style="margin-bottom:1.25rem">'+backPill()+'<h1 style="margin:14px 0 0">Add properties to your plan</h1><p style="color:var(--text-secondary);margin:.3rem 0 0">Estimated annual savings once each property is saving with Atrium.</p></div>'+(list.length?'<div style="display:flex;flex-direction:column;gap:10px">'+rows+'</div>':'<div class="cf-sq" style="text-align:center;padding:2rem"><i class="ti ti-circle-check" style="font-size:26px;color:var(--text-success)"></i><p style="margin:.5rem 0 0">Every property is in your plan.</p></div>');
   }
 
-  function render(){ if(S.screen==='leaf')renderLeaf(); else if(S.screen==='signup')renderSignup(); else if(S.screen==='savings')renderSavings(); else if(S.screen==='savleaf')renderSavingsLeaf(); else renderPlanner(); }
+  function render(){ if(S.screen==='leaf')renderLeaf(); else if(S.screen==='signup')renderSignup(); else if(S.screen==='savings')renderSavings(); else if(S.screen==='savleaf')renderSavingsLeaf(); else if(S.screen==='review')renderReview(); else renderPlanner(); }
 
   app.addEventListener('click',function(e){
     var d=e.target.closest('[data-disc]'); if(d){S.disc[d.dataset.disc]=!S.disc[d.dataset.disc];render();return;}
     var pertog=e.target.closest('[data-period]'); if(pertog){S.period=pertog.dataset.period;render();return;}
     var seg=e.target.closest('[data-segmode]'); if(seg){S.mode[seg.dataset.sol]=seg.dataset.segmode;render();return;}
     var el=e.target.closest('[data-act],[data-approve]'); if(!el)return;
-    if(el.dataset.approve){var s=DATA.solutions.find(function(x){return x.id===el.dataset.approve;});var m=curMode(s);window.open('esign.html?doc='+encodeURIComponent(s.type+' — '+s.prop),'_blank');S.approved[s.id]=1;S.approvedMode[s.id]=m;S.excl[s.id]=0;S.screen='home';render();return;}
+    if(el.dataset.approve){var s=DATA.solutions.find(function(x){return x.id===el.dataset.approve;});var m=curMode(s);S.approved[s.id]=1;S.approvedMode[s.id]=m;S.excl[s.id]=0;if(S.screen==='review'){S.wfDec[el.dataset.approve]='approve';S.wfIdx++;render();return;}window.open('esign.html?doc='+encodeURIComponent(s.type+' — '+s.prop),'_blank');S.screen='home';render();return;}
     var a=el.dataset.act, v=el.dataset.val;
     if(a==='connect'){el.textContent='Request sent →';el.disabled=true;el.style.opacity=.7;}
     else if(a==='toggle'){var ts=DATA.solutions.find(function(x){return x.id===v;});if(ts&&!est(ts)){S.excl[v]=!S.excl[v];S.plMode='custom';render();}}
@@ -628,12 +673,15 @@
     else if(a==='savview'){S.savView=v;render();}
     else if(a==='savchart'){S.savChart=v;render();}
     else if(a==='savleaf'){S.savLeaf=v;S.screen='savleaf';render();}
-    else if(a==='approve-selected'){var sel=included().slice().sort(recSort)[0];if(sel){S.leafId=sel.id;S.screen='leaf';}render();}
+    else if(a==='approve-selected'){S.wf=included().slice().sort(recSort).map(function(x){return x.id;});S.wfIdx=0;S.wfDec={};if(S.wf.length)S.screen='review';render();}
+    else if(a==='wf-skip'){S.wfDec[S.wf[S.wfIdx]]='skip';S.wfIdx++;render();}
+    else if(a==='wf-prev'){if(S.wfIdx>0)S.wfIdx--;else S.screen='home';render();}
+    else if(a==='wf-exit'){S.screen='home';render();}
     else if(a==='approvehere'){var mh=sols().filter(function(s){return s.prop===v;}).sort(recSort)[0];if(mh){S.leafId=mh.id;S.screen='leaf';}else S.screen='home';render();}
     else if(a==='approvetype'){var mt=sols().filter(function(s){return s.type===v;}).sort(recSort)[0];if(mt){S.leafId=mt.id;S.screen='leaf';}else S.screen='home';render();}
     else if(a==='step'){el.textContent='We’ll guide you →';el.disabled=true;el.style.opacity=.6;}
     else if(a==='sign'){var p=DATA.prospects.find(function(x){return x.id===v;});window.open('esign.html?doc='+encodeURIComponent('New property — '+p.name),'_blank');S.signed[v]=1;render();}
-    else if(a==='back'){var B={leaf:'home',signup:'home',savleaf:'savings',savings:'home'};S.screen=B[S.screen]||'home';render();}
+    else if(a==='back'){var B={leaf:'home',signup:'home',savleaf:'savings',savings:'home',review:'home'};S.screen=B[S.screen]||'home';render();}
   });
   render();
 })();
