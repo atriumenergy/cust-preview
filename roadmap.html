@@ -1,0 +1,850 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Atrium — roadmap (concept)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tabler-icons/2.47.0/tabler-icons.min.css">
+<style>
+  :root{
+    --surface-0:hsl(240 33% 98%);--surface-1:hsl(240 14% 97%);--surface-2:#ffffff;
+    --text-primary:hsl(240 50% 10%);--text-secondary:hsl(240 10% 44%);--text-muted:hsl(240 8% 60%);
+    --border:hsl(240 12% 90%);--border-strong:hsl(240 12% 82%);
+    --text-success:hsl(86 58% 33%);--bg-success:hsl(86 45% 95%);
+    --primary:hsl(240 91% 20%);--primary-fg:#ffffff;
+    --text-warning:hsl(24 82% 40%);--bg-warning:hsl(38 90% 96%);--border-warning:hsl(38 80% 85%);
+    --radius:10px;--shadow:0 1px 2px rgba(16,18,40,.04),0 1px 3px rgba(16,18,40,.06);--shadow-hover:0 6px 18px rgba(16,18,40,.10);
+    --font:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--surface-0);color:var(--text-primary);font-family:var(--font);font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:760px;margin:0 auto;padding:18px 18px 64px}
+  h1{font-weight:700;margin:0;letter-spacing:-.01em}
+  .mono{font-variant-numeric:tabular-nums}
+  .cf-sq{background:var(--surface-2);border:1px solid var(--border);border-radius:14px;padding:18px;cursor:pointer;transition:transform .12s,box-shadow .12s,border-color .12s;text-align:left;width:100%;font:inherit;color:inherit;box-shadow:var(--shadow)}
+  .cf-sq:hover{transform:translateY(-2px);box-shadow:var(--shadow-hover);border-color:var(--border-strong)}
+  .cf-sq:disabled{cursor:default;opacity:.75;box-shadow:none;transform:none}
+  .cf-sq.est{border-style:dashed;border-color:var(--border-strong)}
+  .cf-amt{font-weight:700;letter-spacing:-.01em}
+  .cf-btn{background:var(--primary);color:var(--primary-fg);border:1px solid var(--primary);border-radius:8px;padding:8px 16px;cursor:pointer;font:inherit;font-size:14px;font-weight:600}
+  .cf-btn:hover{filter:brightness(1.18)}
+  .cf-btn.sm{padding:5px 11px;font-size:13px}
+  .cf-pill{border:1px solid var(--border-strong);background:var(--surface-2);border-radius:99px;padding:6px 14px;cursor:pointer;font:inherit;font-size:14px;font-weight:500;color:var(--text-secondary)}
+  .cf-pill:hover{border-color:var(--text-muted)}
+  .cf-pill[aria-pressed="true"]{background:var(--primary);color:var(--primary-fg);border-color:var(--primary)}
+  .ghost{background:none;border:none;color:var(--text-secondary);cursor:pointer;font:inherit;font-size:13px;font-weight:500;display:inline-flex;align-items:center;gap:4px;padding:6px 4px}
+  .ghost:hover{color:var(--text-primary)}
+  .card{background:var(--surface-2);border:1px solid var(--border);border-radius:14px;padding:18px;box-shadow:var(--shadow);margin-bottom:14px}
+  .card.est{border-style:dashed;border-color:var(--border-strong)}
+  .seg{display:inline-flex;background:hsl(240 20% 96%);border:1px solid var(--border);border-radius:99px;padding:3px}
+  .seg button{border:none;background:none;border-radius:99px;padding:5px 14px;cursor:pointer;font:inherit;font-size:13px;font-weight:600;color:var(--text-secondary)}
+  .seg button[aria-pressed="true"]{background:var(--primary);color:var(--primary-fg)}
+  .payseg{display:flex;gap:6px}
+  .payseg button{flex:1;border:1px solid var(--border-strong);background:var(--surface-2);border-radius:10px;padding:9px 6px;cursor:pointer;font:inherit;font-size:14px;font-weight:600;color:var(--text-secondary);text-align:center;line-height:1.2}
+  .payseg button:hover{border-color:var(--text-muted)}
+  .payseg button[aria-pressed="true"]{background:var(--primary);color:var(--primary-fg);border-color:var(--primary)}
+  .chip{background:hsl(240 20% 97%);border:1px solid var(--border);border-radius:10px;padding:10px 12px}
+  .chip .k{font-size:12px;color:var(--text-muted)}
+  .chip .v{font-size:16px;font-weight:700;letter-spacing:-.01em}
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px}
+  .mtoggle{display:inline-flex;background:hsl(240 20% 96%);border:1px solid var(--border);border-radius:99px;padding:2px}
+  .mtoggle button{border:none;background:none;border-radius:99px;padding:4px 12px;cursor:pointer;font:inherit;font-size:12px;font-weight:600;color:var(--text-secondary)}
+  .mtoggle button[aria-pressed="true"]{background:var(--surface-2);color:var(--text-primary);box-shadow:var(--shadow)}
+  .approved-strip{display:flex;align-items:center;gap:8px;background:var(--bg-success);border:1px solid hsl(86 40% 82%);border-radius:12px;padding:11px 14px;font-size:14px;color:var(--text-success)}
+  .approved-strip b{font-weight:700}
+  .measured{display:inline-flex;align-items:center;gap:4px;font-size:12px;font-weight:600;color:var(--text-success);background:var(--bg-success);border:1px solid hsl(86 40% 82%);border-radius:99px;padding:3px 9px}
+  .esttag{display:inline-flex;align-items:center;gap:4px;font-size:12px;font-weight:600;color:var(--text-warning)}
+  .fid-banner{display:flex;flex-wrap:wrap;align-items:center;gap:8px;font-size:13px;color:var(--text-warning);background:var(--bg-warning);border:1px solid var(--border-warning);border-radius:10px;padding:9px 12px;margin-bottom:14px}
+  .disc{margin-top:14px;border-top:1px solid var(--border);padding-top:10px}
+  .disc-toggle{background:none;border:none;cursor:pointer;font:inherit;font-size:13px;font-weight:600;color:var(--text-secondary);display:inline-flex;align-items:center;gap:6px;padding:2px 0}
+  .disc-body{margin-top:10px;display:flex;flex-direction:column;gap:8px}
+  .disc-msg{max-width:85%;background:hsl(240 20% 97%);border:1px solid var(--border);border-radius:10px;padding:8px 11px}
+  .disc-msg.me{align-self:flex-end;background:hsl(240 60% 97%);border-color:hsl(240 40% 90%)}
+  .disc-name{font-size:11px;color:var(--text-muted);font-weight:600;margin-bottom:2px}
+  .disc-text{font-size:13px}
+  .disc-att{margin-top:6px;display:inline-flex;align-items:center;gap:5px;font-size:12px;color:var(--text-secondary);background:var(--surface-2);border:1px solid var(--border);border-radius:8px;padding:4px 8px}
+  .disc-reply{display:flex;gap:6px;margin-top:2px}
+  .disc-reply input{flex:1;border:1px solid var(--border);border-radius:8px;padding:8px 10px;font:inherit;font-size:13px;background:var(--surface-1)}
+  .cf-fade{animation:cfOut .35s forwards}
+  @keyframes cfOut{to{opacity:0;transform:scale(.96);height:0;margin:0;padding:0;border-width:0}}
+  .sav-legend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:12px;color:var(--text-secondary);margin-top:8px}
+  .sav-legend span{display:inline-flex;align-items:center;gap:5px}
+  .sav-legend i.k{width:16px;height:0;border-top-width:2px;border-top-style:solid;display:inline-block}
+
+  /* ===== toggle + review-flow bits (shared with planner) ===== */
+  .pl-tog{flex-shrink:0;width:44px;height:26px;border-radius:99px;border:1px solid var(--border-strong);background:hsl(240 14% 92%);position:relative;cursor:pointer;padding:0;transition:background .14s,border-color .14s}
+  .pl-tog::after{content:"";position:absolute;top:2px;left:2px;width:20px;height:20px;border-radius:50%;background:#fff;box-shadow:0 1px 2px rgba(16,18,40,.25);transition:left .14s}
+  .pl-tog[aria-pressed="true"]{background:var(--primary);border-color:var(--primary)}
+  .pl-tog[aria-pressed="true"]::after{left:20px}
+  .pl-lock{flex-shrink:0;width:44px;height:26px;display:inline-flex;align-items:center;justify-content:center;color:var(--text-muted);font-size:15px}
+  .pl-need{font-size:12px;color:var(--text-warning);font-weight:500;display:inline-flex;align-items:center;gap:4px}
+  .wf-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}
+  .wf-steplabel{font-size:14px;color:var(--text-secondary)}
+  .wf-skip{background:none;border:none;color:var(--text-muted);font:inherit;font-size:14px;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:4px;padding:6px 8px;border-radius:8px}
+  .wf-skip:hover{color:var(--text-primary);background:hsl(240 20% 96%)}
+  .wf-dots{display:flex;gap:5px;margin-bottom:16px}
+  .wf-dot{flex:1;height:4px;border-radius:2px;background:var(--border)}
+  .wf-dot.cur{background:var(--primary)}
+  .wf-dot.ok{background:var(--text-success)}
+  .wf-dot.sk{background:var(--border-strong)}
+  .wf-done{max-width:440px;margin:7vh auto 0;padding:0 4px;text-align:center}
+  .wf-donehero{width:60px;height:60px;border-radius:50%;background:var(--bg-success);display:flex;align-items:center;justify-content:center;margin:0 auto;color:var(--text-success);font-size:32px}
+  .wf-donelist{margin-top:16px;display:flex;flex-direction:column;gap:8px;text-align:left}
+  .wf-donerow{display:flex;align-items:center;gap:8px;font-size:14px;background:hsl(240 20% 98.5%);border:1px solid var(--border);border-radius:10px;padding:10px 12px}
+
+  /* ===== Roadmap shell ===== */
+  .rm-head{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px 10px;margin-bottom:14px}
+  /* guiding-hand hero: benefit number + LOUD approve + goal tool + ramp chart */
+  .rm-hero{background:linear-gradient(180deg,hsl(86 45% 97.5%),var(--surface-2) 58%);border:1px solid hsl(86 45% 80%);border-radius:16px;padding:18px;box-shadow:var(--shadow);margin-bottom:16px}
+  .rm-hero-row{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap}
+  .rm-hero-amt{font-size:40px;font-weight:700;color:var(--text-success);letter-spacing:-.02em;line-height:1}
+  .rm-hero-amt .u{font-size:.4em;font-weight:600;color:var(--text-muted);letter-spacing:0}
+  .rm-approve{display:inline-flex;align-items:center;gap:8px;background:var(--primary);color:var(--primary-fg);border:none;border-radius:12px;padding:15px 24px;font:inherit;font-size:16px;font-weight:700;cursor:pointer;box-shadow:0 4px 14px hsl(240 91% 20% / .32);transition:transform .12s,box-shadow .12s,filter .12s}
+  .rm-approve:hover{transform:translateY(-1px);box-shadow:0 7px 20px hsl(240 91% 20% / .40);filter:brightness(1.1)}
+  .rm-approve:disabled{opacity:.5;cursor:default;box-shadow:none;transform:none;filter:none}
+  .rm-hero-ctx{font-size:13.5px;color:var(--text-secondary);margin-top:10px}
+  .rm-goal{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-top:14px;padding-top:14px;border-top:1px solid var(--border)}
+  .rm-goal-label{font-size:13px;font-weight:600;color:var(--text-primary)}
+  .rm-goal-input{display:inline-flex;align-items:center;gap:3px;border:1px solid var(--border-strong);border-radius:9px;background:var(--surface-2);padding:5px 10px}
+  .rm-goal-input span{color:var(--text-muted);font-size:13px}
+  .rm-goal-input input{border:none;background:none;font:inherit;font-size:14px;font-weight:600;width:56px;color:var(--text-primary);outline:none}
+  .rm-quick{display:flex;gap:6px;flex-wrap:wrap;margin-left:auto}
+  .rm-goal-fb{font-size:13px;color:var(--text-secondary);margin-top:10px;background:hsl(240 20% 97%);border:1px solid var(--border);border-radius:9px;padding:8px 11px}
+  .rm-goal-fb b{color:var(--text-success)}
+  .rm-ramp{margin-top:14px;background:hsl(240 20% 98.5%);border:1px solid var(--border);border-radius:10px;padding:11px 12px 8px}
+  .rm-ramp-cap{font-size:11.5px;color:var(--text-muted);margin-top:4px}
+  /* the today origin */
+  .rm-origin{display:block;width:100%;text-align:left;font:inherit;color:inherit;cursor:pointer;background:var(--surface-2);border:1px solid var(--border);border-radius:14px;padding:13px 16px 10px;box-shadow:var(--shadow);margin-bottom:14px;transition:box-shadow .12s,border-color .12s}
+  .rm-origin:hover{box-shadow:var(--shadow-hover);border-color:var(--border-strong)}
+  .rm-origin-top{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin-bottom:8px}
+  .rm-origin-v{font-weight:700;color:var(--text-success);font-size:19px;letter-spacing:-.01em}
+  .rm-origin-k{font-size:12.5px;color:var(--text-secondary);display:inline-flex;align-items:center;gap:4px;white-space:nowrap}
+  /* the time-scaled map */
+  .rm-maplabel{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:600;color:var(--text-secondary);margin:0 2px 8px;overflow-wrap:anywhere}
+  .rm-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;border:1px solid var(--border);border-radius:14px;background:var(--surface-2);box-shadow:var(--shadow);padding:12px 14px}
+  .rm-inner{min-width:600px;position:relative}
+  .rm-axis{position:relative;height:16px;margin-bottom:6px}
+  .rm-tick{position:absolute;top:0;transform:translateX(-50%);font-size:10px;color:var(--text-muted);white-space:nowrap}
+  .rm-today-lbl{position:absolute;top:0;transform:translateX(-50%);font-size:10px;font-weight:700;color:var(--text-warning);white-space:nowrap}
+  .rm-lane{margin:9px 0}
+  .rm-lane-head{display:flex;justify-content:space-between;align-items:baseline;gap:8px;margin-bottom:3px}
+  .rm-lane-name{font-size:13px;font-weight:700}
+  .rm-lane-sum{font-size:12px;color:var(--text-success);font-weight:600}
+  .rm-track{position:relative;height:54px;border-radius:9px;background:hsl(240 20% 98%);border:1px solid var(--border)}
+  .rm-past{position:absolute;left:0;top:0;bottom:0;background:hsl(86 45% 94.5%);border-right:1px dashed hsl(86 40% 78%);border-radius:9px 0 0 9px}
+  .rm-today{position:absolute;top:-2px;bottom:-2px;width:0;border-left:2px solid var(--text-warning)}
+  .rm-grid{position:absolute;top:4px;bottom:4px;width:0;border-left:1px dashed var(--border)}
+  .rm-conn{position:absolute;top:50%;height:0;border-top:2px dotted hsl(240 45% 66%);transform:translateY(-50%);pointer-events:none}
+  .rm-pill{position:absolute;top:50%;transform:translate(-50%,-50%);display:flex;flex-direction:column;align-items:center;gap:2px;width:52px;padding:5px 2px;border-radius:9px;border:1px solid;cursor:pointer;font:inherit;box-shadow:var(--shadow)}
+  .rm-pill i{font-size:16px;line-height:1}
+  .rm-pill .lab{font-size:8.5px;font-weight:700;line-height:1.05;text-align:center;letter-spacing:-.01em}
+  .rm-pill.on{background:var(--primary);border-color:var(--primary);color:#fff}
+  .rm-pill.off{background:var(--surface-2);border-color:var(--border-strong);color:var(--text-muted);opacity:.78}
+  .rm-pill.est{background:var(--bg-warning);border:1px dashed var(--border-warning);color:var(--text-warning)}
+  .rm-pill:hover{filter:brightness(1.05);box-shadow:var(--shadow-hover)}
+  .rm-legend{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:11.5px;color:var(--text-secondary);margin:9px 2px 0}
+  .rm-legend span{display:inline-flex;align-items:center;gap:5px}
+  .rm-legend i.sw{width:13px;height:13px;border-radius:4px;display:inline-block;border:1px solid}
+  .rm-legend i.sw.on{background:var(--primary);border-color:var(--primary)}
+  .rm-legend i.sw.off{background:var(--surface-2);border-color:var(--border-strong)}
+  .rm-legend i.sw.est{background:var(--bg-warning);border:1px dashed var(--border-warning)}
+  .rm-mapnote{font-size:12px;color:var(--text-muted);margin:8px 2px 0;display:flex;gap:6px;align-items:flex-start;overflow-wrap:anywhere}
+  .rm-addlane{display:inline-flex;align-items:center;gap:6px;margin-top:10px;background:hsl(86 45% 97%);border:1px dashed hsl(86 40% 72%);color:var(--text-success);border-radius:10px;padding:9px 13px;font:inherit;font-size:13px;font-weight:600;cursor:pointer}
+  .rm-addlane:hover{filter:brightness(.98)}
+  /* project list — stable order, one plain-English line each */
+  .rm-band{margin-top:20px}
+  .rm-band-head{display:flex;align-items:baseline;justify-content:space-between;gap:8px;margin:0 2px 9px;flex-wrap:wrap}
+  .rm-band-t{font-size:15px;font-weight:700;display:inline-flex;align-items:center;gap:7px}
+  .rm-band-when{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-muted)}
+  .rm-band-sum{font-size:12.5px;color:var(--text-secondary)}
+  .rm-item{display:flex;align-items:flex-start;gap:12px;background:var(--surface-2);border:1px solid var(--border);border-radius:12px;padding:13px 14px;box-shadow:var(--shadow);margin-bottom:9px;transition:border-color .12s,box-shadow .12s,opacity .12s}
+  .rm-item:hover{border-color:var(--border-strong)}
+  .rm-item.off{opacity:.82}
+  .rm-item.est{border-style:dashed;border-color:var(--border-strong);background:hsl(240 20% 98.5%)}
+  .rm-item-main{min-width:0;flex:1;cursor:pointer}
+  .rm-item-name{background:none;border:none;padding:0;margin:0;font:inherit;color:inherit;cursor:pointer;font-weight:600;display:inline-flex;align-items:center;gap:5px;text-align:left}
+  .rm-item-name:hover{color:var(--primary);text-decoration:underline}
+  .rm-what{font-size:12.5px;color:var(--text-secondary);margin-top:3px}
+  .rm-item-meta{font-size:12px;color:var(--text-muted);margin-top:6px;display:flex;flex-wrap:wrap;gap:3px 12px}
+  .rm-item-meta span{display:inline-flex;align-items:center;gap:4px}
+  .rm-item-fig{text-align:right;flex-shrink:0}
+  .rm-item-sav{font-size:17px;font-weight:700;color:var(--text-success);letter-spacing:-.01em}
+  .rm-item-cost{font-size:12px;color:var(--text-secondary);margin-top:1px}
+  /* add properties — a DIFFERENT decision, visually distinct (new lane, green, dashed) */
+  .rm-add{margin-top:26px;border:1px dashed hsl(86 40% 70%);border-radius:16px;background:hsl(86 45% 98%);padding:16px}
+  .rm-add-h{display:flex;align-items:center;gap:8px;font-size:15px;font-weight:700;color:var(--text-success)}
+  .rm-add-sub{font-size:13px;color:var(--text-secondary);margin:6px 0 2px}
+  .rm-add-row{display:flex;align-items:center;gap:12px;background:var(--surface-2);border:1px dashed hsl(86 40% 74%);border-radius:12px;padding:13px 14px;margin-top:10px}
+  .rm-add-ic{flex-shrink:0;width:30px;height:30px;border-radius:8px;background:hsl(86 45% 93%);color:var(--text-success);display:inline-flex;align-items:center;justify-content:center}
+  @media (max-width:560px){
+    .rm-hero-row{align-items:stretch}
+    .rm-approve{width:100%;justify-content:center}
+    .rm-quick{margin-left:0;width:100%}
+    .rm-item{flex-wrap:wrap}
+    .rm-item-fig{width:100%;text-align:left;padding-left:56px;margin-top:2px}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+<div id="app">Loading…</div>
+</div>
+<script>
+(function(){
+  var app=document.getElementById('app');
+  var DATA={
+    portfolio:"Coastline Hospitality Group",
+    prospects:[
+      {id:'p1',name:'Summit Ridge Suites',cf:55000,ready:true,step:'Proposal ready'},
+      {id:'p2',name:'Harbor Point Hotel',cf:48000,ready:true,step:'Proposal ready'},
+      {id:'p3',name:'Grandview Hotel',cf:42000,ready:false,step:'Complete your audit',est:true},
+      {id:'p4',name:'Old Town Motel',cf:38000,ready:false,step:'Complete your audit',est:true},
+      {id:'p5',name:'Pinewood Inn',cf:32000,ready:false,step:'Add your utility bills',est:true},
+      {id:'p6',name:'Bayside Motor Lodge',cf:26000,ready:false,step:'Add your utility bills',est:true}
+    ],
+    solutions:[
+      {id:'s1',prop:'Marina Bay Inn',type:'Solar + Batteries',u:2,note:'Start now — about a year to build for the 2027 rebate',vendor:'GreenVolt Partners',install:'about 6 weeks · starts Sep',fidelity:'measured',market:150000,discountPct:12,incentive:45000,savings:26000,loan:{termYears:25,aprPct:6.5},lease:{annualAtrium:44000,annualMarket:52000,termYears:20}},
+      {id:'s5',prop:'Cedar Court Hotel',type:'Solar + Batteries',u:2,note:'Start now — about a year to build for the 2027 rebate',vendor:'GreenVolt Partners',install:'about 5 weeks',fidelity:'measured',market:105000,discountPct:12,incentive:31000,savings:18000,loan:{termYears:25,aprPct:6.5},lease:{annualAtrium:31000,annualMarket:37000,termYears:20}},
+      {id:'s2',prop:'Marina Bay Inn',type:'Heat Pump Water Heaters',u:1,vendor:'Thermal Systems',install:'about 2 weeks',fidelity:'measured',market:25000,discountPct:12,incentive:40000,savings:6000,loan:{termYears:5,aprPct:6.9},lease:null},
+      {id:'s6',prop:'Cedar Court Hotel',type:'LED Lighting',u:0,vendor:'BrightSwap',install:'about 2 weeks',fidelity:'measured',market:16000,discountPct:13,incentive:2000,savings:4800,loan:{termYears:5,aprPct:7.9},lease:null},
+      {id:'s3',prop:'Marina Bay Inn',type:'LED Lighting',u:0,vendor:'BrightSwap',install:'about 2 weeks',fidelity:'measured',market:12000,discountPct:13,incentive:1400,savings:3600,loan:{termYears:5,aprPct:7.9},lease:null},
+      {id:'s4',prop:'Marina Bay Inn',type:'Smart Thermostats',u:1,vendor:'Cozy Controls',install:'about 1 week',fidelity:'measured',market:28800,discountPct:14,incentive:4000,savings:12800,loan:{termYears:5,aprPct:7.9},lease:null},
+      {id:'s10',prop:'Marina Bay Inn',type:'Building Controls (EMS)',u:1,vendor:'Nodal Systems',install:'about 3 weeks',fidelity:'measured',market:21000,discountPct:12,incentive:3000,savings:7800,loan:{termYears:5,aprPct:6.9},lease:null},
+      {id:'s11',prop:'Cedar Court Hotel',type:'Kitchen Hood Controls',u:1,vendor:'AirWise Controls',install:'about 1 week',fidelity:'measured',market:10000,discountPct:12,incentive:1000,savings:3200,loan:{termYears:5,aprPct:7.9},lease:null},
+      {id:'s12',prop:'Cedar Court Hotel',type:'Pool Heat Pump',u:1,vendor:'ThermaPool',install:'about 2 weeks',fidelity:'measured',market:13500,discountPct:12,incentive:1800,savings:3900,loan:{termYears:5,aprPct:6.9},lease:null},
+      {id:'s13',prop:'Riverside Lodge',type:'Low-Flow Water Fixtures',u:0,vendor:'AquaTrim',install:'about 1 week',fidelity:'measured',market:5000,discountPct:13,incentive:700,savings:2300,loan:{termYears:5,aprPct:7.9},lease:null},
+      {id:'s8',prop:'Riverside Lodge',type:'Heat Pump Water Heaters',u:1,vendor:'Thermal Systems',install:'about 2 weeks',fidelity:'estimated',dataNeed:'your water-heater metering',savings:4200},
+      {id:'s9',prop:'Riverside Lodge',type:'Smart Thermostats',u:1,vendor:'Cozy Controls',install:'about 1 week',fidelity:'estimated',dataNeed:'occupancy data',savings:35200},
+      {id:'s7',prop:'Cedar Court Hotel',type:'Ozone Laundry',u:0,vendor:'PureWash',install:'about 1 week',fidelity:'measured',market:8500,discountPct:12,incentive:900,savings:3600,loan:{termYears:5,aprPct:7.9},lease:null}
+    ],
+    // properties Atrium already operates — these have savings history + a forecast
+    contracted:[
+      {id:'c1',name:'Marina Bay Inn',rooms:120,saved:90000,runPct:96,next12:392000,without12:434000,perRoomNight:12.10,season:{amp:1.35,phase:0,winter:0.24}},
+      {id:'c2',name:'Cedar Court Hotel',rooms:150,saved:78000,runPct:94,next12:471000,without12:516000,perRoomNight:11.40,season:{amp:0.65,phase:-1.5,winter:0.5}},
+      {id:'c3',name:'Riverside Lodge',rooms:96,saved:52000,runPct:108,next12:318000,without12:350000,perRoomNight:13.60,season:{amp:1.1,phase:1.5,winter:0.62}}
+    ],
+    savedByType:[
+      {type:'Solar + Batteries',saved:105000,pace:58000},
+      {type:'LED Lighting',saved:48000,pace:27000},
+      {type:'Heat Pump Water Heaters',saved:40000,pace:20000},
+      {type:'Smart Thermostats',saved:27000,pace:14000}
+    ]
+  };
+  var S={screen:'home',solView:'type',group:null,leafId:null,savView:'property',savLeaf:null,period:'annual',signed:{},approved:{},approvedMode:{},mode:{},disc:{},excl:{},plMode:'rec',goal:null,unlocked:0};
+  var UL=['Now','Soon','Later'];
+  // ===== shared helpers (verbatim from cashflow.html) =====
+  function fmtK(n){n=Math.round(n);var s=n<0?'-':'';n=Math.abs(n);if(n>=1e6)return s+'$'+(n/1e6).toFixed(2).replace(/\.?0+$/,'')+'M';if(n>=1e3)return s+'$'+Math.round(n/1e3)+'K';return s+'$'+n;}
+  function fmt(n){return '$'+Math.round(n).toLocaleString();}
+  function fmtRange(lo,hi){return fmtK(lo)+'–'+fmtK(hi);}
+  function cap(s){return s[0].toUpperCase()+s.slice(1);}
+  function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;');}
+  function pmtMo(P,aprPct,termY){var r=aprPct/100/12,n=termY*12;return P*r/(1-Math.pow(1+r,-n));}
+  function est(s){return s.fidelity==='estimated';}
+  function price(s){return Math.round(s.market*(1-s.discountPct/100));}
+  function net(s){return price(s)-s.incentive;}
+  function payback(s){return net(s)/s.savings;}
+  function fiveCash(s){return 5*s.savings-net(s);}
+  // Annualized financing cost at the default/selected mode: loan = yearly payment, lease = yearly cost,
+  // cash = no recurring cost (paid upfront). Lets a row show gross savings and cost on the same basis.
+  function annualCost(s){var mode=curMode(s),nt=net(s);if(mode==='loan')return pmtMo(nt,s.loan.aprPct,s.loan.termYears)*12;if(mode==='lease')return s.lease.annualAtrium;return 0;}
+  function costLabel(s){return curMode(s)==='cash'?fmt(net(s))+' upfront':per(annualCost(s))+' cost';}
+  function savLo(s){return Math.round(s.savings*0.75/1000)*1000;}
+  function savHi(s){return Math.round(s.savings*1.25/1000)*1000;}
+  function tileVal(s){return est(s)?5*s.savings:fiveCash(s);}
+  function solModes(s){var m=['cash'];if(s.loan)m.push('loan');if(s.lease)m.push('lease');return m;}
+  function curMode(s){var ms=solModes(s);var d=s.loan?'loan':(s.lease?'lease':'cash');var m=S.mode[s.id]||d;return ms.indexOf(m)>=0?m:d;}
+  function per(x){return S.period==='monthly'?fmt(x/12)+'/mo':fmt(x)+'/yr';}
+  function amtUnit(annual){ return S.period==='monthly' ? {a:fmtK(annual/12),u:'a month'} : {a:fmtK(annual),u:'a year'}; }
+  function perTile(annual){var v=S.period==='monthly'?annual/12:annual;return fmtK(v)+'<span style="font-size:.6em;color:var(--text-muted);font-weight:600"> '+(S.period==='monthly'?'/mo':'/yr')+'</span>';}
+  function perRange(lo,hi){return S.period==='monthly'?fmt(Math.round(lo/12))+'–'+fmt(Math.round(hi/12))+'/mo':fmtK(lo)+'–'+fmtK(hi)+'/yr';}
+  function prospects(){return DATA.prospects.filter(function(p){return !S.signed[p.id];});}
+  function sols(){return DATA.solutions.filter(function(s){return !S.approved[s.id];});}
+  function sumCf(a){return a.reduce(function(t,x){return t+x.cf;},0);}
+  function sumTile(a){return a.reduce(function(t,x){return t+tileVal(x);},0);}
+  function sumSav(a){return a.reduce(function(t,x){return t+x.savings;},0);}
+  function distinctProps(a){var o={};a.forEach(function(s){o[s.prop]=1;});return Object.keys(o).length;}
+  function approveAnnualFor(name){return sols().filter(function(s){return s.prop===name;}).reduce(function(t,s){return t+s.savings;},0);}
+  function approveCountFor(name){return sols().filter(function(s){return s.prop===name;}).length;}
+  // Atrium-recommended priority: incentive deadlines first, then quick wins (fast payback / low friction), then value.
+  function atriumScore(s){
+    var pay=est(s)?8:payback(s);
+    return pay - (s.note?1.3:0);
+  }
+  function recSort(a,b){ return atriumScore(a)-atriumScore(b); }
+  function econ(s,mode){
+    var sav=s.savings,nt=net(s),pay=payback(s);
+    if(mode==='cash'){
+      return {hero:'+'+per(sav), sub:'One-time '+fmt(nt)+' upfront, then it’s yours',
+        chips:[['Upfront (one-time)',fmt(nt)],['Payback',pay.toFixed(1)+' yrs']],
+        series:(function(){var a=[];for(var y=0;y<=10;y++)a.push(-nt+y*sav);return a;})(), be:pay, beLabel:'breaks even at '+pay.toFixed(1)+' yrs',
+        takeaway:'Pay '+fmt(nt)+' once, then keep '+per(sav)+' — best lifetime return.'};
+    }
+    if(mode==='loan'){
+      var m=pmtMo(nt,s.loan.aprPct,s.loan.termYears),ann=m*12,t=s.loan.termYears;
+      return {hero:'+'+per(sav), sub:'$0 down · '+t+'-yr loan @ '+s.loan.aprPct+'% · '+per(ann)+', then it’s yours',
+        chips:[['Loan payment',per(ann)],['Term',t+' yrs']],
+        series:(function(){var a=[0],cum=0;for(var y=1;y<=10;y++){cum+=sav-(y<=t?ann:0);a.push(cum);}return a;})(), be:0.05, beLabel:'cash-flow positive from day one',
+        takeaway:''};
+    }
+    var la=s.lease.annualAtrium,t2=s.lease.termYears;
+    return {hero:'+'+per(sav), sub:'$0 down · '+t2+'-yr lease · '+per(la)+' · no ownership or upkeep',
+      chips:[['Lease cost',per(la)],['Term',t2+' yrs']],
+      series:(function(){var a=[0],cum=0;for(var y=1;y<=10;y++){cum+=sav-la;a.push(cum);}return a;})(), be:0.05, beLabel:'cash-flow positive from year one',
+      takeaway:''};
+  }
+  function spark(series,be){
+    var w=300,h=72,padX=8,padT=8,padB=8,N=120;
+    function stepAt(yr){var i=Math.max(0,Math.min(series.length-2,Math.floor(yr)));return series[i+1]-series[i];}
+    var cum=series[0],pts=[[0,cum]];
+    for(var m=1;m<=N;m++){var yr=m/12;var mult=1+0.1*Math.sin((m-1)/12*2*Math.PI-Math.PI/2);cum+=stepAt(yr-1e-9)/12*mult;pts.push([yr,cum]);}
+    var vals=pts.map(function(p){return p[1];}).concat([0]);
+    var mn=Math.min.apply(null,vals),mx=Math.max.apply(null,vals),sp=(mx-mn)||1;
+    function X(yr){return padX+(yr/10)*(w-2*padX);}
+    function Y(v){return padT+(1-(v-mn)/sp)*(h-padT-padB);}
+    var line=pts.map(function(p){return X(p[0]).toFixed(1)+','+Y(p[1]).toFixed(1);}).join(' ');
+    var area=pts.map(function(p){return X(p[0]).toFixed(1)+','+Y(Math.max(0,p[1])).toFixed(1);}).join(' ')+' '+X(10).toFixed(1)+','+Y(0).toFixed(1)+' '+X(0).toFixed(1)+','+Y(0).toFixed(1);
+    return '<svg viewBox="0 0 '+w+' '+h+'" width="100%" height="'+h+'" preserveAspectRatio="none" style="display:block">'
+      +'<polygon points="'+area+'" fill="hsl(86 45% 95%)"/>'
+      +'<line x1="'+padX+'" x2="'+(w-padX)+'" y1="'+Y(0).toFixed(1)+'" y2="'+Y(0).toFixed(1)+'" stroke="var(--border-strong)" stroke-dasharray="1 3.5" stroke-linecap="round"/>'
+      +'<polyline points="'+line+'" fill="none" stroke="var(--text-success)" stroke-width="2.5"/></svg>';
+  }
+  var THREAD=[
+    {name:'Dana · Atrium',text:'Here’s the proposal — happy to walk you through any of the numbers.',me:false,att:'proposal.pdf'},
+    {name:'You',text:'Can we phase the battery portion to next year?',me:true}
+  ];
+  function discussion(s){
+    var open=S.disc[s.id];
+    return '<div class="disc"><button class="disc-toggle" data-disc="'+s.id+'"><i class="ti ti-message"></i> Questions &amp; notes ('+THREAD.length+') <i class="ti ti-chevron-'+(open?'up':'down')+'"></i></button>'
+      +(open?'<div class="disc-body">'+THREAD.map(function(m){return '<div class="disc-msg'+(m.me?' me':'')+'"><div class="disc-name">'+m.name+'</div><div class="disc-text">'+esc(m.text)+'</div>'+(m.att?'<div class="disc-att"><i class="ti ti-paperclip"></i> '+m.att+'</div>':'')+'</div>';}).join('')
+        +'<div class="disc-reply"><input placeholder="Write a message…" disabled><button class="cf-pill" disabled>Send</button></div></div>':'')
+    +'</div>';
+  }
+  function cardHead(s){
+    return '<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:12px">'
+      +'<div><div style="font-size:18px;font-weight:700">'+esc(s.type)+'</div>'
+        +'<div style="font-size:13px;color:var(--text-muted);margin-top:2px">'+esc(s.prop)+' · <i class="ti ti-tool"></i> '+esc(s.vendor)+' · '+esc(s.install)+'</div></div>'
+      +'<span style="font-size:12px;font-weight:600;color:var(--primary);background:hsl(240 60% 96%);border:1px solid hsl(240 40% 90%);border-radius:99px;padding:4px 10px;white-space:nowrap"><i class="ti ti-calendar"></i> '+UL[s.u]+'</span></div>';
+  }
+  function solutionCard(s){
+    if(est(s)){
+      var lo=savLo(s),hi=savHi(s);
+      return '<div class="card est" data-row="'+s.id+'">'+cardHead(s)
+        +'<div class="fid-banner"><i class="ti ti-alert-triangle"></i> Pre-audit estimate — connect '+esc(s.dataNeed)+' to turn this into a firm quote.<button class="cf-btn sm" data-act="connect" data-val="'+s.id+'">Connect data</button></div>'
+        +'<div style="margin-bottom:6px"><div style="font-size:12px;color:var(--text-muted)">Estimated savings <span class="esttag"><i class="ti ti-help-circle"></i> rough range</span></div>'
+          +'<div class="mono" style="font-size:28px;font-weight:700;color:var(--text-success);letter-spacing:-.02em">'+perRange(lo,hi)+'</div></div>'
+        +'<p style="font-size:13px;color:var(--text-secondary);margin:.2rem 0 0">Firm price, incentives, and Cash / Loan / Lease options appear once we have your data.</p>'
+        +discussion(s)+'</div>';
+    }
+    var mode=curMode(s), e=econ(s,mode), ms=solModes(s);
+    var hint={cash:'Buy outright',loan:'Finance',lease:'Rent'};
+    var payseg=ms.map(function(m){return '<button data-sol="'+s.id+'" data-segmode="'+m+'" aria-pressed="'+(mode===m)+'"><span style="display:block">'+cap(m)+'</span><span style="display:block;font-size:11px;font-weight:500;opacity:.85">'+hint[m]+'</span></button>';}).join('');
+    var chips=e.chips.map(function(k){return '<div class="chip"><div class="k">'+k[0]+'</div><div class="v mono"'+(k[2]?' style="color:'+k[2]+'"':'')+'>'+k[1]+'</div></div>';}).join('');
+    var savePct=Math.round((s.market-price(s))/s.market*100);
+    return '<div class="card" data-row="'+s.id+'">'+cardHead(s)
+      +'<div style="display:flex;flex-wrap:wrap;align-items:center;gap:8px;font-size:13px;color:var(--text-secondary);background:hsl(240 20% 98%);border:1px solid var(--border);border-radius:10px;padding:9px 12px;margin-bottom:16px">'
+        +'<span style="color:var(--text-muted)">'+fmt(s.market)+' market</span><i class="ti ti-arrow-right" style="color:var(--text-muted)"></i>'
+        +'<span>'+fmt(price(s))+' Atrium price <span style="color:var(--text-success);font-weight:600">(−'+savePct+'%)</span></span><i class="ti ti-arrow-right" style="color:var(--text-muted)"></i>'
+        +'<span style="color:var(--text-success);font-weight:600">−'+fmt(s.incentive)+' incentive</span><i class="ti ti-arrow-right" style="color:var(--text-muted)"></i>'
+        +'<span style="font-weight:700;color:var(--text-primary)">'+fmt(net(s))+' your net price</span></div>'
+      +'<div class="payseg" style="margin-bottom:16px">'+payseg+'</div>'
+      +'<div style="margin-bottom:14px"><div style="font-size:12px;color:var(--text-muted)">Savings</div>'
+        +'<div class="mono" style="font-size:30px;font-weight:700;color:var(--text-success);letter-spacing:-.02em">'+e.hero+'</div>'
+        +'<div style="font-size:13px;color:var(--text-secondary);margin-top:2px">'+e.sub+'</div></div>'
+      +'<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(128px,1fr));gap:8px;margin-bottom:12px">'+chips+'</div>'
+      +'<div style="background:hsl(240 20% 98.5%);border:1px solid var(--border);border-radius:10px;padding:10px 12px;margin-bottom:14px">'+spark(e.series,e.be)
+        +'<div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text-muted);margin-top:2px"><span>Now</span><span>'+e.beLabel+'</span><span style="color:var(--text-secondary);font-weight:600">'+fmtK(e.series[e.series.length-1])+' over 10 yrs</span></div></div>'
+      +'<button class="cf-btn" data-approve="'+s.id+'"><i class="ti ti-check"></i> Approve with '+cap(mode)+'</button>'
+      +discussion(s)+'</div>';
+  }
+  function backPill(){return '<button class="cf-pill" data-act="back" style="display:inline-flex;align-items:center;gap:4px"><i class="ti ti-arrow-left"></i> Back to roadmap</button>';}
+  function perToggle(){return '<div class="seg"><button data-period="annual" aria-pressed="'+(S.period==='annual')+'">Annual</button><button data-period="monthly" aria-pressed="'+(S.period==='monthly')+'">Monthly</button></div>';}
+
+  // ===== shared savings / forecast drill (verbatim from cashflow.html) =====
+  function savHeroSvg(toDate,perYear,stroke,areaFill,single){
+    var paceCash=DATA.savedByType.reduce(function(t,x){return t+x.pace;},0);
+    var without=DATA.contracted.reduce(function(t,c){return t+c.without12;},0);
+    var ratio=(0.30*without)/(paceCash||1);                            // approve-all is this multiple of the current rate
+    var saved=toDate!=null?toDate:DATA.contracted.reduce(function(t,c){return t+c.saved;},0);
+    var pace=perYear!=null?perYear:paceCash;
+    var fullPace=pace*ratio;
+    stroke=stroke||'var(--text-success)'; areaFill=areaFill||'hsl(86 45% 93%)';
+    var w=300,h=96,padX=1,padT=7,padB=5,past=24,fut=24,n=past+fut;
+    // seasonality: "now" = summer. Summer = big peak (HVAC + occupancy + rates all high); winter = smaller peak
+    // (heating high, occupancy lower); spring & fall = troughs. cos(annual) makes summer>winter; cos(semi-annual) makes the two peaks.
+    // Cash (default) routes through the shared per-property series so this home summary matches the drill's aggregate. A metric override (single=true, e.g. CO2 on impact, which has no per-property profile) keeps the single portfolio-level curve below.
+    var sol,cur,full;
+    if(!single){var SS=savSeries(DATA.contracted);sol=SS.sol;cur=SS.cur;full=SS.full;}
+    else{
+      var seas=function(m){var k=(m-past)/12;return 1+0.22*Math.cos(2*Math.PI*k)+0.34*Math.cos(4*Math.PI*k);};
+      var raw=[0],rc=0;
+      for(var m=1;m<=past;m++){var yr=(m-past)/12;rc+=(pace/12)*Math.pow(1.05,yr)*seas(m);raw.push(rc);}
+      var scale=saved/(raw[past]||1);sol=raw.map(function(v){return v*scale;});
+      cur=[saved];full=[saved];var cc=saved,fc=saved;
+      for(var m=1;m<=fut;m++){var yr=m/12;cc+=(pace/12)*Math.pow(1.05,yr)*seas(past+m);cur.push(cc);var r=pace+(fullPace-pace)*Math.min(1,m/12);fc+=(r/12)*Math.pow(1.05,yr)*seas(past+m);full.push(fc);}
+    }
+    var mx=full[fut]*1.04;
+    function X(m){return padX+m/n*(w-2*padX);}
+    function Y(v){return padT+(1-v/mx)*(h-padT-padB);}
+    var solP=[],curP=[],fullP=[];
+    for(var i=0;i<=past;i++)solP.push(X(i).toFixed(1)+','+Y(sol[i]).toFixed(1));
+    for(var i=0;i<=fut;i++){curP.push(X(past+i).toFixed(1)+','+Y(cur[i]).toFixed(1));fullP.push(X(past+i).toFixed(1)+','+Y(full[i]).toFixed(1));}
+    var greenArea=solP.join(' ')+' '+curP.join(' ')+' '+X(n).toFixed(1)+','+Y(0).toFixed(1)+' '+X(0).toFixed(1)+','+Y(0).toFixed(1);
+    var wedge=fullP.join(' ')+' '+curP.slice().reverse().join(' ');
+    var tX=X(past).toFixed(1);
+    return '<svg viewBox="0 0 '+w+' '+h+'" width="100%" height="'+h+'" preserveAspectRatio="none" style="display:block">'
+      +'<polygon points="'+greenArea+'" fill="'+areaFill+'"/>'
+      +'<polygon points="'+wedge+'" fill="hsl(240 55% 93%)" opacity="0.8"/>'
+      +'<line x1="'+tX+'" x2="'+tX+'" y1="'+padT+'" y2="'+(h-padB)+'" stroke="var(--border-strong)" stroke-dasharray="1 3.5" stroke-linecap="round"/>'
+      +'<polyline points="'+solP.join(' ')+'" fill="none" stroke="'+stroke+'" stroke-width="2.6"/>'
+      +'<polyline points="'+curP.join(' ')+'" fill="none" stroke="'+stroke+'" stroke-width="2.1" stroke-dasharray="1 3.5" stroke-linecap="round" opacity="0.8"/>'
+      +'<polyline points="'+fullP.join(' ')+'" fill="none" stroke="var(--primary)" stroke-width="2.4" stroke-dasharray="1 3.5" stroke-linecap="round"/></svg>';
+  }
+  function trajChart(sc,apprAnn){
+    var wom=sc.without12/12, savFrac=(sc.without12-sc.next12)/sc.without12, apprFrac=Math.max(savFrac,0.30);
+    var n=25,w=340,h=120,padX=6,padT=10,padB=8,today=12,infl=0.08,s=[]; // infl = counterfactual energy-cost inflation; with-Atrium stays near-flat, so the gap fans open over time
+    function noise(i){return 0.055*Math.sin(i*0.9+0.5)+0.03*Math.sin(i*2.15+1.7)+0.018*Math.sin(i*4.3+3.1);}
+    for(var i=0;i<n;i++){
+      var yr=(i-today)/12, infF=1+infl*yr;
+      var without=wom*infF*(1+noise(i));                                  // counterfactual rises with inflation
+      var g=Math.min(1,i/today);                                          // savings ramp in over the past year
+      // with-Atrium is always a fraction BELOW the counterfactual (never above); the fraction widens ahead as the counterfactual inflates
+      var savNow=savFrac+Math.max(0,0.88*infl*yr), apprNow=apprFrac+Math.max(0,0.88*infl*yr);
+      var wth=without*(1-savNow*g);
+      var target=without*(1-apprNow);
+      var appr=i<=today?wth:wth+(target-wth)*Math.min(1,(i-today)/8);     // "if you approve all" pulls further down after today
+      s.push({without:without,wth:wth,appr:appr});
+    }
+    var all=[];s.forEach(function(d){all.push(d.without,d.wth);if(apprAnn)all.push(d.appr);});
+    var mn=0,mx=Math.max.apply(null,all)*1.06,sp=mx-mn;
+    function X(i){return padX+i/(n-1)*(w-2*padX);}
+    function Y(v){return padT+(1-(v-mn)/sp)*(h-padT-padB);}
+    function poly(key,from,to){var p=[];for(var i=from;i<=to;i++)p.push(X(i).toFixed(1)+','+Y(s[i][key]).toFixed(1));return p.join(' ');}
+    var gap=[];for(var i=0;i<n;i++)gap.push(X(i).toFixed(1)+','+Y(s[i].without).toFixed(1));for(var j=n-1;j>=0;j--)gap.push(X(j).toFixed(1)+','+Y(s[j].wth).toFixed(1));
+    var uw=[];for(var i=today;i<n;i++)uw.push(X(i).toFixed(1)+','+Y(s[i].wth).toFixed(1));for(var j=n-1;j>=today;j--)uw.push(X(j).toFixed(1)+','+Y(s[j].appr).toFixed(1));
+    var ylab='position:absolute;left:2px;font-size:10px;color:var(--text-muted);background:rgba(255,255,255,.72);padding:0 3px;border-radius:3px;line-height:1.2;pointer-events:none';
+    return '<div style="position:relative">'
+      +'<svg viewBox="0 0 '+w+' '+h+'" width="100%" height="'+h+'" preserveAspectRatio="none" style="display:block">'
+      +'<polygon points="'+gap.join(' ')+'" fill="hsl(86 45% 91%)"/>'
+      +(apprAnn?'<polygon points="'+uw.join(' ')+'" fill="hsl(240 55% 93%)" opacity="0.8"/>':'')
+      +'<line x1="'+X(today).toFixed(1)+'" x2="'+X(today).toFixed(1)+'" y1="'+padT+'" y2="'+(h-padB)+'" stroke="var(--border-strong)" stroke-dasharray="1 3.5" stroke-linecap="round"/>'
+      +'<polyline points="'+poly('without',0,today)+'" fill="none" stroke="var(--text-warning)" stroke-width="2"/>'
+      +'<polyline points="'+poly('without',today,n-1)+'" fill="none" stroke="var(--text-warning)" stroke-width="2" stroke-dasharray="1 3.5" stroke-linecap="round"/>'
+      +'<polyline points="'+poly('wth',0,today)+'" fill="none" stroke="var(--text-success)" stroke-width="2.5"/>'
+      +'<polyline points="'+poly('wth',today,n-1)+'" fill="none" stroke="var(--text-success)" stroke-width="2.5" stroke-dasharray="1 3.5" stroke-linecap="round"/>'
+      +(apprAnn?'<polyline points="'+poly('appr',today,n-1)+'" fill="none" stroke="var(--primary)" stroke-width="2" stroke-dasharray="1 3.5" stroke-linecap="round"/>':'')
+      +'</svg>'
+      +'<span style="'+ylab+';top:2px">'+fmtK(mx*12)+'</span>'
+      +'<span style="'+ylab+';top:50%;transform:translateY(-50%)">'+fmtK(mx*12/2)+'</span>'
+      +'<span style="'+ylab+';bottom:3px">$0</span>'
+      +'</div>';
+  }
+  function cumChart(saved,pace){
+    var n=24,w=340,h=118,padX=8,padT=12,padB=8,today=12,s=[],cum=0,pp=saved/12,pf=pace/12;
+    for(var i=0;i<=n;i++){s.push(cum);cum+=(i<12?pp:pf);}
+    var mx=s[n]||1;
+    function X(i){return padX+i/n*(w-2*padX);}
+    function Y(v){return padT+(1-v/mx)*(h-padT-padB);}
+    function poly(from,to){var p=[];for(var i=from;i<=to;i++)p.push(X(i).toFixed(1)+','+Y(s[i]).toFixed(1));return p.join(' ');}
+    var area=poly(0,today)+' '+X(today).toFixed(1)+','+Y(0).toFixed(1)+' '+X(0).toFixed(1)+','+Y(0).toFixed(1);
+    return '<svg viewBox="0 0 '+w+' '+h+'" width="100%" height="'+h+'" preserveAspectRatio="none" style="display:block">'
+      +'<polygon points="'+area+'" fill="hsl(86 45% 93%)"/>'
+      +'<line x1="'+X(today).toFixed(1)+'" x2="'+X(today).toFixed(1)+'" y1="'+padT+'" y2="'+(h-padB)+'" stroke="var(--border-strong)" stroke-dasharray="1 3.5" stroke-linecap="round"/>'
+      +'<polyline points="'+poly(0,today)+'" fill="none" stroke="var(--text-success)" stroke-width="2.5"/>'
+      +'<polyline points="'+poly(today,n)+'" fill="none" stroke="var(--text-success)" stroke-width="2.5" stroke-dasharray="1 3.5" stroke-linecap="round"/></svg>';
+  }
+  function savAxis(){return '<div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text-muted);margin-top:2px"><span>12 mo ago</span><span>today</span><span>12 mo ahead</span></div>';}
+  function savSeries(props){
+    var past=24,fut=24,n=past+fut,sol=[],cur=[],full=[];
+    for(var i=0;i<=past;i++)sol.push(0);
+    for(var i=0;i<=fut;i++){cur.push(0);full.push(0);}
+    props.forEach(function(c){
+      var pr=c.season||{amp:1,phase:0,winter:0.34},saved=c.saved,pace=c.without12-c.next12,fullPace=0.30*c.without12;
+      function seas(m){var k=(m-past)/12-pr.phase/12;return 1+pr.amp*(0.22*Math.cos(2*Math.PI*k)+pr.winter*Math.cos(4*Math.PI*k));}
+      var raw=[0],rc=0;
+      for(var m=1;m<=past;m++){var yr=(m-past)/12;rc+=(pace/12)*Math.pow(1.05,yr)*seas(m);raw.push(rc);}
+      var sc=saved/(raw[past]||1);
+      for(var i=0;i<=past;i++)sol[i]+=raw[i]*sc;
+      var cc=saved,fc=saved;cur[0]+=saved;full[0]+=saved;
+      for(var m=1;m<=fut;m++){var yr=m/12;cc+=(pace/12)*Math.pow(1.05,yr)*seas(past+m);cur[m]+=cc;var r=pace+(fullPace-pace)*Math.min(1,m/12);fc+=(r/12)*Math.pow(1.05,yr)*seas(past+m);full[m]+=fc;}
+    });
+    return {sol:sol,cur:cur,full:full,past:past,fut:fut,n:n};
+  }
+  function bankedChart(props){
+    if(!props)props=DATA.contracted;
+    var SS=savSeries(props),sol=SS.sol,cur=SS.cur,full=SS.full,past=SS.past,fut=SS.fut,n=SS.n;
+    var w=340,h=118,padX=6,padT=10,padB=8,fc=full[fut];
+    var mx=fc*1.04;
+    function X(m){return padX+m/n*(w-2*padX);}
+    function Y(v){return padT+(1-v/mx)*(h-padT-padB);}
+    var solP=[],curP=[],fullP=[];
+    for(var i=0;i<=past;i++)solP.push(X(i).toFixed(1)+','+Y(sol[i]).toFixed(1));
+    for(var i=0;i<=fut;i++){curP.push(X(past+i).toFixed(1)+','+Y(cur[i]).toFixed(1));fullP.push(X(past+i).toFixed(1)+','+Y(full[i]).toFixed(1));}
+    var greenArea=solP.join(' ')+' '+curP.join(' ')+' '+X(n).toFixed(1)+','+Y(0).toFixed(1)+' '+X(0).toFixed(1)+','+Y(0).toFixed(1);
+    var wedge=fullP.join(' ')+' '+curP.slice().reverse().join(' ');
+    var tX=X(past).toFixed(1);
+    var ylab='position:absolute;left:2px;font-size:10px;color:var(--text-muted);background:rgba(255,255,255,.72);padding:0 3px;border-radius:3px;line-height:1.2;pointer-events:none';
+    return '<div style="position:relative">'
+      +'<svg viewBox="0 0 '+w+' '+h+'" width="100%" height="'+h+'" preserveAspectRatio="none" style="display:block">'
+      +'<polygon points="'+greenArea+'" fill="hsl(86 45% 92%)"/>'
+      +'<polygon points="'+wedge+'" fill="hsl(240 55% 93%)" opacity="0.8"/>'
+      +'<line x1="'+tX+'" x2="'+tX+'" y1="'+padT+'" y2="'+(h-padB)+'" stroke="var(--border-strong)" stroke-dasharray="1 3.5" stroke-linecap="round"/>'
+      +'<polyline points="'+solP.join(' ')+'" fill="none" stroke="var(--text-success)" stroke-width="2.6"/>'
+      +'<polyline points="'+curP.join(' ')+'" fill="none" stroke="var(--text-success)" stroke-width="2.1" stroke-dasharray="1 3.5" stroke-linecap="round" opacity="0.8"/>'
+      +'<polyline points="'+fullP.join(' ')+'" fill="none" stroke="var(--primary)" stroke-width="2.6" stroke-dasharray="1 3.5" stroke-linecap="round"/>'
+      +'</svg>'
+      +'<span style="'+ylab+';top:2px">'+fmtK(mx)+'</span><span style="'+ylab+';top:50%;transform:translateY(-50%)">'+fmtK(mx/2)+'</span><span style="'+ylab+';bottom:3px">$0</span>'
+      +'</div>';
+  }
+  function savChartInner(props,apprAnn){
+    var without12=props.reduce(function(t,c){return t+c.without12;},0),next12=props.reduce(function(t,c){return t+c.next12;},0);
+    var cf=S.savChart!=='counterfactual';
+    var sbtn='border:none;font:inherit;font-size:11px;padding:3px 9px;cursor:pointer;line-height:1.5';
+    var toggle='<div style="display:flex;justify-content:flex-end;margin-bottom:8px"><div style="display:inline-flex;border:1px solid var(--border);border-radius:6px;overflow:hidden">'
+      +'<button data-act="savchart" data-val="cashflow" style="'+sbtn+';background:'+(cf?'hsl(240 24% 95%)':'transparent')+';color:'+(cf?'var(--text-primary)':'var(--text-muted)')+';font-weight:'+(cf?'600':'500')+'">Cash Flow View</button>'
+      +'<button data-act="savchart" data-val="counterfactual" style="'+sbtn+';border-left:1px solid var(--border);background:'+(!cf?'hsl(240 24% 95%)':'transparent')+';color:'+(!cf?'var(--text-primary)':'var(--text-muted)')+';font-weight:'+(!cf?'600':'500')+'">Bill View</button>'
+      +'</div></div>';
+    if(cf) return toggle+bankedChart(props)
+      +'<div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text-muted);margin-top:2px"><span>2 yrs ago</span><span>today</span><span>2 yrs ahead</span></div>'
+      +'<div class="sav-legend"><span><i class="k" style="border-color:var(--text-success)"></i> saved so far</span><span><i class="k" style="border-color:var(--text-success);border-top-style:dotted"></i> current pace</span>'+(apprAnn?'<span><i class="k" style="border-color:var(--primary);border-top-style:dotted"></i> approve all proposed</span>':'')+'</div>';
+    return toggle+trajChart({without12:without12,next12:next12},apprAnn)
+      +'<div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text-muted);margin-top:2px"><span>12 mo ago</span><span>today</span><span>12 mo ahead</span></div>'
+      +'<div class="sav-legend"><span><i class="k" style="border-color:var(--text-warning)"></i> without Atrium</span><span><i class="k" style="border-color:var(--text-success)"></i> with Atrium</span>'+(apprAnn?'<span><i class="k" style="border-color:var(--primary);border-top-style:dotted"></i> if you approve all</span>':'')+'<span style="color:var(--text-muted)">dotted = forecast</span></div>';
+  }
+  function renderSavings(){
+    var byProp=S.savView==='property';
+    var toggle='<div style="display:flex;gap:6px;margin-bottom:1rem"><button class="cf-pill" data-act="savview" data-val="property" aria-pressed="'+byProp+'">By property</button><button class="cf-pill" data-act="savview" data-val="type" aria-pressed="'+(!byProp)+'">By solution type</button></div>';
+    var grid;
+    if(byProp){
+      grid=DATA.contracted.map(function(c){
+        var rate=Math.round((c.without12-c.next12)/c.without12*100);
+        var status='<span style="display:inline-flex;align-items:center;gap:4px;color:var(--text-success);font-size:13px;font-weight:500"><i class="ti ti-leaf"></i> saving '+rate+'%</span>';
+        return '<button class="cf-sq" data-act="savleaf" data-val="'+c.id+'" style="display:flex;flex-direction:column;gap:4px;min-height:112px"><span style="font-size:14px;font-weight:600">'+esc(c.name)+'</span><span style="font-size:11px;color:var(--text-muted)">Saved to date</span><span class="cf-amt" style="font-size:21px;color:var(--text-success);margin-top:-2px">'+fmtK(c.saved)+'</span><span style="margin-top:auto;display:flex;justify-content:space-between;align-items:center">'+status+'<i class="ti ti-arrow-right" style="color:var(--text-muted)"></i></span></button>';
+      }).join('');
+    } else {
+      grid=DATA.savedByType.map(function(t){
+        return '<button class="cf-sq" data-act="savleaf" data-val="'+esc(t.type)+'" style="display:flex;flex-direction:column;gap:5px;min-height:130px"><span style="font-size:15px;font-weight:600">'+esc(t.type)+'</span><span style="font-size:12px;color:var(--text-muted)">Saved to date</span><span class="cf-amt" style="font-size:24px;color:var(--text-success);margin-top:-3px">'+fmtK(t.saved)+'</span><span style="margin-top:auto;display:flex;justify-content:space-between;align-items:center"><span style="color:var(--text-muted);font-size:13px">on pace for +'+fmtK(t.pace)+'/yr</span><i class="ti ti-arrow-right" style="color:var(--text-muted)"></i></span></button>';
+      }).join('');
+    }
+    var tot=DATA.contracted.reduce(function(t,c){return t+c.saved;},0);
+    app.innerHTML='<div style="margin-bottom:1.1rem">'+backPill()+'<h1 style="margin:14px 0 0;font-size:23px">Savings so far</h1><p style="color:var(--text-secondary);margin:.3rem 0 0">You’ve saved <b style="color:var(--text-success)">'+fmtK(tot)+'</b> with Atrium. Open any '+(byProp?'hotel':'solution type')+' to see where it’s headed.</p></div>'+('<div class="card" style="margin-bottom:18px">'+savChartInner(DATA.contracted,sols().reduce(function(t,s){return t+s.savings;},0))+'</div>')+toggle+'<div class="grid">'+grid+'</div>';
+  }
+  function renderSavingsLeaf(){
+    if(S.savView==='property'){
+      var c=DATA.contracted.find(function(x){return x.id===S.savLeaf;});
+      if(!c){S.screen='savings';return renderSavings();}
+      var apprAnn=approveAnnualFor(c.name),apprN=approveCountFor(c.name);
+      var cta=apprAnn?'<div style="margin-top:16px;background:var(--bg-success);border:1px solid hsl(86 40% 82%);border-radius:12px;padding:14px 16px"><div style="font-size:14px">Approve the '+apprN+' proposed project'+(apprN>1?'s':'')+' at '+esc(c.name)+' to save about <b>'+fmtK(apprAnn)+' a year</b> more.</div><button class="cf-btn" data-act="approvehere" data-val="'+esc(c.name)+'" style="margin-top:10px"><i class="ti ti-check"></i> Review &amp; approve here</button></div>':'';
+      app.innerHTML='<div style="margin-bottom:1.1rem">'+backPill()+'<h1 style="margin:14px 0 0;font-size:23px">'+esc(c.name)+'</h1><p style="color:var(--text-secondary);margin:.35rem 0 0">You’ve saved <b style="color:var(--text-success)">'+fmtK(c.saved)+'</b> with Atrium — on track to keep saving.</p></div>'
+        +'<div class="card">'+savChartInner([c],apprAnn)+cta+'</div>';
+    } else {
+      var t=DATA.savedByType.find(function(x){return x.type===S.savLeaf;});
+      if(!t){S.screen='savings';return renderSavings();}
+      var live=sols().filter(function(s){return s.type===t.type;}),aa=sumSav(live),an=live.length;
+      var cta2=aa?'<div style="margin-top:16px;background:var(--bg-success);border:1px solid hsl(86 40% 82%);border-radius:12px;padding:14px 16px"><div style="font-size:14px">You have '+an+' more '+esc(t.type)+' project'+(an>1?'s':'')+' proposed — approve to add about <b>'+fmtK(aa)+' a year</b>.</div><button class="cf-btn" data-act="approvetype" data-val="'+esc(t.type)+'" style="margin-top:10px"><i class="ti ti-check"></i> Review &amp; approve</button></div>':'';
+      app.innerHTML='<div style="margin-bottom:1.1rem">'+backPill()+'<h1 style="margin:14px 0 0;font-size:23px">'+esc(t.type)+'</h1><p style="color:var(--text-secondary);margin:.3rem 0 0">Cumulative savings across your portfolio.</p></div>'
+        +'<div class="card"><div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:10px"><div><div style="font-size:12px;color:var(--text-muted)">Saved to date</div><div class="mono" style="font-size:27px;font-weight:700;color:var(--text-success);letter-spacing:-.02em">'+fmtK(t.saved)+'</div></div><div style="text-align:right"><div style="font-size:12px;color:var(--text-muted)">On pace next year</div><div class="mono" style="font-size:18px;font-weight:700">+'+fmtK(t.pace)+'</div></div></div>'+cumChart(t.saved,t.pace)+savAxis()
+        +'<div class="sav-legend"><span><i class="k" style="border-color:var(--text-success)"></i> saved so far</span><span><i class="k" style="border-color:var(--text-success);border-top-style:dotted"></i> forecast</span></div>'+cta2+'</div>';
+    }
+  }
+
+  // ================= Roadmap shell (this prototype) =================
+  // Selection: every firm (measured) project starts in the recommended "Now" set.
+  // Estimated projects are awareness-only — never selectable or counted.
+  DATA.solutions.forEach(function(s){if(!est(s)&&s.u!==0)S.excl[s.id]=1;});
+  function measured(){return sols().filter(function(s){return !est(s);});}
+  function estimated(){return sols().filter(function(s){return est(s);});}
+  function included(){return measured().filter(function(s){return !S.excl[s.id];});}
+  function on(s){return !est(s)&&!S.excl[s.id];}
+
+  // Plain-English "what this is" — a lookup by type so the shared DATA stays untouched.
+  var WHAT={
+    'Solar + Batteries':'Generate your own power with rooftop solar and store it in on-site batteries.',
+    'Heat Pump Water Heaters':'Replace gas water heaters with efficient electric heat-pump ones.',
+    'LED Lighting':'Swap old bulbs and fixtures for low-energy LED lighting.',
+    'Smart Thermostats':'Add thermostats that adjust room temperature automatically to cut waste.',
+    'Building Controls (EMS)':'Run the building’s heating, cooling and fans on one efficient automatic schedule.',
+    'Kitchen Hood Controls':'Make kitchen exhaust fans speed up and slow down with cooking instead of running full-blast.',
+    'Pool Heat Pump':'Heat the pool with an efficient electric heat pump instead of a gas heater.',
+    'Low-Flow Water Fixtures':'Fit taps and showerheads that use less hot water.',
+    'Ozone Laundry':'Wash laundry in cold water using ozone, cutting water-heating costs.'
+  };
+  var ICON={'Solar + Batteries':'sun','Heat Pump Water Heaters':'flame','LED Lighting':'bulb','Smart Thermostats':'temperature','Building Controls (EMS)':'adjustments','Kitchen Hood Controls':'wind','Pool Heat Pump':'pool','Low-Flow Water Fixtures':'droplet','Ozone Laundry':'wash'};
+  var SHORT={'Solar + Batteries':'Solar','Heat Pump Water Heaters':'Water heat','LED Lighting':'LED','Smart Thermostats':'Thermostats','Building Controls (EMS)':'Controls','Kitchen Hood Controls':'Hood','Pool Heat Pump':'Pool','Low-Flow Water Fixtures':'Low-flow','Ozone Laundry':'Laundry'};
+  function plainWhat(t){return WHAT[t]||'';}
+  function typeIcon(t){return ICON[t]||'bolt';}
+  function shortName(t){return SHORT[t]||t;}
+  function whenText(s){
+    if(/starts/i.test(s.install)) return esc(s.install);
+    var when=s.u===0?'start now':s.u===1?'start in a few months':'start next year';
+    return esc(s.install)+' · '+when;
+  }
+
+  // Goal seek: fill the plan (in recommended order) until the yearly target is reached.
+  function applyGoal(target){
+    S.goal=target;S.plMode='goal';
+    var order=measured().slice().sort(recSort);
+    S.excl={};order.forEach(function(s){S.excl[s.id]=1;});
+    var run=0;
+    for(var i=0;i<order.length;i++){ if(run>=target)break; S.excl[order[i].id]=0; run+=order[i].savings; }
+  }
+
+  // The ramp-to-goal chart: yearly savings switch on as each selected project comes online.
+  function rmRamp(){
+    var inc=included();
+    var total=sumSav(inc), goal=(S.plMode==='goal'&&S.goal)?S.goal:0;
+    var w=320,h=94,padX=8,padT=12,padB=16,AX=13;
+    var base={0:0.5,1:4,2:8.5};
+    function weeks(s){var m=/about (\d+) week/.exec(s.install||'');return m?+m[1]:3;}
+    function doneM(s){return Math.min(AX, base[s.u]+weeks(s)/4.345+0.4);}
+    var evts=inc.map(function(s){return {m:doneM(s),v:s.savings};}).sort(function(a,b){return a.m-b.m;});
+    var mx=Math.max(total,goal,1)*1.14;
+    function X(m){return padX+m/AX*(w-2*padX);}
+    function Y(v){return padT+(1-v/mx)*(h-padT-padB);}
+    var series=[],cum=0,ei=0;
+    for(var m=0;m<=AX;m+=0.5){ while(ei<evts.length&&evts[ei].m<=m+1e-9){cum+=evts[ei].v;ei++;} series.push([m,cum]); }
+    var line=series.map(function(p){return X(p[0]).toFixed(1)+','+Y(p[1]).toFixed(1);}).join(' ');
+    var area=line+' '+X(AX).toFixed(1)+','+Y(0).toFixed(1)+' '+X(0).toFixed(1)+','+Y(0).toFixed(1);
+    var goalEl=goal?'<line x1="'+padX+'" x2="'+(w-padX)+'" y1="'+Y(goal).toFixed(1)+'" y2="'+Y(goal).toFixed(1)+'" stroke="var(--primary)" stroke-width="1.4" stroke-dasharray="3 3"/>'
+       +'<text x="'+(w-padX)+'" y="'+(Y(goal)-3).toFixed(1)+'" text-anchor="end" font-size="9" fill="var(--primary)">goal '+fmtK(goal)+'</text>':'';
+    var endY=Y(series[series.length-1][1]);
+    var ylab='position:absolute;left:3px;top:2px;font-size:9.5px;font-weight:600;color:var(--text-success);background:rgba(255,255,255,.72);padding:0 3px;border-radius:3px;pointer-events:none';
+    var xlab='position:absolute;bottom:1px;font-size:9.5px;color:var(--text-muted);transform:translateX(-50%);white-space:nowrap';
+    return '<div style="position:relative">'
+      +'<svg viewBox="0 0 '+w+' '+h+'" width="100%" height="'+h+'" preserveAspectRatio="none" style="display:block">'
+      +'<polygon points="'+area+'" fill="hsl(86 45% 92%)"/>'
+      +goalEl
+      +'<polyline points="'+line+'" fill="none" stroke="var(--text-success)" stroke-width="2.5"/>'
+      +'<line x1="'+X(0).toFixed(1)+'" x2="'+X(0).toFixed(1)+'" y1="'+padT+'" y2="'+(h-padB)+'" stroke="var(--text-warning)" stroke-width="1.5"/>'
+      +'<circle cx="'+X(AX).toFixed(1)+'" cy="'+endY.toFixed(1)+'" r="2.6" fill="var(--text-success)"/>'
+      +'</svg>'
+      +'<span style="'+ylab+'">'+(total?'+':'')+fmtK(total)+'/yr</span>'
+      +'<span style="'+xlab+';left:'+(X(0)/w*100).toFixed(1)+'%">today</span>'
+      +'<span style="'+xlab+';left:'+(X(6)/w*100).toFixed(1)+'%">+6 mo</span>'
+      +'<span style="'+xlab+';left:'+(X(12)/w*100).toFixed(1)+'%">+12 mo</span>'
+      +'</div>';
+  }
+
+  // the today origin: where you are now, tapping into the shared savings drill.
+  function originCard(){
+    var tot=DATA.contracted.reduce(function(t,c){return t+c.saved;},0);
+    return '<button class="rm-origin" data-act="go" data-val="savings">'
+      +'<div class="rm-origin-top"><span class="rm-origin-v">'+fmtK(tot)+' saved with Atrium so far</span><span class="rm-origin-k">where you are today · see what’s ahead <i class="ti ti-arrow-right"></i></span></div>'
+      +savHeroSvg()+'</button>';
+  }
+
+  // the guiding-hand hero: benefit number + LOUD approve + goal tool + ramp chart.
+  function heroBlock(){
+    var inc=included(),n=inc.length,nFirm=measured().length,props=distinctProps(inc);
+    var total=sumSav(inc),up=inc.reduce(function(t,s){return t+net(s);},0),a=amtUnit(total);
+    var cta=n?'<button class="rm-approve" data-act="approve-selected"><i class="ti ti-circle-check"></i> Review &amp; approve</button>'
+             :'<button class="rm-approve" disabled><i class="ti ti-circle-check"></i> Review &amp; approve</button>';
+    var ctx=n?(n+' of '+nFirm+' projects ready · '+props+' hotel'+(props>1?'s':'')+' · about '+fmtK(up)+' to install, or $0 down with a loan or lease')
+             :'Nothing chosen yet — set a goal or pick projects below.';
+    function qp(m,l){return '<button class="cf-pill" data-act="'+m+'" aria-pressed="'+(S.plMode===m)+'">'+l+'</button>';}
+    var goalVal=(S.plMode==='goal'&&S.goal)?Math.round(S.goal/1000):'';
+    var goalRow='<div class="rm-goal"><span class="rm-goal-label"><i class="ti ti-target"></i> Aim for a yearly goal</span>'
+      +'<span class="rm-goal-input"><span>$</span><input id="rm-goal" type="text" inputmode="numeric" placeholder="150" value="'+goalVal+'"><span>K/yr</span></span>'
+      +'<button class="cf-btn" data-act="setgoal">Build it</button>'
+      +'<span class="rm-quick">'+qp('rec','Recommended')+qp('all','Everything')+qp('none','Clear')+'</span></div>';
+    var fb='';
+    if(S.plMode==='goal'&&S.goal){
+      fb=(total>=S.goal)
+        ? '<div class="rm-goal-fb"><i class="ti ti-check"></i> To reach '+fmtK(S.goal)+' a year, we lined up '+n+' project'+(n>1?'s':'')+' — <b>+'+fmtK(total)+' a year</b>. Fine-tune any below.</div>'
+        : '<div class="rm-goal-fb"><i class="ti ti-info-circle"></i> Your proposed projects add up to <b>+'+fmtK(total)+' a year</b>, short of '+fmtK(S.goal)+'. Add more hotels below to go higher.</div>';
+    }
+    return '<div class="rm-hero"><div class="rm-hero-row"><div class="rm-hero-amt mono">'+(n?'+':'')+a.a+'<span class="u"> '+a.u+'</span></div>'+cta+'</div>'
+      +'<div class="rm-hero-ctx">'+ctx+'</div>'+goalRow+fb
+      +'<div class="rm-ramp">'+rmRamp()+'<div class="rm-ramp-cap">Each project switches on its yearly savings when it comes online. Tap any project for cash, loan or lease.</div></div></div>';
+  }
+
+  // the time-scaled map: today on the left, a real month axis to the right, one lane per hotel.
+  function laneProjects(name){return sols().filter(function(s){return s.prop===name;});}
+  function rmMap(){
+    var lanes=DATA.contracted.filter(function(c){return laneProjects(c.name).length;});
+    var oPct=14,AX=12,xRight=4,base={0:0.5,1:4,2:8.5},span={0:2.6,1:3,2:3};
+    function mx(m){return oPct + m/AX*(100-oPct-xRight);}
+    var ticks=[{m:0,l:'Today · Jul',t:1},{m:3,l:'Oct'},{m:6,l:'Jan ’27'},{m:9,l:'Apr'},{m:12,l:'Jul ’27'}];
+    var axis='<div class="rm-axis">'+ticks.map(function(t){
+      return '<span class="'+(t.t?'rm-today-lbl':'rm-tick')+'" style="left:'+mx(t.m).toFixed(1)+'%">'+t.l+'</span>';
+    }).join('')+'</div>';
+    var lanesHtml=lanes.map(function(c){
+      var ps=laneProjects(c.name),byU={0:[],1:[],2:[]};
+      ps.forEach(function(s){byU[s.u].push(s);});
+      var placed=[];
+      [0,1,2].forEach(function(u){ byU[u].sort(recSort).forEach(function(s,i){ var m=Math.min(base[u]+i*1.3, base[u]+span[u]); placed.push({s:s,m:m,x:mx(m)}); }); });
+      var selSum=ps.filter(function(s){return !est(s)&&on(s);}).reduce(function(t,s){return t+s.savings;},0);
+      // through-line: earliest firm quick win -> the later solar it helps fund.
+      var early=placed.filter(function(p){return !est(p.s)&&p.s.u<2;}).sort(function(a,b){return a.x-b.x;})[0];
+      var late=placed.filter(function(p){return p.s.u===2;}).sort(function(a,b){return a.x-b.x;})[0];
+      var conn=(early&&late&&late.x>early.x)?'<div class="rm-conn" style="left:'+early.x.toFixed(1)+'%;width:'+(late.x-early.x).toFixed(1)+'%"></div>':'';
+      var pills=placed.map(function(p){
+        var s=p.s,cls=est(s)?'est':(on(s)?'on':'off');
+        return '<button class="rm-pill '+cls+'" data-act="leaf" data-val="'+s.id+'" style="left:'+p.x.toFixed(1)+'%" title="'+esc(s.type)+' — '+esc(s.prop)+'"><i class="ti ti-'+typeIcon(s.type)+'"></i><span class="lab">'+esc(shortName(s.type))+'</span></button>';
+      }).join('');
+      var grids=ticks.filter(function(t){return t.m>0;}).map(function(t){return '<div class="rm-grid" style="left:'+mx(t.m).toFixed(1)+'%"></div>';}).join('');
+      var sum=selSum?'<span class="rm-lane-sum">+'+perTile(selSum)+' chosen</span>':'<span class="rm-lane-sum" style="color:var(--text-muted)">none chosen</span>';
+      return '<div class="rm-lane"><div class="rm-lane-head"><span class="rm-lane-name"><i class="ti ti-building" style="color:var(--text-muted);font-size:13px"></i> '+esc(c.name)+'</span>'+sum+'</div>'
+        +'<div class="rm-track"><div class="rm-past" style="width:'+oPct+'%"></div><div class="rm-today" style="left:'+oPct+'%"></div>'+grids+conn+pills+'</div></div>';
+    }).join('');
+    var prN=prospects().length;
+    var addLane=prN?'<button class="rm-addlane" data-act="go" data-val="signup"><i class="ti ti-plus"></i> '+prN+' more propert'+(prN>1?'ies':'y')+' not on your roadmap yet — add a lane</button>':'';
+    var legend='<div class="rm-legend"><span><i class="sw on"></i> chosen to approve</span><span><i class="sw off"></i> not chosen</span><span><i class="sw est"></i> still being estimated</span><span><i class="ti ti-line-dashed"></i> funds a later project</span></div>';
+    var note='<div class="rm-mapnote"><i class="ti ti-bulb"></i><span>Early quick wins start saving right away and help fund the bigger projects later. Tap any project for the numbers.</span></div>';
+    return '<div class="rm-mapwrap"><div class="rm-maplabel"><i class="ti ti-map-2"></i> Your plan on a timeline — today on the left, the year ahead to the right</div>'
+      +'<div class="rm-scroll"><div class="rm-inner">'+axis+lanesHtml+'</div></div>'+legend+note+addLane+'</div>';
+  }
+
+  // the stable project list — grouped Now/Soon/Later, order never changes when you toggle.
+  function itemRow(s){
+    var nameBtn='<button class="rm-item-name" data-act="leaf" data-val="'+s.id+'"><i class="ti ti-'+typeIcon(s.type)+'" style="color:var(--text-muted)"></i> '+esc(s.type)+' <i class="ti ti-chevron-right" style="font-size:14px;color:var(--text-muted)"></i></button>';
+    if(est(s)){
+      return '<div class="rm-item est" data-row="'+s.id+'">'
+        +'<span class="pl-lock" title="Still an estimate"><i class="ti ti-lock"></i></span>'
+        +'<div class="rm-item-main" data-act="leaf" data-val="'+s.id+'">'+nameBtn
+          +'<div class="rm-what">'+esc(plainWhat(s.type))+'</div>'
+          +'<div class="rm-item-meta"><span><i class="ti ti-map-pin"></i> '+esc(s.prop)+'</span><span class="pl-need"><i class="ti ti-plug-connected"></i> connect data to firm up</span></div></div>'
+        +'<div class="rm-item-fig"><div class="rm-item-sav" style="color:var(--text-secondary)">'+perRange(savLo(s),savHi(s))+'</div><div class="rm-item-cost">estimate</div></div></div>';
+    }
+    var inc=on(s);
+    return '<div class="rm-item'+(inc?'':' off')+'" data-row="'+s.id+'">'
+      +'<button class="pl-tog" data-act="toggle" data-val="'+s.id+'" aria-pressed="'+inc+'" title="'+(inc?'Chosen — tap to remove':'Tap to add')+'"></button>'
+      +'<div class="rm-item-main" data-act="leaf" data-val="'+s.id+'">'+nameBtn
+        +'<div class="rm-what">'+esc(plainWhat(s.type))+'</div>'
+        +'<div class="rm-item-meta"><span><i class="ti ti-map-pin"></i> '+esc(s.prop)+'</span><span><i class="ti ti-clock"></i> '+whenText(s)+'</span>'+(s.note?'<span style="color:var(--text-warning);font-weight:600"><i class="ti ti-alarm"></i> time-sensitive</span>':'')+'</div></div>'
+      +'<div class="rm-item-fig"><div class="rm-item-sav">'+per(s.savings)+'</div><div class="rm-item-cost">'+costLabel(s)+'</div></div></div>';
+  }
+  function bandBlock(u){
+    var all=sols().filter(function(s){return s.u===u;});
+    if(!all.length)return '';
+    var firm=all.filter(function(s){return !est(s);}).sort(recSort);
+    var ests=all.filter(est).sort(recSort);
+    var ordered=firm.concat(ests); // fixed order — toggling never reshuffles
+    var selSum=firm.filter(on).reduce(function(t,s){return t+s.savings;},0);
+    var when=['Start now','In a few months','Next year'][u];
+    var icon=['player-play','calendar','calendar-time'][u];
+    return '<div class="rm-band"><div class="rm-band-head"><span class="rm-band-t"><i class="ti ti-'+icon+'"></i> '+UL[u]+'</span>'
+      +'<span class="rm-band-sum"><span class="rm-band-when">'+when+'</span> · '+(selSum?'+'+perTile(selSum)+' chosen':all.length+' project'+(all.length>1?'s':''))+'</span></div>'
+      +ordered.map(itemRow).join('')+'</div>';
+  }
+
+  // adding a NEW property is a different decision — distinct green "add a lane" treatment.
+  function addPropsBlock(){
+    var list=prospects();if(!list.length)return '';
+    var amt=amtUnit(sumCf(list));
+    var rows=list.map(function(p){
+      var cta=p.ready?'<button class="cf-btn" data-act="sign" data-val="'+p.id+'">Add &amp; sign</button>':'<button class="cf-pill" data-act="step" data-val="'+p.id+'">'+esc(p.step)+'</button>';
+      return '<div class="rm-add-row" data-row="'+p.id+'"><span class="rm-add-ic"><i class="ti ti-plus"></i></span>'
+        +'<div style="min-width:0;flex:1"><div style="font-weight:600">'+esc(p.name)+'</div><div style="font-size:12.5px;color:var(--text-muted)">'+(p.est?'Estimated · '+esc(p.step):esc(p.step))+'</div></div>'
+        +'<div style="text-align:right;flex-shrink:0"><div style="font-weight:700;color:var(--text-success)">'+perTile(p.cf)+'</div><div style="margin-top:6px">'+cta+'</div></div></div>';
+    }).join('');
+    return '<div class="rm-add"><div class="rm-add-h"><i class="ti ti-plus"></i> Add more hotels to your roadmap</div>'
+      +'<div class="rm-add-sub">A different move from approving work above — put a new hotel on the map. Estimated '+amt.a+' '+amt.u+' more once it’s saving with Atrium.</div>'
+      +rows+'</div>';
+  }
+
+  function renderRoadmap(){
+    var head='<div class="rm-head"><div><p style="color:var(--text-secondary);margin:0;font-size:14px">'+esc(DATA.portfolio)+'</p>'
+      +'<h1 style="margin:.15rem 0 0;font-size:22px">Your savings roadmap</h1></div>'
+      +'<div class="mtoggle"><button data-period="annual" aria-pressed="'+(S.period==='annual')+'">Annual</button><button data-period="monthly" aria-pressed="'+(S.period==='monthly')+'">Monthly</button></div></div>';
+    var appd=DATA.solutions.filter(function(s){return S.approved[s.id];});
+    var au=amtUnit(sumSav(appd));
+    var approvedEl=appd.length?'<div class="approved-strip" style="margin-top:16px"><i class="ti ti-circle-check"></i> Approved this session — <b>'+au.a+' '+au.u+'</b> across '+appd.length+' project'+(appd.length>1?'s':'')+'</div>':'';
+    app.innerHTML=head+heroBlock()+originCard()+rmMap()+bandBlock(0)+bandBlock(1)+bandBlock(2)+addPropsBlock()+approvedEl;
+  }
+  function renderLeaf(){
+    var s=DATA.solutions.find(function(x){return x.id===S.leafId;});
+    if(!s||S.approved[s.id]){S.screen='home';return renderRoadmap();}
+    var head='<div style="display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:16px">'+backPill()+(est(s)?'':'<span style="display:flex;align-items:center;gap:8px"><span style="font-size:13px;color:var(--text-muted)">Amounts:</span>'+perToggle()+'</span>')+'</div>';
+    app.innerHTML=head+solutionCard(s);
+  }
+  function renderSignup(){
+    var list=prospects();
+    var rows=list.map(function(p){
+      var cta=p.ready?'<button class="cf-btn" data-act="sign" data-val="'+p.id+'">Add &amp; sign</button>':'<button class="cf-pill" data-act="step" data-val="'+p.id+'">'+esc(p.step)+'</button>';
+      return '<div class="rm-add-row" data-row="'+p.id+'"><span class="rm-add-ic"><i class="ti ti-plus"></i></span>'
+        +'<div style="min-width:0;flex:1"><div style="font-weight:600">'+esc(p.name)+'</div><div style="font-size:12.5px;color:var(--text-muted)">'+(p.est?'Estimated · '+esc(p.step):esc(p.step))+'</div></div>'
+        +'<div style="text-align:right;flex-shrink:0"><div style="font-weight:700;color:var(--text-success)">'+perTile(p.cf)+'</div><div style="margin-top:6px">'+cta+'</div></div></div>';
+    }).join('');
+    app.innerHTML='<div style="margin-bottom:1.25rem">'+backPill()+'<h1 style="margin:14px 0 0">Add hotels to your roadmap</h1><p style="color:var(--text-secondary);margin:.3rem 0 0">Each one becomes a new lane on your timeline. Estimated yearly savings once it’s saving with Atrium.</p></div>'
+      +(list.length?'<div>'+rows+'</div>':'<div class="card" style="text-align:center;padding:2rem"><i class="ti ti-circle-check" style="font-size:26px;color:var(--text-success)"></i><p style="margin:.5rem 0 0">Every hotel is on your roadmap.</p></div>');
+  }
+
+  // "Review & approve" steps through the chosen projects one card at a time (shared leaf each step).
+  function renderReview(){
+    if(!S.wf||S.wfIdx>=S.wf.length)return renderReviewDone();
+    var s=DATA.solutions.find(function(x){return x.id===S.wf[S.wfIdx];});
+    if(!s){S.wfIdx++;return renderReview();}
+    var n=S.wf.length,step=S.wfIdx+1;
+    var dots=S.wf.map(function(id,i){var dec=S.wfDec[id];var cls=i===S.wfIdx?'cur':(dec==='approve'?'ok':(dec==='skip'?'sk':''));return '<span class="wf-dot '+cls+'"></span>';}).join('');
+    var head='<div class="wf-head">'
+      +'<button class="cf-pill" data-act="wf-prev" style="display:inline-flex;align-items:center;gap:4px"><i class="ti ti-arrow-left"></i> '+(step>1?'Back':'Exit')+'</button>'
+      +'<div class="wf-steplabel">Step <b>'+step+'</b> of '+n+'</div>'
+      +'<button class="wf-skip" data-act="wf-skip">Skip <i class="ti ti-arrow-right"></i></button>'
+      +'</div><div class="wf-dots">'+dots+'</div>';
+    app.innerHTML=head+solutionCard(s);
+  }
+  function renderReviewDone(){
+    var appr=(S.wf||[]).filter(function(id){return S.wfDec[id]==='approve';});
+    var skip=(S.wf||[]).filter(function(id){return S.wfDec[id]==='skip';});
+    var apprSols=appr.map(function(id){return DATA.solutions.find(function(x){return x.id===id;});}).filter(Boolean);
+    var au=amtUnit(apprSols.reduce(function(t,s){return t+s.savings;},0));
+    var list=apprSols.map(function(s){return '<div class="wf-donerow"><i class="ti ti-circle-check" style="color:var(--text-success)"></i> '+esc(s.type)+' <span style="color:var(--text-muted)">· '+esc(s.prop)+'</span><span class="mono" style="margin-left:auto;color:var(--text-success);font-weight:600">'+per(s.savings)+'</span></div>';}).join('');
+    app.innerHTML='<div class="wf-done">'
+      +'<div class="wf-donehero"><i class="ti ti-circle-check"></i></div>'
+      +'<h1 style="margin:12px 0 2px;font-size:23px">'+(appr.length?'Approving '+appr.length+' project'+(appr.length>1?'s':''):'Nothing approved')+'</h1>'
+      +'<p style="color:var(--text-secondary);margin:0">'+(appr.length?'<b style="color:var(--text-success)">+'+au.a+' '+au.u+'</b> in new savings'+(skip.length?' · '+skip.length+' skipped':''):(skip.length?'You skipped all '+skip.length+' for now.':''))+'</p>'
+      +(list?'<div class="wf-donelist">'+list+'</div>':'')
+      +(appr.length?'<p style="font-size:13px;color:var(--text-muted);margin:14px 0 0"><i class="ti ti-file-text"></i> We’ll send your contract'+(appr.length>1?'s':'')+' to e-sign.</p>':'')
+      +'<button class="rm-approve" data-act="wf-exit" style="width:100%;justify-content:center;margin-top:18px">Back to roadmap</button>'
+      +'</div>';
+  }
+
+  function render(){
+    if(S.screen==='leaf')renderLeaf();
+    else if(S.screen==='signup')renderSignup();
+    else if(S.screen==='savings')renderSavings();
+    else if(S.screen==='savleaf')renderSavingsLeaf();
+    else if(S.screen==='review')renderReview();
+    else renderRoadmap();
+  }
+  function unlockRow(id,amt,then){var row=app.querySelector('[data-row="'+id+'"]');S.unlocked+=amt;if(row){row.classList.add('cf-fade');setTimeout(then,340);}else then();}
+  function setGoalFromInput(){var inp=document.getElementById('rm-goal');var kv=inp?parseFloat(String(inp.value).replace(/[^0-9.]/g,'')):NaN;if(kv>0)applyGoal(Math.round(kv*1000));render();}
+  app.addEventListener('keydown',function(e){ if(e.key==='Enter'&&e.target&&e.target.id==='rm-goal'){e.preventDefault();setGoalFromInput();} });
+  app.addEventListener('click',function(e){
+    var d=e.target.closest('[data-disc]'); if(d){S.disc[d.dataset.disc]=!S.disc[d.dataset.disc];render();return;}
+    var pertog=e.target.closest('[data-period]'); if(pertog){S.period=pertog.dataset.period;render();return;}
+    var seg=e.target.closest('[data-segmode]'); if(seg){S.mode[seg.dataset.sol]=seg.dataset.segmode;render();return;}
+    var el=e.target.closest('[data-act],[data-approve]'); if(!el)return;
+    if(el.dataset.approve){var s=DATA.solutions.find(function(x){return x.id===el.dataset.approve;});var m=curMode(s);S.approvedMode[s.id]=m;S.excl[s.id]=0;
+      if(S.screen==='review'){S.approved[s.id]=1;S.wfDec[el.dataset.approve]='approve';S.wfIdx++;render();return;}
+      window.open('esign.html?doc='+encodeURIComponent(s.type+' — '+s.prop),'_blank');S.approved[s.id]=1;S.screen='home';render();return;}
+    var a=el.dataset.act, v=el.dataset.val;
+    if(a==='connect'){el.textContent='Request sent →';el.disabled=true;el.style.opacity=.7;}
+    else if(a==='toggle'){var ts=DATA.solutions.find(function(x){return x.id===v;});if(ts&&!est(ts)){S.excl[v]=!S.excl[v];S.plMode='custom';render();}}
+    else if(a==='all'){S.excl={};S.plMode='all';S.goal=null;render();}
+    else if(a==='rec'){S.excl={};DATA.solutions.forEach(function(s){if(!est(s)&&s.u!==0)S.excl[s.id]=1;});S.plMode='rec';S.goal=null;render();}
+    else if(a==='none'){measured().forEach(function(s){S.excl[s.id]=1;});S.plMode='none';S.goal=null;render();}
+    else if(a==='setgoal'){setGoalFromInput();}
+    else if(a==='leaf'){S.leafId=v;S.screen='leaf';render();}
+    else if(a==='go'){S.screen=v;render();}
+    else if(a==='savview'){S.savView=v;render();}
+    else if(a==='savchart'){S.savChart=v;render();}
+    else if(a==='savleaf'){S.savLeaf=v;S.screen='savleaf';render();}
+    else if(a==='approve-selected'){S.wf=included().slice().sort(recSort).map(function(x){return x.id;});S.wfIdx=0;S.wfDec={};if(S.wf.length)S.screen='review';render();}
+    else if(a==='wf-skip'){S.wfDec[S.wf[S.wfIdx]]='skip';S.wfIdx++;render();}
+    else if(a==='wf-prev'){if(S.wfIdx>0)S.wfIdx--;else S.screen='home';render();}
+    else if(a==='wf-exit'){S.screen='home';render();}
+    else if(a==='approvehere'){var mh=sols().filter(function(s){return s.prop===v;}).sort(recSort)[0];if(mh){S.leafId=mh.id;S.screen='leaf';}else S.screen='home';render();}
+    else if(a==='approvetype'){var mt=sols().filter(function(s){return s.type===v;}).sort(recSort)[0];if(mt){S.leafId=mt.id;S.screen='leaf';}else S.screen='home';render();}
+    else if(a==='step'){el.textContent='We’ll guide you →';el.disabled=true;el.style.opacity=.6;}
+    else if(a==='sign'){var p=DATA.prospects.find(function(x){return x.id===v;});window.open('esign.html?doc='+encodeURIComponent('New property — '+p.name),'_blank');unlockRow(v,p.cf,function(){S.signed[v]=1;render();});}
+    else if(a==='back'){var B={leaf:'home',signup:'home',savleaf:'savings',savings:'home',review:'home'};S.screen=B[S.screen]||'home';render();}
+  });
+  render();
+})();
+</script>
+</body>
+</html>
