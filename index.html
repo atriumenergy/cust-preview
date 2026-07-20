@@ -28,57 +28,73 @@
   .btn{border:1px solid var(--border-strong);background:var(--surface-2);border-radius:99px;padding:6px 13px;cursor:pointer;font:inherit;font-size:13px;font-weight:500;color:var(--text-secondary);display:inline-flex;align-items:center;gap:6px}
   .btn:hover{border-color:var(--text-muted)}
   .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px}
-  .card{display:flex;flex-direction:column;gap:6px;min-height:150px;background:var(--surface-2);border:1px solid var(--border);border-radius:14px;padding:18px;box-shadow:var(--shadow);text-decoration:none;color:inherit;transition:transform .12s,box-shadow .12s,border-color .12s}
+  .card{display:flex;flex-direction:column;gap:6px;min-height:168px;background:var(--surface-2);border:1px solid var(--border);border-radius:14px;padding:20px;box-shadow:var(--shadow);text-decoration:none;color:inherit;transition:transform .12s,box-shadow .12s,border-color .12s}
   a.card:hover{transform:translateY(-2px);box-shadow:var(--shadow-hover);border-color:var(--border-strong)}
-  .card.soon{opacity:.55;border-style:dashed;box-shadow:none}
-  .idx{width:26px;height:26px;border-radius:8px;background:hsl(240 40% 96%);color:var(--primary);font-weight:700;font-size:13px;display:flex;align-items:center;justify-content:center}
-  .nm{font-size:17px;font-weight:700}
-  .ts{font-size:13px;color:var(--text-secondary)}
+  .card.feat{border-color:hsl(240 40% 88%);background:linear-gradient(180deg,hsl(240 45% 99%),var(--surface-2) 60%)}
+  .idx{width:28px;height:28px;border-radius:8px;background:var(--primary);color:var(--primary-fg);font-weight:700;font-size:14px;display:flex;align-items:center;justify-content:center}
+  .nm{font-size:18px;font-weight:700}
+  .ts{font-size:13.5px;color:var(--text-secondary)}
   .foot{margin-top:auto;display:flex;justify-content:space-between;align-items:center;font-size:13px;color:var(--text-muted)}
-  .note{color:var(--text-muted);font-size:12px;margin-top:18px}
+  .seclabel{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-muted);margin:36px 0 12px;display:flex;align-items:center;gap:8px}
+  .seclabel::after{content:"";flex:1;height:1px;background:var(--border)}
+  .rest{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:9px}
+  .rest a{display:flex;align-items:center;gap:9px;background:var(--surface-2);border:1px solid var(--border);border-radius:11px;padding:12px 14px;text-decoration:none;color:var(--text-secondary);font-size:14px;font-weight:500;transition:border-color .12s,color .12s}
+  .rest a:hover{border-color:var(--border-strong);color:var(--text-primary)}
+  .rest a i{color:var(--text-muted)}
+  .note{color:var(--text-muted);font-size:12px;margin-top:16px}
 </style>
 </head>
 <body>
 <div class="wrap">
   <h1>Atrium — concept preview</h1>
-  <p class="sub">Nine directions for the same product. Open any concept, click around the drill-downs, and tell us what resonates. Sample data throughout — not final visual design.</p>
+  <p class="sub">Three directions, synthesized from the team's feedback. Open each, click through the drill-downs, and tell us what resonates. Sample data throughout — not final visual design.</p>
   <div class="bar">
     <label class="toggle"><input type="checkbox" id="blind"> Blind labels (hide names for interviews)</label>
     <button class="btn" id="shuffle"><i class="ti ti-arrows-shuffle"></i> New order (next interviewee)</button>
   </div>
-  <div class="grid" id="grid"></div>
+  <div class="grid" id="feat"></div>
   <p class="note" id="note"></p>
+
+  <div class="seclabel">Earlier concepts — the set these came from</div>
+  <div class="rest" id="rest"></div>
 </div>
 <script>
 (function(){
-  var CONCEPTS=[
-    {key:'cashflow',   name:'Cash-flow',   teaser:'Money unlock — every tile is the 5-year cash flow it releases.', live:true},
-    {key:'timeline',   name:'Timeline',    teaser:'A roadmap on a time rail; cash flow builds as you move right.', live:true},
-    {key:'impact',     name:'Impact',      teaser:'Path to net-zero — CO₂ avoided leads, dollars ride along.', live:true},
-    {key:'inbox',      name:'Inbox',       teaser:'A triage queue — clear what needs you, one item at a time.', live:true},
-    {key:'scorecard',  name:'Scorecard',   teaser:'Your performance, compliance, and standing vs. peers.', live:true},
-    {key:'copilot',    name:'Copilot',     teaser:'A conversational energy-advisor; approve right in the chat.', live:true},
-    {key:'building',   name:'Building view',teaser:'The building by system, with live data and opportunities.', live:true},
-    {key:'marketplace',name:'Marketplace', teaser:'Shop and bundle upgrades per property.', live:true},
-    {key:'planner',    name:'Planner',     teaser:'A what-if sandbox — toggle projects, watch outcomes move.', live:true}
+  var FEATURED=[
+    {key:'cashflow2', name:'Cash Flow', teaser:'The money, made decidable — savings, cost, and install time per project, with a loud approve.'},
+    {key:'roadmap',   name:'Roadmap',   teaser:'A time-scaled plan — projects on a real calendar, each unlocking the next, built toward a savings goal.'},
+    {key:'building2', name:'Building',  teaser:'Your building by system, with live readings — drill from what you have saved to how to save more.'}
   ];
-  var grid=document.getElementById('grid'), note=document.getElementById('note'), blindEl=document.getElementById('blind');
+  var REST=[
+    {key:'cashflow',name:'Cash-flow'},{key:'timeline',name:'Timeline'},{key:'impact',name:'Impact'},
+    {key:'inbox',name:'Inbox'},{key:'scorecard',name:'Scorecard'},{key:'copilot',name:'Copilot'},
+    {key:'building',name:'Building view'},{key:'marketplace',name:'Marketplace'},{key:'planner',name:'Planner'}
+  ];
+  var feat=document.getElementById('feat'), rest=document.getElementById('rest'),
+      note=document.getElementById('note'), blindEl=document.getElementById('blind');
   function shuffleArr(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t;}return a;}
   function order(){
     var o=null; try{o=JSON.parse(sessionStorage.getItem('cpOrder'));}catch(e){}
-    if(!o||o.length!==CONCEPTS.length){o=shuffleArr(CONCEPTS.map(function(_,i){return i;}));try{sessionStorage.setItem('cpOrder',JSON.stringify(o));}catch(e){}}
+    if(!o||o.length!==FEATURED.length){o=shuffleArr(FEATURED.map(function(_,i){return i;}));try{sessionStorage.setItem('cpOrder',JSON.stringify(o));}catch(e){}}
     return o;
   }
   function render(){
     var blind=blindEl.checked, o=order();
-    grid.innerHTML=o.map(function(idx,pos){
-      var c=CONCEPTS[idx], label=blind?('Concept '+String.fromCharCode(65+pos)):c.name, ts=blind?'A direction for the same product — open and explore.':c.teaser;
-      var foot=c.live?'<span>Open</span><i class="ti ti-arrow-right"></i>':'<span>In progress</span><i class="ti ti-dots"></i>';
-      var inner='<div style="display:flex;align-items:center;gap:9px"><span class="idx">'+String.fromCharCode(65+pos)+'</span><span class="nm">'+label+'</span></div><span class="ts">'+ts+'</span><span class="foot">'+foot+'</span>';
-      return c.live?'<a class="card" href="'+c.key+'.html" target="_blank" rel="noopener">'+inner+'</a>':'<div class="card soon">'+inner+'</div>';
+    feat.innerHTML=o.map(function(idx,pos){
+      var c=FEATURED[idx], label=blind?('Concept '+String.fromCharCode(65+pos)):c.name,
+          ts=blind?'A direction for reviewing and approving your projects — open and explore.':c.teaser;
+      return '<a class="card feat" href="'+c.key+'.html">'
+        +'<div style="display:flex;align-items:center;gap:9px"><span class="idx">'+String.fromCharCode(65+pos)+'</span><span class="nm">'+label+'</span></div>'
+        +'<span class="ts">'+ts+'</span>'
+        +'<span class="foot"><span>Open</span><i class="ti ti-arrow-right"></i></span></a>';
     }).join('');
-    note.textContent=blind?'Blind mode: names hidden and order reshuffled per interviewee — decode later from the tab’s URL. All 9 concepts are wired up.':'All 9 concepts are wired up. Toggle blind labels + reshuffle before each interview.';
+    note.textContent=blind
+      ? 'Blind mode: the three are labeled A/B/C and reshuffled per interviewee — decode later from the tab URL.'
+      : 'Toggle blind labels + reshuffle before each interview so order and names do not bias the response.';
   }
+  rest.innerHTML=REST.map(function(c){
+    return '<a href="'+c.key+'.html"><i class="ti ti-arrow-up-right"></i> '+c.name+'</a>';
+  }).join('');
   blindEl.addEventListener('change',render);
   document.getElementById('shuffle').addEventListener('click',function(){try{sessionStorage.removeItem('cpOrder');}catch(e){}render();});
   render();
